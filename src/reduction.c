@@ -1,21 +1,10 @@
 #include "reduction.h"
 
-float** bezier_degree_reduction_matrix(int n, int m)
+float** bezier_reduction_matrix(int n, int m)
 {
   assert(n > m);
-  return 0;
-}
-
-Bezier* bezier_degree_reduction_rec(Bezier* c, int m)
-{
-  int n = c->n;
-
-  Bezier* low = bezier_create(m);
-  low->a = c->a;
-  low->b = c->b;
 
   float (*psi)[n+1] = malloc(sizeof(float) * (m + 1) * (n + 1));
-  float (*e) = malloc(sizeof(float) * (n + 1));
 
   float C = factrl(n)*up_power(1-n, m)
     / (factrl(m)*up_power(m+2, n));
@@ -75,6 +64,20 @@ Bezier* bezier_degree_reduction_rec(Bezier* c, int m)
     }
   }
 
+  return (float**)psi;
+}
+
+Bezier* bezier_degree_reduction(Bezier* c, int m, float **reduction_matrix)
+{
+  int n = c->n;
+
+  Bezier* low = bezier_create(m);
+  low->a = c->a;
+  low->b = c->b;
+  
+  float (*psi)[n+1] = (float(*)[])reduction_matrix;
+  float (*e) = malloc(sizeof(float) * (n + 1));
+
   for(int i = 0; i <= m; ++i)
   {
     e[i] = 0;
@@ -87,7 +90,6 @@ Bezier* bezier_degree_reduction_rec(Bezier* c, int m)
     low->c[i] = e[i];
   }
 
-  free(psi);
   free(e);
   
   return low;

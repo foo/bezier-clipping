@@ -1,6 +1,6 @@
 #include "quadclip.h"
 
-void bezier_quadclip_aux(Bezier* original, float** intervals, int* num_intervals, float eps);
+void bezier_quadclip_aux(Bezier* original, float** intervals, int* num_intervals, float eps, float** reduction_matrix);
 
 
 int bezier_quadclip(Bezier* original, float** roots, float eps)
@@ -9,20 +9,23 @@ int bezier_quadclip(Bezier* original, float** roots, float eps)
 
   *roots = malloc(sizeof(float) * original->n);
 
-  bezier_quadclip_aux(original, roots, &num_roots, eps);
+  float** reduction_matrix = bezier_reduction_matrix(original->n, 2);
+
+  bezier_quadclip_aux(original, roots, &num_roots, eps, reduction_matrix);
+
   return num_roots;
 }
 
-void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float eps)
+void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float eps, float** reduction_matrix)
 {
   if(original->b - original->a <= 2.0f*eps)
   {
-    (*roots)[(*num_roots)++] = (original->b - original->a) / 2.0f;
+    (*roots)[(*num_roots)++] = (original->a + original->b) / 2.0f;
   }
   else
   {
     const int deg = original->n;
-    Bezier* reduced = bezier_degree_reduction_rec(original, 2);
+    Bezier* reduced = bezier_degree_reduction(original, 2, reduction_matrix);
     Bezier* reduced_and_raised = bezier_copy(reduced);
 
     bezier_degree_raise(reduced_and_raised, deg);
@@ -45,15 +48,15 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
       if(ox_intervals[i]->b - ox_intervals[i]->a < (original->b - original->a) / 2.0f)
       {
 	Bezier* clipped = bezier_subrange(original, ox_intervals[i]->a, ox_intervals[i]->b);
-	bezier_quadclip_aux(clipped, roots, num_roots, eps);
+	bezier_quadclip_aux(clipped, roots, num_roots, eps, reduction_matrix);
       }
       else
       {
 	const float middle = (ox_intervals[i]->a + ox_intervals[i]->b) / 2.0f;
 	Bezier* clipped_left = bezier_subrange(original, ox_intervals[i]->a, middle);
 	Bezier* clipped_right = bezier_subrange(original, middle, ox_intervals[i]->b);
-	bezier_quadclip_aux(clipped_left, roots, num_roots, eps);
-	bezier_quadclip_aux(clipped_right, roots, num_roots, eps);
+	bezier_quadclip_aux(clipped_left, roots, num_roots, eps, reduction_matrix);
+	bezier_quadclip_aux(clipped_right, roots, num_roots, eps, reduction_matrix);
       }
     }
   }
