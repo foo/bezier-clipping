@@ -15,6 +15,7 @@ typedef struct
 } Bezier;
 
 Bezier* bezier_create(int N);
+Bezier* bezier_create_with_coeffs(int N, float* coeffs);
 Bezier* bezier_copy(Bezier* b);
 void bezier_destroy(Bezier* b);
 void bezier_degree_raise(Bezier* b, int n);

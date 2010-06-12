@@ -12,6 +12,18 @@ Bezier* bezier_create(int N)
   return b;
 }
 
+Bezier* bezier_create_with_coeffs(int N, float* coeffs)
+{
+  Bezier* b = malloc(sizeof(Bezier));
+  b->n = N;
+  b->c = coeffs;
+
+  b->a = 0.0f;
+  b->b = 1.0f;
+
+  return b;
+}
+
 Bezier* bezier_copy(Bezier* b)
 {
   Bezier* b2 = bezier_create(b->n);

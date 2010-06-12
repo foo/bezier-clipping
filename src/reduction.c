@@ -29,7 +29,7 @@ float** bezier_reduction_matrix(int n, int m)
       psi[0][1] *= -1;
   }
 
-  // pierwszy wiersz
+  // first row
   {
     for(int j = 1; j <= n - 1; ++j)
     {
@@ -40,7 +40,7 @@ float** bezier_reduction_matrix(int n, int m)
     }
   }
 
-  // reszta tablicy
+  // rest of matrix
   {
     for(int i = 0; i <= m - 1; ++i)
     {
@@ -71,10 +71,6 @@ Bezier* bezier_degree_reduction(Bezier* c, int m, float **reduction_matrix)
 {
   int n = c->n;
 
-  Bezier* low = bezier_create(m);
-  low->a = c->a;
-  low->b = c->b;
-  
   float (*psi)[n+1] = (float(*)[])reduction_matrix;
   float (*e) = malloc(sizeof(float) * (n + 1));
 
@@ -85,12 +81,9 @@ Bezier* bezier_degree_reduction(Bezier* c, int m, float **reduction_matrix)
       e[i] += c->c[j]*psi[i][j];
   }
 
-  for(int i = 0; i <= m; ++i)
-  {
-    low->c[i] = e[i];
-  }
-
-  free(e);
+  Bezier* low = bezier_create_with_coeffs(m, e);
+  low->a = c->a;
+  low->b = c->b;
   
   return low;
 }
