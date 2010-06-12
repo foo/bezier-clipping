@@ -97,3 +97,10 @@ int bezier_quad_roots(Bezier* b, float** roots)
     }
   }
 }
+
+int bezier_cubic_roots(Bezier* b, float** roots)
+{
+  
+  return 0;
+}
+

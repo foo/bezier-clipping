@@ -1,5 +1,11 @@
 #include "reduction.h"
 
+float** bezier_degree_reduction_matrix(int n, int m)
+{
+  assert(n > m);
+  return 0;
+}
+
 Bezier* bezier_degree_reduction_rec(Bezier* c, int m)
 {
   int n = c->n;

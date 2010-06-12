@@ -87,7 +87,14 @@ void graph_draw(Graph* g)
     glColor3f(1.0f, 0.0f, 0.0f);
 
     float* roots = 0;
-    int num_roots = bezier_quad_roots(g->bezier, &roots);
+    int num_roots = 0;
+    
+    if(g->bezier->n == 2)
+      num_roots = bezier_quad_roots(g->bezier, &roots);
+    else if(g->bezier->n == 3)
+      num_roots = bezier_cubic_roots(g->bezier, &roots);
+    else
+      assert(0);
 
     glPointSize(5.0);
     glBegin(GL_POINTS);

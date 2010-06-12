@@ -1,23 +1,23 @@
 #include "quadclip.h"
 
-void bezier_quadclip_aux(Bezier* original, Interval*** intervals, int* num_intervals, float eps);
+void bezier_quadclip_aux(Bezier* original, float** intervals, int* num_intervals, float eps);
 
 
-int bezier_quadclip(Bezier* original, Interval*** intervals, float eps)
+int bezier_quadclip(Bezier* original, float** roots, float eps)
 {
-  int num_intervals = 0;
+  int num_roots = 0;
 
-  *intervals = malloc(sizeof(Interval*) * original->n);
+  *roots = malloc(sizeof(float) * original->n);
 
-  bezier_quadclip_aux(original, intervals, &num_intervals, eps);
-  return num_intervals;
+  bezier_quadclip_aux(original, roots, &num_roots, eps);
+  return num_roots;
 }
 
-void bezier_quadclip_aux(Bezier* original, Interval*** intervals, int* num_intervals, float eps)
+void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float eps)
 {
-  if(original->b - original->a <= eps)
+  if(original->b - original->a <= 2.0f*eps)
   {
-    (*intervals)[(*num_intervals)++] = interval_create(original->a, original->b);
+    (*roots)[(*num_roots)++] = (original->b - original->a) / 2.0f;
   }
   else
   {
@@ -45,15 +45,15 @@ void bezier_quadclip_aux(Bezier* original, Interval*** intervals, int* num_inter
       if(ox_intervals[i]->b - ox_intervals[i]->a < (original->b - original->a) / 2.0f)
       {
 	Bezier* clipped = bezier_subrange(original, ox_intervals[i]->a, ox_intervals[i]->b);
-	bezier_quadclip_aux(clipped, intervals, num_intervals, eps);
+	bezier_quadclip_aux(clipped, roots, num_roots, eps);
       }
       else
       {
 	const float middle = (ox_intervals[i]->a + ox_intervals[i]->b) / 2.0f;
 	Bezier* clipped_left = bezier_subrange(original, ox_intervals[i]->a, middle);
 	Bezier* clipped_right = bezier_subrange(original, middle, ox_intervals[i]->b);
-	bezier_quadclip_aux(clipped_left, intervals, num_intervals, eps);
-	bezier_quadclip_aux(clipped_right, intervals, num_intervals, eps);
+	bezier_quadclip_aux(clipped_left, roots, num_roots, eps);
+	bezier_quadclip_aux(clipped_right, roots, num_roots, eps);
       }
     }
   }

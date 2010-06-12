@@ -432,6 +432,16 @@ void demo_quadclip2()
   }
 }
 
+void demo_cubic()
+{
+  Bezier* b = sample_bezier_cosinus(3, 30);
+  
+  num_graphs = 1;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+  graphs[0]->draw_roots = 1;
+}
+
 void init()
 {
   //demo_parabola();
@@ -468,7 +478,9 @@ void init()
   //demo_bounds_with_intervals4();
 
   //demo_quadclip1();
-  demo_quadclip2();
+  //demo_quadclip2();
+
+  demo_cubic();
 }
 
 void update()
