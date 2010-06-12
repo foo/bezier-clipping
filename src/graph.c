@@ -26,11 +26,27 @@ Graph* graph_create(Bezier* b)
   return g;
 }
 
+void draw_control_line(Graph* g)
+{
+  glLineWidth(1.0f);
+  glBegin(GL_LINE_STRIP);
+  for (int i = 0; i <= g->bezier->n; i++)
+  {
+    const float x_01 = (float)i / (float)g->bezier->n;
+    const float x_ab = x_01 * (g->bezier->b - g->bezier->a) + g->bezier->a;
+      
+    glVertex2f(
+      g->offset_x + g->width * x_ab,
+      g->offset_y + g->height * g->bezier->c[i]
+	       );
+  }
+  glEnd();
+}
+
 void graph_draw(Graph* g)
 {
   glColor3f(g->color_r, g->color_g, g->color_b);
   
-  glLineWidth(1.0f);
   if(g->draw_control_line)
   {
     glBegin(GL_LINE_STRIP);

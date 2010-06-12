@@ -14,8 +14,12 @@ int bezier_quad_roots(Bezier* b, float** roots)
 
   if(A == 0)
   {
+    // function is linear
     if(B == 0)
+    {
+      // function is constant
       return 0;
+    }
     else
     {
       float root = -C / B;
@@ -100,7 +104,39 @@ int bezier_quad_roots(Bezier* b, float** roots)
 
 int bezier_cubic_roots(Bezier* b, float** roots)
 {
-  
+  // bezier basis to power basis
+  // P(x) = Ax3+Bx2+Cx+D
+  float A = -b->c[0] + 3*b->c[1] - 3*b->c[2] + b->c[3];
+  float B = 3*b->c[0] - 6*b->c[1] + 3*b->c[2];
+  float C = -3*b->c[0] + 3*b->c[1];
+  float D = b->c[0];
+
+  if(A == 0)
+  {
+    // function is quadratic
+    if(B == 0)
+    {
+      // function is linear
+      if(C == 0)
+      {
+	// function is constant
+	return 0;
+      }
+      else
+      {
+	assert(0);
+      }
+    }
+    else
+    {
+      assert(0);
+    }
+  }
+  else
+  {
+    // function is not quadratic
+    
+  }
   return 0;
 }
 

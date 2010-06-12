@@ -414,6 +414,8 @@ void demo_cubic()
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
+  
+  graphs[0]->num_roots = bezier_cubic_roots(b, &graphs[0]->roots);
 }
 
 void init()
