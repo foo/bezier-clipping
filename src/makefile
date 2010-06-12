@@ -1,39 +1,40 @@
+
 FLAGS=-Wall -std=c99 -pedantic
-OBJ=bezier.o graph.o quadclip.o casteljau.o reduction.o samples.o utils.o roots.o gui.o interval.o
+OBJ=../bin/bezier.o ../bin/graph.o ../bin/quadclip.o ../bin/casteljau.o ../bin/reduction.o ../bin/samples.o ../bin/utils.o ../bin/roots.o ../bin/gui.o ../bin/interval.o
 
 bezier:
-	gcc $(FLAGS) -c bezier.c
+	gcc $(FLAGS) -c bezier.c -o ../bin/bezier.o
 
 samples:
-	gcc $(FLAGS) -c samples.c
+	gcc $(FLAGS) -c samples.c -o ../bin/samples.o
 
 graph: bezier casteljau
-	gcc $(FLAGS) -c graph.c
+	gcc $(FLAGS) -c graph.c -o ../bin/graph.o
 
 casteljau: bezier
-	gcc $(FLAGS) -c casteljau.c
+	gcc $(FLAGS) -c casteljau.c -o ../bin/casteljau.o
 
 quadclip: bezier reduction roots interval casteljau
-	gcc $(FLAGS) -c quadclip.c
+	gcc $(FLAGS) -c quadclip.c -o ../bin/quadclip.o
 
 reduction: bezier utils
-	gcc $(FLAGS) -c reduction.c
+	gcc $(FLAGS) -c reduction.c -o ../bin/reduction.o
 
 utils:
-	gcc $(FLAGS) -c utils.c
+	gcc $(FLAGS) -c utils.c -o ../bin/utils.o
 
 interval:
-	gcc $(FLAGS) -c interval.c
+	gcc $(FLAGS) -c interval.c -o ../bin/interval.o
 
 roots: bezier
-	gcc $(FLAGS) -c roots.c
+	gcc $(FLAGS) -c roots.c -o ../bin/roots.o
 
 gui: graph reduction quadclip samples interval
-	gcc $(FLAGS) -c gui.c
+	gcc $(FLAGS) -c gui.c -o ../bin/gui.o
 
 init: gui
-	gcc $(FLAGS) init.c $(OBJ) -lglut -lpng -o lpp.e
+	gcc $(FLAGS) init.c $(OBJ) -lglut -lpng -o ../bin/lpp.e
 
 all: init
 clear:
-	rm *.o *.e
+	rm ../bin/*
