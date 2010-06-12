@@ -4,6 +4,7 @@
 #include "bezier.h"
 #include "casteljau.h"
 #include "roots.h"
+#include "interval.h"
 
 typedef struct
 {
@@ -11,7 +12,6 @@ typedef struct
   int draw_control_line;
   int draw_control_points;
   int draw_axis;
-  int draw_roots;
   float color_r;
   float color_g;
   float color_b;
@@ -20,6 +20,12 @@ typedef struct
   float offset_x;
   float offset_y;
   float precision;
+  
+  Interval** intervals;
+  int num_intervals;
+
+  float* roots;
+  int num_roots;
 } Graph;
 
 Graph* graph_create(Bezier* b);

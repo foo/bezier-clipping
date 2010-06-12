@@ -15,12 +15,6 @@ float* move_mod_y = 0;
 Graph** graphs = 0;
 int num_graphs = 0;
 
-Interval** intervals = 0;
-int num_intervals = 0;
-
-float* roots = 0;
-int num_roots = 0;
-
 void demo_parabola()
 {
   num_graphs = 1;
@@ -62,7 +56,6 @@ void demo_sinus()
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(sample_bezier_sinus(10, 3.1415f));
-  graphs[0]->draw_roots = 0;
 }
 
 void demo_cosinus()
@@ -70,7 +63,6 @@ void demo_cosinus()
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(sample_bezier_cosinus(10, 3.1415f));
-  graphs[0]->draw_roots = 0;
 }
 
 void demo_sinus_reduction(int n, int freq)
@@ -84,7 +76,6 @@ void demo_sinus_reduction(int n, int freq)
   graphs[1]->color_r = 0.0f;
   graphs[1]->color_g = 0.0f;
   graphs[1]->color_b = 1.0f;
-  graphs[1]->draw_roots = 0;
 }
 
 void demo_cosinus_reduction(int n, int freq)
@@ -98,7 +89,6 @@ void demo_cosinus_reduction(int n, int freq)
   graphs[1]->color_r = 0.0f;
   graphs[1]->color_g = 0.0f;
   graphs[1]->color_b = 1.0f;
-  graphs[1]->draw_roots = 0;
 }
 
 void demo_bounds()
@@ -118,9 +108,7 @@ void demo_bounds()
   num_graphs = 4;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(original);
-  graphs[0]->draw_roots = 0;
   graphs[1] = graph_create(reduced_and_raised);
-  graphs[1]->draw_roots = 0;
   graphs[1]->color_r = 0.5f;
   graphs[1]->color_g = 0.5f;
   graphs[1]->color_b = 0.5f;
@@ -157,9 +145,7 @@ void demo_bounds_with_intervals1()
   num_graphs = 4;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(original);
-  graphs[0]->draw_roots = 0;
   graphs[1] = graph_create(reduced_and_raised);
-  graphs[1]->draw_roots = 0;
   graphs[1]->color_r = 0.5f;
   graphs[1]->color_g = 0.5f;
   graphs[1]->color_b = 0.5f;
@@ -174,7 +160,7 @@ void demo_bounds_with_intervals1()
   graphs[3]->color_g = 1.0f;
   graphs[3]->color_b = 0.5f;
 
-  num_intervals = bezier_intervals_between(reduced_up, reduced_down, &intervals);
+  graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
 }
 
 void demo_bounds_with_intervals2()
@@ -198,9 +184,7 @@ void demo_bounds_with_intervals2()
   num_graphs = 4;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(original);
-  graphs[0]->draw_roots = 0;
   graphs[1] = graph_create(reduced_and_raised);
-  graphs[1]->draw_roots = 0;
   graphs[1]->color_r = 0.5f;
   graphs[1]->color_g = 0.5f;
   graphs[1]->color_b = 0.5f;
@@ -215,7 +199,7 @@ void demo_bounds_with_intervals2()
   graphs[3]->color_g = 1.0f;
   graphs[3]->color_b = 0.5f;
 
-  num_intervals = bezier_intervals_between(reduced_up, reduced_down, &intervals);
+  graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
 }
 
 
@@ -240,9 +224,7 @@ void demo_bounds_with_intervals3()
   num_graphs = 4;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(original);
-  graphs[0]->draw_roots = 0;
   graphs[1] = graph_create(reduced_and_raised);
-  graphs[1]->draw_roots = 0;
   graphs[1]->color_r = 0.5f;
   graphs[1]->color_g = 0.5f;
   graphs[1]->color_b = 0.5f;
@@ -257,7 +239,7 @@ void demo_bounds_with_intervals3()
   graphs[3]->color_g = 1.0f;
   graphs[3]->color_b = 0.5f;
 
-  num_intervals = bezier_intervals_between(reduced_up, reduced_down, &intervals);
+  graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
 }
 
 
@@ -282,9 +264,7 @@ void demo_bounds_with_intervals4()
   num_graphs = 4;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(original);
-  graphs[0]->draw_roots = 0;
   graphs[1] = graph_create(reduced_and_raised);
-  graphs[1]->draw_roots = 0;
   graphs[1]->color_r = 0.5f;
   graphs[1]->color_g = 0.5f;
   graphs[1]->color_b = 0.5f;
@@ -299,7 +279,7 @@ void demo_bounds_with_intervals4()
   graphs[3]->color_g = 1.0f;
   graphs[3]->color_b = 0.5f;
 
-  num_intervals = bezier_intervals_between(reduced_up, reduced_down, &intervals);
+  graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
 }
 
 void demo_reduced_and_raised()
@@ -313,9 +293,7 @@ void demo_reduced_and_raised()
   num_graphs = 2;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(original);
-  graphs[0]->draw_roots = 0;
   graphs[1] = graph_create(reduced_and_raised);
-  graphs[1]->draw_roots = 0;
   graphs[1]->color_r = 0.5f;
   graphs[1]->color_g = 0.5f;
   graphs[1]->color_b = 0.5f;
@@ -327,7 +305,7 @@ void demo_intervals1()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(sample_bezier_parabola());
 
-  num_intervals = bezier_above(graphs[0]->bezier, &intervals);
+  graphs[0]->num_intervals = bezier_above(graphs[0]->bezier, &graphs[0]->intervals);
 }
 
 void demo_intervals2()
@@ -339,7 +317,7 @@ void demo_intervals2()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  num_intervals = bezier_above(b, &intervals);
+  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals3()
@@ -351,7 +329,7 @@ void demo_intervals3()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  num_intervals = bezier_above(b, &intervals);
+  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals4()
@@ -363,7 +341,7 @@ void demo_intervals4()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  num_intervals = bezier_above(b, &intervals);
+  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals5()
@@ -375,7 +353,7 @@ void demo_intervals5()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  num_intervals = bezier_above(b, &intervals);
+  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals6()
@@ -389,7 +367,7 @@ void demo_intervals6()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  num_intervals = bezier_above(b, &intervals);
+  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals7()
@@ -403,7 +381,7 @@ void demo_intervals7()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  num_intervals = bezier_above(b, &intervals);
+  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
 }
 
 void demo_quadclip1()
@@ -414,9 +392,8 @@ void demo_quadclip1()
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
-  graphs[0]->draw_roots = 0;
 
-  num_roots = bezier_quadclip(b, &roots, 0.001f);
+  graphs[0]->num_roots = bezier_quadclip(b, &graphs[0]->roots, 0.001f);
 }
 
 void demo_quadclip2()
@@ -426,9 +403,8 @@ void demo_quadclip2()
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
-  graphs[0]->draw_roots = 0;
 
-  num_roots = bezier_quadclip(b, &roots, 0.001f);
+  graphs[0]->num_roots = bezier_quadclip(b, &graphs[0]->roots, 0.001f);
 }
 
 void demo_cubic()
@@ -438,7 +414,6 @@ void demo_cubic()
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
-  graphs[0]->draw_roots = 1;
 }
 
 void init()
@@ -494,40 +469,6 @@ void draw()
   glColor3f(1.0f, 0.0f, 0.0f);
   glLineWidth(3.0f);
   glBegin(GL_LINES);
-  
-  for(int i = 0; i < num_intervals; ++i)
-  {
-    assert(intervals);
-    assert(intervals[i]);
-    assert(!interval_empty(intervals[i]));
-    glVertex2f(graphs[0]->offset_x + graphs[0]->width * intervals[i]->a, graphs[0]->offset_y);
-    glVertex2f(graphs[0]->offset_x + graphs[0]->width * intervals[i]->b, graphs[0]->offset_y);
-  }
-  glEnd();
-
-  glBegin(GL_POINTS);
-  
-  for(int i = 0; i < num_intervals; ++i)
-  {
-    assert(intervals);
-    assert(intervals[i]);
-    assert(!interval_empty(intervals[i]));
-    glVertex2f(graphs[0]->offset_x + graphs[0]->width * intervals[i]->a, graphs[0]->offset_y);
-    glVertex2f(graphs[0]->offset_x + graphs[0]->width * intervals[i]->b, graphs[0]->offset_y);
-  }
-  glEnd();
-
-  glBegin(GL_POINTS);
-  
-  for(int i = 0; i < num_roots; ++i)
-  {
-    assert(roots);
-    glVertex2f(graphs[0]->offset_x + graphs[0]->width * roots[i], graphs[0]->offset_y);
-  }
-  glEnd();
-  
-  glLineWidth(1.0f);
-
   
   // mouse
   glColor3f(0.0f, 0.0f, 0.0f);

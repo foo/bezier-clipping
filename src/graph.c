@@ -7,7 +7,6 @@ Graph* graph_create(Bezier* b)
   g->bezier = b;
   g->draw_control_line = 0;
   g->draw_control_points = 1;
-  g->draw_roots = 1;
   g->draw_axis = 1;
   g->color_r = 0.0f;
   g->color_g = 0.0f;
@@ -17,6 +16,12 @@ Graph* graph_create(Bezier* b)
   g->offset_x = 100.0f;
   g->offset_y = 200.0f;
   g->precision = 0.001f;
+
+  g->roots = 0;
+  g->num_roots = 0;
+
+  g->intervals = 0;
+  g->num_intervals = 0;
   
   return g;
 }
@@ -25,6 +30,7 @@ void graph_draw(Graph* g)
 {
   glColor3f(g->color_r, g->color_g, g->color_b);
   
+  glLineWidth(1.0f);
   if(g->draw_control_line)
   {
     glBegin(GL_LINE_STRIP);
@@ -41,6 +47,7 @@ void graph_draw(Graph* g)
     glEnd();
   }
 
+  glLineWidth(1.0f);
   if(g->draw_control_points)
   {
     glPointSize(5.0);
@@ -59,6 +66,7 @@ void graph_draw(Graph* g)
     glEnd();
   }
 
+  glLineWidth(1.0f);
   if(g->draw_axis)
   {
     glBegin(GL_LINES);
@@ -70,6 +78,7 @@ void graph_draw(Graph* g)
     glEnd();
   }
 
+  glLineWidth(1.0f);
   glBegin(GL_LINE_STRIP);
   for(float t = g->bezier->a; t <= g->bezier->b; t += g->precision)
   {
@@ -82,44 +91,40 @@ void graph_draw(Graph* g)
   }
   glEnd();
 
-  if(g->draw_roots)
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glLineWidth(3.0f);
+  glBegin(GL_LINES);
+  
+  for(int i = 0; i < g->num_intervals; ++i)
   {
-    glColor3f(1.0f, 0.0f, 0.0f);
-
-    float* roots = 0;
-    int num_roots = 0;
-    
-    if(g->bezier->n == 2)
-      num_roots = bezier_quad_roots(g->bezier, &roots);
-    else if(g->bezier->n == 3)
-      num_roots = bezier_cubic_roots(g->bezier, &roots);
-    else
-      assert(0);
-
-    glPointSize(5.0);
-    glBegin(GL_POINTS);
-    for(int i = 0; i < num_roots; ++i)
-    {
-      const float t = roots[i];
-
-      if(g->bezier->a <= t && t <= g->bezier->b)
-      {
-	const float ft = bezier_de_casteljau(g->bezier, t);
-
-	const float eps = 0.01f;
-	assert(fabs(ft) < eps);
-	
-	glVertex2f(
-	  g->offset_x + g->width * t,
-	  g->offset_y + g->height * ft
-		   );
-      }
-    }
-    glEnd();
-
-    if(roots)
-      free(roots);
-
-    glColor3f(g->color_r, g->color_g, g->color_b);
+    assert(g->intervals);
+    assert(g->intervals[i]);
+    assert(!interval_empty(g->intervals[i]));
+    glVertex2f(g->offset_x + g->width * g->intervals[i]->a, g->offset_y);
+    glVertex2f(g->offset_x + g->width * g->intervals[i]->b, g->offset_y);
   }
+  glEnd();
+
+  glBegin(GL_POINTS);
+  
+  for(int i = 0; i < g->num_intervals; ++i)
+  {
+    assert(g->intervals);
+    assert(g->intervals[i]);
+    assert(!interval_empty(g->intervals[i]));
+    glVertex2f(g->offset_x + g->width * g->intervals[i]->a, g->offset_y);
+    glVertex2f(g->offset_x + g->width * g->intervals[i]->b, g->offset_y);
+  }
+  glEnd();
+
+  glBegin(GL_POINTS);
+  
+  for(int i = 0; i < g->num_roots; ++i)
+  {
+    assert(g->roots);
+    glVertex2f(g->offset_x + g->width * g->roots[i], g->offset_y);
+  }
+  glEnd();
+  
+  glLineWidth(1.0f);
 }
