@@ -2,33 +2,30 @@
 
 int power_linear_roots(Interval* b, float A, float B, float** roots)
 {
-  float root = -B / A;
-  if(b->a <= root && root <= b->b)
+  if(A == 0)
   {
-    *roots = malloc(sizeof(float));
-    (*roots)[0] = root;
-    return 1;
+    // function is constant and we treat f(x) == 0 as no roots
+    return 0;
   }
   else
-    return 0;
-
-  return 0;
+  {
+    float root = -B / A;
+    if(b->a <= root && root <= b->b)
+    {
+      *roots = malloc(sizeof(float));
+      (*roots)[0] = root;
+      return 1;
+    }
+    else
+      return 0;
+  }
 }
 
 int power_quad_roots(Interval* b, float A, float B, float C, float** roots)
 {
   if(A == 0)
   {
-    // function is linear
-    if(B == 0)
-    {
-      // function is constant
-      return 0;
-    }
-    else
-    {
-      return power_linear_roots(b, B, C, roots);
-    }
+    return power_linear_roots(b, B, C, roots);
   }
   else
   {
@@ -122,7 +119,7 @@ int power_cubic_roots(Interval* b, float A, float B, float C, float D, float** r
 
       int inserter = 0;
       for(; inserter < 3; inserter++)
-	(*roots)[inserter] = p * cos((phi + 2 * i * PI) / 3.0) - w;
+	(*roots)[inserter] = p * cos((phi + 2 * inserter * PI) / 3.0) - w;
       
       // todo: sort roots
       // todo: remove out of range
