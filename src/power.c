@@ -1,17 +1,22 @@
-#include "roots.h"
+#include "power.h"
 
-// wzory viete'a
-
-int bezier_quad_roots(Bezier* b, float** roots)
+int power_linear_roots(Interval* b, float A, float B, float** roots)
 {
-  assert(b);
-  assert(b->n == 2);
+  float root = -B / A;
+  if(b->a <= root && root <= b->b)
+  {
+    *roots = malloc(sizeof(float));
+    (*roots)[0] = root;
+    return 1;
+  }
+  else
+    return 0;
 
-  // quadratic polynomial coefficients in power basis
-  float A = b->c[0] - 2*b->c[1] + b->c[2];
-  float B = -2*b->c[0] + 2*b->c[1];
-  float C = b->c[0];
+  return 0;
+}
 
+int power_quad_roots(Interval* b, float A, float B, float C, float** roots)
+{
   if(A == 0)
   {
     // function is linear
@@ -22,15 +27,7 @@ int bezier_quad_roots(Bezier* b, float** roots)
     }
     else
     {
-      float root = -C / B;
-      if(b->a <= root && root <= b->b)
-      {
-	*roots = malloc(sizeof(float));
-	(*roots)[0] = root;
-	return 1;
-      }
-      else
-	return 0;
+      return power_linear_roots(b, B, C, roots);
     }
   }
   else
@@ -102,15 +99,8 @@ int bezier_quad_roots(Bezier* b, float** roots)
   }
 }
 
-int bezier_cubic_roots(Bezier* b, float** roots)
+int power_cubic_roots(Interval* b, float A, float B, float C, float D, float** roots)
 {
-  // bezier basis to power basis
-  // P(x) = Ax3+Bx2+Cx+D
-  float A = -b->c[0] + 3*b->c[1] - 3*b->c[2] + b->c[3];
-  float B = 3*b->c[0] - 6*b->c[1] + 3*b->c[2];
-  float C = -3*b->c[0] + 3*b->c[1];
-  float D = b->c[0];
-
   if(A == 0)
   {
     // function is quadratic

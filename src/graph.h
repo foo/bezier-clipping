@@ -3,7 +3,6 @@
 #include <malloc.h>
 #include "bezier.h"
 #include "casteljau.h"
-#include "roots.h"
 #include "interval.h"
 
 typedef struct

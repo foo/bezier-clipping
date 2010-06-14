@@ -1,7 +1,6 @@
 #pragma once
 
 #include "bezier.h"
-#include "roots.h"
 #include "interval.h"
 #include "casteljau.h"
 #include "reduction.h"

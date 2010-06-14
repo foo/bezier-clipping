@@ -75,3 +75,24 @@ void bezier_inc_coeffs(Bezier* b, float ratio)
     b->c[i] += ratio;
 }
 
+int bezier_quad_roots(Bezier* b, float** roots)
+{
+  assert(b->n == 2);
+
+  float A = b->c[0] - 2*b->c[1] + b->c[2];
+  float B = -2*b->c[0] + 2*b->c[1];
+  float C = b->c[0];
+
+  return power_quad_roots(interval_create(b->a, b->b), A, B, C, roots);
+}
+int bezier_cubic_roots(Bezier* b, float** roots)
+{
+  assert(b->n == 3);
+
+  float A = -b->c[0] + 3*b->c[1] - 3*b->c[2] + b->c[3];
+  float B = 3*b->c[0] - 6*b->c[1] + 3*b->c[2];
+  float C = -3*b->c[0] + 3*b->c[1];
+  float D = b->c[0];
+
+  return power_cubic_roots(interval_create(b->a, b->b), A, B, C, D, roots);
+}
