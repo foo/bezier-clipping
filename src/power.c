@@ -103,30 +103,39 @@ int power_cubic_roots(Interval* b, float A, float B, float C, float D, float** r
 {
   if(A == 0)
   {
-    // function is quadratic
-    if(B == 0)
-    {
-      // function is linear
-      if(C == 0)
-      {
-	// function is constant
-	return 0;
-      }
-      else
-      {
-	assert(0);
-      }
-    }
-    else
-    {
-      assert(0);
-    }
+    return power_quad_roots(b, B, C, D, roots);
   }
   else
   {
-    // function is not quadratic
+    *roots = malloc(sizeof(float) * 3);
     
+    float w = B / (3 * A);
+    float p = (C / (3 * A) - w*w)*(C / (3 * A) - w*w)*(C / (3 * A) - w*w);
+    float q = -0.5 * (2 * w*w*w - (C * w - D) / A);
+    float delta = q*q + p;
+    
+    if(delta < 0.0)
+    {
+      float h = q / sqrt(-p);
+      float phi = acos(max(-1.0, min(1.0, h)));
+      p = 2 * pow(-p, 1.0 / 6.0);
+
+      int inserter = 0;
+      for(; inserter < 3; inserter++)
+	(*roots)[inserter] = p * cos((phi + 2 * i * PI) / 3.0) - w;
+      
+      // todo: sort roots
+      // todo: remove out of range
+      
+      return 3;
+    }
+    else
+    {
+      delta = sqrt(delta);
+      *roots = malloc(sizeof(float));
+      (*roots)[0] = (q + delta)*(q + delta)*(q + delta)*(q + delta) + (q - delta)*(q - delta)*(q - delta)*(q - delta) - w;
+      return 1;
+    }
   }
-  return 0;
 }
 

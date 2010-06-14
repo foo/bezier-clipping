@@ -454,9 +454,9 @@ void init()
   //demo_bounds_with_intervals4();
 
   //demo_quadclip1();
-  demo_quadclip2();
+  //demo_quadclip2();
 
-  //demo_cubic();
+  demo_cubic();
 }
 
 void update()

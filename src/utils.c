@@ -71,3 +71,5 @@ int up_power(const int x, const int up)
     t*=i;
   return t;
 }
+
+const float PI = 3.1415692f;

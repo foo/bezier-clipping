@@ -12,3 +12,4 @@ float factln(const int n);
 float bico(const int n, const int k);
 int up_power(const int x, const int up);
   
+const float PI;
