@@ -5,13 +5,11 @@ Power* power_create(int deg)
   Power* p = malloc(sizeof(Power));
   p->n = deg;
   p->c = (float*)malloc(sizeof(float) * (p->n + 1));
-  p->dom = interval_create(0, 1);
   return p;
 }
 
 void power_destroy(Power* p)
 {
-  free(p->dom);
   free(p);
 }
 
@@ -22,11 +20,11 @@ int power_cubic_roots(float A, float B, float C, float D, float** roots);
 int power_analytic_roots(Power* p, float** roots)
 {
   if(p->n == 1)
-    return interval_filter(p->dom, roots, power_linear_roots(p->c[0], p->c[1], roots));
+    return power_linear_roots(p->c[0], p->c[1], roots);
   else if(p->n == 2)
-    return interval_filter(p->dom, roots, power_quad_roots(p->c[0], p->c[1], p->c[2], roots));
+    return power_quad_roots(p->c[0], p->c[1], p->c[2], roots);
   else if(p->n == 3)
-    return interval_filter(p->dom, roots, power_cubic_roots(p->c[0], p->c[1], p->c[2], p->c[3], roots));
+    return power_cubic_roots(p->c[0], p->c[1], p->c[2], p->c[3], roots);
   else
   {
     assert(0); // power basis root finder of polynomials of degree higher then 3 is not the point of this program
@@ -140,8 +138,6 @@ int power_cubic_roots(float A, float B, float C, float D, float** roots)
 
 float power_eval(Power* p, float t)
 {
-  assert(interval_inside(p->dom, t));
-  
   float res = p->c[0];
   for(int i = 1; i <= p->n; ++i)
     res = res * t + p->c[i];

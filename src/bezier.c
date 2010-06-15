@@ -102,7 +102,6 @@ Power* bezier_to_power(Bezier* b)
     p->c[0] = A;
     p->c[1] = B;
     p->c[2] = C;
-    p->dom = interval_copy(b->dom);
     p->n = b->n;
     return p;
   }
@@ -118,7 +117,6 @@ Power* bezier_to_power(Bezier* b)
     p->c[1] = B;
     p->c[2] = C;
     p->c[3] = D;
-    p->dom = interval_copy(b->dom);
     p->n = b->n;
     return p;
   }

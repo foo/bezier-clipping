@@ -5,7 +5,6 @@
 #include "graph.h"
 #include "reduction.h"
 #include "quadclip.h"
-#include "cubicclip.h"
 #include "samples.h"
 #include "interval.h"
 

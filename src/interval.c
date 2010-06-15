@@ -126,7 +126,7 @@ float interval_linear_scale(Interval* from, Interval* to, float t)
   return ((t - from->a) / interval_len(from)) * interval_len(to) + to->a;
 }
 
-int intervals_subtract(Interval** intervals_up, int num_intervals_up, Interval** intervals_down, int num_intervals_down, Interval *** intervals)
+int intervals_subtract(Interval** intervals_down, int num_intervals_down, Interval** intervals_up, int num_intervals_up, Interval *** intervals)
 {
   int inserter = 0;
   *intervals = malloc(sizeof(Interval*) * 4);

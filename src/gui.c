@@ -248,6 +248,8 @@ void demo_bounds_with_intervals4()
 {
   const int deg = 3;
   Bezier* original = bezier_create(deg);
+  original->dom->a = 0.4;
+  original->dom->b = 0.6;
   original->c[0] = 0.2;
   original->c[1] = 0.1;
   original->c[2] = -0.1;
@@ -401,7 +403,7 @@ void demo_quadclip1()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_roots = bezier_quadclip(b, &graphs[0]->roots, 0.001f);
+  graphs[0]->num_roots = bezier_roots(b, &graphs[0]->roots, 0.001f, 3);
 }
 
 void demo_quadclip2()
@@ -412,7 +414,7 @@ void demo_quadclip2()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_roots = bezier_quadclip(b, &graphs[0]->roots, 0.001f);
+  graphs[0]->num_roots = bezier_roots(b, &graphs[0]->roots, 0.001f, 3);
 }
 
 void demo_cubic_roots1()
@@ -546,10 +548,10 @@ void demo_between()
   graphs[0] = graph_create(b);
 
   Bezier* b2 = bezier_copy(b);
-  bezier_inc_coeffs(b2, 0.3);
+  bezier_inc_coeffs(b2, 0.1);
   graphs[1] = graph_create(b2);
 
-  graphs[0]->num_intervals = bezier_intervals_between(b2, b, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_intervals_between( b2, b, &graphs[0]->intervals);
 }
 
 void init()
@@ -585,7 +587,7 @@ void init()
   //demo_bounds_with_intervals1();
   //demo_bounds_with_intervals2();
   //demo_bounds_with_intervals3();
-  //demo_bounds_with_intervals4();
+  demo_bounds_with_intervals4();
 
   //demo_quadclip1();
   //demo_quadclip2();
@@ -600,7 +602,7 @@ void init()
   //demo_above3();
   //demo_above4();
 
-  demo_between();
+  //demo_between();
 }
 
 void update()

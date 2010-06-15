@@ -10,7 +10,6 @@ typedef struct
 {
   int n; // degree
   float* c; // coefficients; size is n + 1
-  Interval* dom;
 } Power;
 
 Power* power_create(int deg);

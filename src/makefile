@@ -1,6 +1,6 @@
 
 FLAGS=-Wall -std=c99 -pedantic
-OBJ=../bin/bezier.o ../bin/graph.o ../bin/quadclip.o ../bin/cubicclip.o ../bin/casteljau.o ../bin/reduction.o ../bin/samples.o ../bin/utils.o ../bin/power.o ../bin/gui.o ../bin/interval.o
+OBJ=../bin/bezier.o ../bin/graph.o ../bin/quadclip.o ../bin/casteljau.o ../bin/reduction.o ../bin/samples.o ../bin/utils.o ../bin/power.o ../bin/gui.o ../bin/interval.o
 
 power:
 	gcc $(FLAGS) -c power.c -o ../bin/power.o
@@ -20,9 +20,6 @@ casteljau: bezier
 quadclip: bezier reduction interval casteljau
 	gcc $(FLAGS) -c quadclip.c -o ../bin/quadclip.o
 
-cubicclip: bezier reduction interval casteljau
-	gcc $(FLAGS) -c cubicclip.c -o ../bin/cubicclip.o
-
 reduction: bezier utils
 	gcc $(FLAGS) -c reduction.c -o ../bin/reduction.o
 
@@ -32,7 +29,7 @@ utils:
 interval:
 	gcc $(FLAGS) -c interval.c -o ../bin/interval.o
 
-gui: graph reduction quadclip cubicclip samples interval
+gui: graph reduction quadclip samples interval
 	gcc $(FLAGS) -c gui.c -o ../bin/gui.o
 
 init: gui

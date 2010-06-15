@@ -1,22 +1,21 @@
 #include "quadclip.h"
 
-void bezier_quadclip_aux(Bezier* original, float** intervals, int* num_intervals, float eps, float** reduction_matrix);
+void bezier_roots_aux(Bezier* original, float** intervals, int* num_intervals, float eps, float** reduction_matrix, int reduce);
 
-
-int bezier_quadclip(Bezier* original, float** roots, float eps)
+int bezier_roots(Bezier* original, float** roots, float eps, int reduce)
 {
   int num_roots = 0;
 
   *roots = malloc(sizeof(float) * original->n);
 
-  float** reduction_matrix = bezier_reduction_matrix(original->n, 2);
+  float** reduction_matrix = bezier_reduction_matrix(original->n, reduce);
 
-  bezier_quadclip_aux(original, roots, &num_roots, eps, reduction_matrix);
+  bezier_roots_aux(original, roots, &num_roots, eps, reduction_matrix, reduce);
 
   return num_roots;
 }
 
-void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float eps, float** reduction_matrix)
+void bezier_roots_aux(Bezier* original, float** roots, int* num_roots, float eps, float** reduction_matrix, int reduce)
 {
   if(interval_len(original->dom) <= 2.0f*eps)
   {
@@ -25,7 +24,7 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
   else
   {
     const int deg = original->n;
-    Bezier* reduced = bezier_degree_reduction(original, 2, reduction_matrix);
+    Bezier* reduced = bezier_degree_reduction(original, reduce, reduction_matrix);
     Bezier* reduced_and_raised = bezier_copy(reduced);
 
     bezier_degree_raise(reduced_and_raised, deg);
@@ -42,13 +41,14 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
     int ox_num_intervals = 0;
     
     ox_num_intervals = bezier_intervals_between(reduced_up, reduced_down, &ox_intervals);
+    printf("ox = %d\n", ox_num_intervals);
     
     for(int i = 0; i < ox_num_intervals; ++i)
     {
       if(interval_len(ox_intervals[i]) < interval_len(original->dom) / 2.0f)
       {
 	Bezier* clipped = bezier_subrange(original, ox_intervals[i]->a, ox_intervals[i]->b);
-	bezier_quadclip_aux(clipped, roots, num_roots, eps, reduction_matrix);
+	bezier_roots_aux(clipped, roots, num_roots, eps, reduction_matrix, reduce);
 	bezier_destroy(clipped);
       }
       else
@@ -56,8 +56,8 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
 	const float middle = interval_middle(ox_intervals[i]);
 	Bezier* clipped_left = bezier_subrange(original, ox_intervals[i]->a, middle);
 	Bezier* clipped_right = bezier_subrange(original, middle, ox_intervals[i]->b);
-	bezier_quadclip_aux(clipped_left, roots, num_roots, eps, reduction_matrix);
-	bezier_quadclip_aux(clipped_right, roots, num_roots, eps, reduction_matrix);
+	bezier_roots_aux(clipped_left, roots, num_roots, eps, reduction_matrix, reduce);
+	bezier_roots_aux(clipped_right, roots, num_roots, eps, reduction_matrix, reduce);
 
 	bezier_destroy(clipped_left);
 	bezier_destroy(clipped_right);
@@ -66,137 +66,27 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
   }
 }
 
-int bezier_quad_above(Bezier* b, Interval*** intervals)
-{
-  assert(b->n == 2);
-
-  float A = b->c[0] - 2*b->c[1] + b->c[2];
-  float B = -2*b->c[0] + 2*b->c[1];
-
-  float* roots = 0;
-  int num_roots = bezier_analytic_roots(b, &roots);
-  
-  if(A == 0)
-  {
-    if(num_roots == 0)
-      return 0;
-    else
-    {
-      if(B > 0)
-      {
-	*intervals = malloc(sizeof(Interval*));
-	(*intervals)[0] = interval_create(b->dom->a, roots[0]);
-	return 1;
-      }
-      else
-      {
-	*intervals = malloc(sizeof(Interval*));
-	(*intervals)[0] = interval_create(roots[0], b->dom->b);
-	return 1;
-      }
-    }
-  }
-  else
-  {
-    float C = b->c[0];
-    float delta = B*B - 4*A*C;
-
-    if(delta == 0)
-      return 0;
-    else
-    {
-      if(A > 0)
-      {
-	if(num_roots == 2)
-	{
-	  *intervals = malloc(sizeof(Interval*));
-	  (*intervals)[0] = interval_create(roots[0], roots[1]);
-	  return 1;
-	}
-	else if(num_roots == 1)
-	{
-	  float Wx = -B / (2 * A);
-	  if(Wx < roots[0])
-	  {
-	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(b->dom->a, roots[0]);
-	    return 1;
-	  }
-	  else
-	  {
-	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(roots[0], b->dom->b);
-	    return 1;
-	  }
-	}
-	else
-	{
-	  assert(num_roots == 0);
-
-	  const float half = interval_middle(b->dom);
-	  if(bezier_de_casteljau(b, half) < 0)
-	  {
-	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_copy(b->dom);
-	    return 1;
-	  }
-	  else
-	    return 0;
-	}
-      }
-      else
-      {
-	if(num_roots == 2)
-	{
-	  *intervals = malloc(sizeof(Interval*) * 2);
-	  (*intervals)[0] = interval_create(b->dom->a, roots[0]);
-	  (*intervals)[1] = interval_create(roots[1], b->dom->b);
-	  return 2;
-	}
-	else if(num_roots == 1)
-	{
-	  float Wx = -B / (2 * A);
-	  if(Wx < roots[0])
-	  {
-	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(roots[0], b->dom->b);
-	    return 1;
-	  }
-	  else
-	  {
-	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(b->dom->a, roots[0]);
-	    return 1;
-	  }
-	}
-	else
-	{
-	  assert(num_roots == 0);
-
-	  const float half = interval_middle(b->dom);
-	  if(bezier_de_casteljau(b, half) < 0)
-	  {
-	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_copy(b->dom);
-	    return 1;
-	  }
-	  else
-	    return 0;
-	}
-      }
-    }
-  }
-}
-
 int bezier_intervals_between(Bezier* up, Bezier* down, Interval*** intervals)
 {
   assert(up->n == down->n);
+  assert(interval_equal(up->dom, down->dom));
 
+  Interval* zero_one = interval_create(0.0f, 1.0f);
   Interval** intervals_up = 0;
   int num_intervals_up = power_above(bezier_to_power(up), &intervals_up);
+  for(int i = 0; i < num_intervals_up; ++i)
+  {
+    intervals_up[i]->a = interval_linear_scale(zero_one, up->dom, intervals_up[i]->a);
+    intervals_up[i]->b = interval_linear_scale(zero_one, up->dom, intervals_up[i]->b);
+  }
 
   Interval** intervals_down = 0;
   int num_intervals_down = power_above(bezier_to_power(down), &intervals_down);
+  for(int i = 0; i < num_intervals_down; ++i)
+  {
+    intervals_down[i]->a = interval_linear_scale(zero_one, down->dom, intervals_down[i]->a);
+    intervals_down[i]->b = interval_linear_scale(zero_one, down->dom, intervals_down[i]->b);
+  }
 
-  return intervals_subtract(intervals_up, num_intervals_up, intervals_down, num_intervals_down, intervals);
+  return intervals_subtract(intervals_down, num_intervals_down, intervals_up, num_intervals_up, intervals);
 }
