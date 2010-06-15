@@ -1,12 +1,5 @@
 #include "init.h"
 
-#include "bezier.h"
-#include "graph.h"
-#include "reduction.h"
-#include "quadclip.h"
-#include "samples.h"
-#include "interval.h"
-
 const float mouse_size = 20;
 
 float* move_mod_x = 0;
@@ -168,7 +161,7 @@ void demo_bounds_with_intervals1()
   graphs[3]->color_g = 1.0f;
   graphs[3]->color_b = 0.5f;
 
-  graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
 }
 
 void demo_bounds_with_intervals2()
@@ -207,7 +200,7 @@ void demo_bounds_with_intervals2()
   graphs[3]->color_g = 1.0f;
   graphs[3]->color_b = 0.5f;
 
-  graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
 }
 
 
@@ -247,7 +240,7 @@ void demo_bounds_with_intervals3()
   graphs[3]->color_g = 1.0f;
   graphs[3]->color_b = 0.5f;
 
-  graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
 }
 
 
@@ -287,7 +280,7 @@ void demo_bounds_with_intervals4()
   graphs[3]->color_g = 1.0f;
   graphs[3]->color_b = 0.5f;
 
-  graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
 }
 
 void demo_reduced_and_raised()
@@ -313,7 +306,7 @@ void demo_intervals1()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(sample_bezier_parabola());
 
-  graphs[0]->num_intervals = bezier_above(graphs[0]->bezier, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_above(graphs[0]->bezier, &graphs[0]->intervals);
 }
 
 void demo_intervals2()
@@ -325,7 +318,7 @@ void demo_intervals2()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals3()
@@ -337,7 +330,7 @@ void demo_intervals3()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals4()
@@ -349,7 +342,7 @@ void demo_intervals4()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals5()
@@ -361,7 +354,7 @@ void demo_intervals5()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals6()
@@ -375,7 +368,7 @@ void demo_intervals6()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_above(b, &graphs[0]->intervals);
 }
 
 void demo_intervals7()
@@ -389,7 +382,7 @@ void demo_intervals7()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_intervals = bezier_above(b, &graphs[0]->intervals);
+  graphs[0]->num_intervals = bezier_quad_above(b, &graphs[0]->intervals);
 }
 
 void demo_quadclip1()
@@ -415,7 +408,7 @@ void demo_quadclip2()
   graphs[0]->num_roots = bezier_quadclip(b, &graphs[0]->roots, 0.001f);
 }
 
-void demo_cubic()
+void demo_cubic_above1()
 {
   Bezier* b = sample_bezier_cosinus(3, 30);
   
@@ -423,7 +416,7 @@ void demo_cubic()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
   
-  graphs[0]->num_roots = bezier_cubic_roots(b, &graphs[0]->roots);
+  graphs[0]->num_intervals = bezier_cubic_above(b, &graphs[0]->intervals);
 }
 
 void init()
@@ -461,10 +454,10 @@ void init()
   //demo_bounds_with_intervals3();
   //demo_bounds_with_intervals4();
 
-  demo_quadclip1();
+  //demo_quadclip1();
   //demo_quadclip2();
 
-  //demo_cubic();
+  demo_cubic_above1();
 }
 
 void update()

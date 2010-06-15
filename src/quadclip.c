@@ -41,7 +41,7 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
     Interval** ox_intervals = 0;
     int ox_num_intervals = 0;
     
-    ox_num_intervals = bezier_intervals_between(reduced_up, reduced_down, &ox_intervals);
+    ox_num_intervals = bezier_quad_intervals_between(reduced_up, reduced_down, &ox_intervals);
     
     for(int i = 0; i < ox_num_intervals; ++i)
     {
@@ -66,7 +66,7 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
   }
 }
 
-int bezier_above(Bezier* b, Interval*** intervals)
+int bezier_quad_above(Bezier* b, Interval*** intervals)
 {
   assert(b->n == 2);
 
@@ -188,16 +188,16 @@ int bezier_above(Bezier* b, Interval*** intervals)
   }
 }
 
-int bezier_intervals_between(Bezier* up, Bezier* down, Interval*** intervals)
+int bezier_quad_intervals_between(Bezier* up, Bezier* down, Interval*** intervals)
 {
   assert(up->n == 2);
   assert(down->n == 2);
 
   Interval** intervals_up = 0;
-  int num_intervals_up = bezier_above(up, &intervals_up);
+  int num_intervals_up = bezier_quad_above(up, &intervals_up);
 
   Interval** intervals_down = 0;
-  int num_intervals_down = bezier_above(down, &intervals_down);
+  int num_intervals_down = bezier_quad_above(down, &intervals_down);
 
   // keep intervals above "down" and subtract intervals above "up"
 
