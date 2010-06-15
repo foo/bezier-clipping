@@ -81,7 +81,15 @@ int bezier_quad_roots(Bezier* b, float** roots)
   float B = -2*b->c[0] + 2*b->c[1];
   float C = b->c[0];
 
-  return power_quad_roots(b->dom, A, B, C, roots);
+  Interval* zero_one = interval_create(0.0f, 1.0f);
+
+  int num_roots = power_quad_roots(A, B, C, roots);
+  for(int i = 0; i < num_roots; ++i)
+    (*roots)[i] = interval_linear_scale(zero_one, b->dom, (*roots)[i]);
+
+  interval_destroy(zero_one);
+  
+  return interval_filter(b->dom, roots, num_roots);
 }
 int bezier_cubic_roots(Bezier* b, float** roots)
 {
@@ -92,5 +100,13 @@ int bezier_cubic_roots(Bezier* b, float** roots)
   float C = -3*b->c[0] + 3*b->c[1];
   float D = b->c[0];
 
-  return power_cubic_roots(b->dom, A, B, C, D, roots);
+  Interval* zero_one = interval_create(0.0f, 1.0f);
+
+  int num_roots = power_cubic_roots(A, B, C, D, roots);
+  for(int i = 0; i < num_roots; ++i)
+    (*roots)[i] = interval_linear_scale(zero_one, b->dom, (*roots)[i]);
+
+  interval_destroy(zero_one);
+  
+  return interval_filter(b->dom, roots, num_roots);
 }

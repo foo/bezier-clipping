@@ -20,6 +20,7 @@ void demo_parabola()
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(sample_bezier_parabola());
+  graphs[0]->num_roots = bezier_quad_roots(graphs[0]->bezier, &graphs[0]->roots);
 }
 
 void demo_parabola_subrange()
@@ -27,6 +28,7 @@ void demo_parabola_subrange()
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(bezier_subrange(sample_bezier_parabola(), 0.3f, 0.7f));
+  graphs[0]->num_roots = bezier_quad_roots(graphs[0]->bezier, &graphs[0]->roots);
 }
 
 void demo_parabola_split()
@@ -41,6 +43,9 @@ void demo_parabola_split()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(left);
   graphs[1] = graph_create(right);
+
+  graphs[0]->num_roots = bezier_quad_roots(graphs[0]->bezier, &graphs[0]->roots);
+  graphs[1]->num_roots = bezier_quad_roots(graphs[1]->bezier, &graphs[1]->roots);
 }
 
 void demo_parabola_two_subranges()
@@ -49,6 +54,9 @@ void demo_parabola_two_subranges()
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(bezier_subrange(sample_bezier_parabola(), 0.3f, 0.4f));
   graphs[1] = graph_create(bezier_subrange(sample_bezier_parabola(), 0.5f, 0.7f));
+  
+  graphs[0]->num_roots = bezier_quad_roots(graphs[0]->bezier, &graphs[0]->roots);
+  graphs[1]->num_roots = bezier_quad_roots(graphs[1]->bezier, &graphs[1]->roots);
 }
 
 void demo_sinus()
@@ -453,10 +461,10 @@ void init()
   //demo_bounds_with_intervals3();
   //demo_bounds_with_intervals4();
 
-  //demo_quadclip1();
+  demo_quadclip1();
   //demo_quadclip2();
 
-  demo_cubic();
+  //demo_cubic();
 }
 
 void update()

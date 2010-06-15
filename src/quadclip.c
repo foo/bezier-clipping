@@ -20,7 +20,7 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
 {
   if(interval_len(original->dom) <= 2.0f*eps)
   {
-    (*roots)[(*num_roots)++] = interval_len(original->dom) / 2.0f;
+    (*roots)[(*num_roots)++] = interval_middle(original->dom);
   }
   else
   {
@@ -49,14 +49,18 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
       {
 	Bezier* clipped = bezier_subrange(original, ox_intervals[i]->a, ox_intervals[i]->b);
 	bezier_quadclip_aux(clipped, roots, num_roots, eps, reduction_matrix);
+	bezier_destroy(clipped);
       }
       else
       {
-	const float middle = (ox_intervals[i]->a + ox_intervals[i]->b) / 2.0f;
+	const float middle = interval_middle(ox_intervals[i]);
 	Bezier* clipped_left = bezier_subrange(original, ox_intervals[i]->a, middle);
 	Bezier* clipped_right = bezier_subrange(original, middle, ox_intervals[i]->b);
 	bezier_quadclip_aux(clipped_left, roots, num_roots, eps, reduction_matrix);
 	bezier_quadclip_aux(clipped_right, roots, num_roots, eps, reduction_matrix);
+
+	bezier_destroy(clipped_left);
+	bezier_destroy(clipped_right);
       }
     }
   }

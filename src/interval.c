@@ -120,3 +120,8 @@ float interval_middle(Interval* i)
   
   return (i->a + i->b) / 2.0f;
 }
+
+float interval_linear_scale(Interval* from, Interval* to, float t)
+{
+  return ((t - from->a) / interval_len(from)) * interval_len(to) + to->a;
+}
