@@ -25,3 +25,4 @@ int interval_filter(Interval* i, float** pts, int num_pts);
 float interval_len(Interval* i);
 float interval_middle(Interval* i);
 float interval_linear_scale(Interval* from, Interval* to, float t);
+int intervals_subtract(Interval** intervals_up, int num_intervals_up, Interval** intervals_down, int num_intervals_down, Interval *** interrvals);

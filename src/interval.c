@@ -125,3 +125,36 @@ float interval_linear_scale(Interval* from, Interval* to, float t)
 {
   return ((t - from->a) / interval_len(from)) * interval_len(to) + to->a;
 }
+
+int intervals_subtract(Interval** intervals_up, int num_intervals_up, Interval** intervals_down, int num_intervals_down, Interval *** intervals)
+{
+  int inserter = 0;
+  *intervals = malloc(sizeof(Interval*) * 4);
+  for(int i = 0; i < num_intervals_down; ++i)
+  {
+    if(!interval_empty(intervals_down[i]))
+    {
+      Interval* actual = (*intervals)[inserter++] = interval_copy(intervals_down[i]);
+    
+      for(int j = 0; j < num_intervals_up; ++j)
+      {
+	if(interval_overlapps(actual, intervals_up[j]))
+	{
+	  --inserter;
+	  Interval** diff = 0;
+	  int num_diff = interval_difference(actual, intervals_up[j], &diff);
+	  
+	  for(int k = 0; k < num_diff; ++k)
+	  {
+	    if(!interval_empty(diff[k]))
+	    {
+	      (*intervals)[inserter++] = interval_copy(diff[k]);
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+  return inserter;
+}

@@ -41,7 +41,7 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
     Interval** ox_intervals = 0;
     int ox_num_intervals = 0;
     
-    ox_num_intervals = bezier_quad_intervals_between(reduced_up, reduced_down, &ox_intervals);
+    ox_num_intervals = bezier_intervals_between(reduced_up, reduced_down, &ox_intervals);
     
     for(int i = 0; i < ox_num_intervals; ++i)
     {
@@ -188,46 +188,15 @@ int bezier_quad_above(Bezier* b, Interval*** intervals)
   }
 }
 
-int bezier_quad_intervals_between(Bezier* up, Bezier* down, Interval*** intervals)
+int bezier_intervals_between(Bezier* up, Bezier* down, Interval*** intervals)
 {
-  assert(up->n == 2);
-  assert(down->n == 2);
+  assert(up->n == down->n);
 
   Interval** intervals_up = 0;
-  int num_intervals_up = bezier_quad_above(up, &intervals_up);
+  int num_intervals_up = power_above(bezier_to_power(up), &intervals_up);
 
   Interval** intervals_down = 0;
-  int num_intervals_down = bezier_quad_above(down, &intervals_down);
+  int num_intervals_down = power_above(bezier_to_power(down), &intervals_down);
 
-  // keep intervals above "down" and subtract intervals above "up"
-
-  int inserter = 0;
-  *intervals = malloc(sizeof(Interval*) * 4);
-  for(int i = 0; i < num_intervals_down; ++i)
-  {
-    if(!interval_empty(intervals_down[i]))
-    {
-      Interval* actual = (*intervals)[inserter++] = interval_copy(intervals_down[i]);
-    
-      for(int j = 0; j < num_intervals_up; ++j)
-      {
-	if(interval_overlapps(actual, intervals_up[j]))
-	{
-	  --inserter;
-	  Interval** diff = 0;
-	  int num_diff = interval_difference(actual, intervals_up[j], &diff);
-	  
-	  for(int k = 0; k < num_diff; ++k)
-	  {
-	    if(!interval_empty(diff[k]))
-	    {
-	      (*intervals)[inserter++] = interval_copy(diff[k]);
-	    }
-	  }
-	}
-      }
-    }
-  }
-
-  return inserter;
+  return intervals_subtract(intervals_up, num_intervals_up, intervals_down, num_intervals_down, intervals);
 }
