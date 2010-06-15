@@ -465,6 +465,67 @@ void demo_cubic_roots4()
   graphs[0]->num_roots = bezier_analytic_roots(b, &graphs[0]->roots);
 }
 
+void demo_above1()
+{
+  Bezier* b = bezier_create(2);
+  b->c[0] = 0.5;
+  b->c[1] = 0.6f;
+  b->c[2] = -0.6f;
+  
+  num_graphs = 1;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+
+  graphs[0]->num_intervals = power_above(bezier_to_power(b), &graphs[0]->intervals);
+}
+
+void demo_above2()
+{
+  Bezier* b = bezier_create(2);
+  b->c[0] = -0.5;
+  b->c[1] = 0.6f;
+  b->c[2] = -0.6f;
+  
+  num_graphs = 1;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+
+  graphs[0]->num_intervals = power_above(bezier_to_power(b), &graphs[0]->intervals);
+  graphs[0]->num_roots = bezier_analytic_roots(b, &graphs[0]->roots);
+}
+
+void demo_above3()
+{
+  Bezier* b = bezier_create(3);
+  b->c[0] = -0.5;
+  b->c[1] = 0.6f;
+  b->c[2] = -0.6f;
+  b->c[3] = 0.1f;
+  
+  num_graphs = 1;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+
+  graphs[0]->num_intervals = power_above(bezier_to_power(b), &graphs[0]->intervals);
+  graphs[0]->num_roots = bezier_analytic_roots(b, &graphs[0]->roots);
+}
+
+void demo_above4()
+{
+  Bezier* b = bezier_create(3);
+  b->c[0] = -0.5;
+  b->c[1] = 0.8f;
+  b->c[2] = -0.6f;
+  b->c[3] = 0.1f;
+  
+  num_graphs = 1;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+
+  graphs[0]->num_intervals = power_above(bezier_to_power(b), &graphs[0]->intervals);
+  graphs[0]->num_roots = bezier_analytic_roots(b, &graphs[0]->roots);
+}
+
 void init()
 {
   //demo_parabola();
@@ -503,10 +564,15 @@ void init()
   //demo_quadclip1();
   //demo_quadclip2();
 
-  demo_cubic_roots1();
+  //demo_cubic_roots1();
   //demo_cubic_roots2();
   //demo_cubic_roots3();
   //demo_cubic_roots4();
+
+  //demo_above1();
+  //demo_above2();
+  //demo_above3();
+  demo_above4();
 }
 
 void update()

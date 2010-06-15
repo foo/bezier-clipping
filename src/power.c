@@ -5,11 +5,13 @@ Power* power_create(int deg)
   Power* p = malloc(sizeof(Power));
   p->n = deg;
   p->c = (float*)malloc(sizeof(float) * (p->n + 1));
+  p->dom = interval_create(0, 1);
   return p;
 }
 
 void power_destroy(Power* p)
 {
+  free(p->dom);
   free(p);
 }
 
@@ -20,11 +22,11 @@ int power_cubic_roots(float A, float B, float C, float D, float** roots);
 int power_analytic_roots(Power* p, float** roots)
 {
   if(p->n == 1)
-    return power_linear_roots(p->c[0], p->c[1], roots);
+    return interval_filter(p->dom, roots, power_linear_roots(p->c[0], p->c[1], roots));
   else if(p->n == 2)
-    return power_quad_roots(p->c[0], p->c[1], p->c[2], roots);
+    return interval_filter(p->dom, roots, power_quad_roots(p->c[0], p->c[1], p->c[2], roots));
   else if(p->n == 3)
-    return power_cubic_roots(p->c[0], p->c[1], p->c[2], p->c[3], roots);
+    return interval_filter(p->dom, roots, power_cubic_roots(p->c[0], p->c[1], p->c[2], p->c[3], roots));
   else
   {
     assert(0); // power basis root finder of polynomials of degree higher then 3 is not the point of this program
@@ -136,3 +138,52 @@ int power_cubic_roots(float A, float B, float C, float D, float** roots)
   }
 }
 
+float power_eval(Power* p, float t)
+{
+  assert(interval_inside(p->dom, t));
+  
+  float res = p->c[0];
+  for(int i = 1; i <= p->n; ++i)
+    res = res * t + p->c[i];
+  return res;
+}
+
+Power* power_derivative(Power* p)
+{
+  Power* d = power_create(p->n - 1);
+  for(int i = 0; i <= d->n; ++i)
+    d->c[i] = p->c[i] * (p->n - i);
+
+  return d;
+}
+
+int power_above(Power* p, Interval*** intervals)
+{
+  float* roots = 0;
+  int num_roots = power_analytic_roots(p, &roots);
+
+  *intervals = malloc(sizeof(float) * (num_roots - 1));
+
+  int inserter = 0;
+
+  float last_dec_deriv = 0.0f;
+  Power* deriv = power_derivative(p);
+
+  for(int i = 0; i < num_roots; ++i)
+  {
+    if(power_eval(deriv, roots[i]) < 0.0f)
+    {
+      if(i == num_roots - 1)
+	(*intervals)[inserter++] = interval_create(roots[i], 1.0f);
+      else
+	last_dec_deriv = roots[i];
+    }
+    else
+    {
+      (*intervals)[inserter++] = interval_create(last_dec_deriv, roots[i]);
+    }
+  }
+
+  power_destroy(deriv);
+  return inserter;
+}
