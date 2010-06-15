@@ -74,7 +74,7 @@ int bezier_quad_above(Bezier* b, Interval*** intervals)
   float B = -2*b->c[0] + 2*b->c[1];
 
   float* roots = 0;
-  int num_roots = bezier_quad_roots(b, &roots);
+  int num_roots = bezier_analytic_roots(b, &roots);
   
   if(A == 0)
   {

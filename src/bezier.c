@@ -73,17 +73,13 @@ void bezier_inc_coeffs(Bezier* b, float ratio)
     b->c[i] += ratio;
 }
 
-int bezier_quad_roots(Bezier* b, float** roots)
+int bezier_analytic_roots(Bezier* b, float** roots)
 {
-  assert(b->n == 2);
-
-  float A = b->c[0] - 2*b->c[1] + b->c[2];
-  float B = -2*b->c[0] + 2*b->c[1];
-  float C = b->c[0];
+  Power* p = bezier_to_power(b);
 
   Interval* zero_one = interval_create(0.0f, 1.0f);
 
-  int num_roots = power_quad_roots(A, B, C, roots);
+  int num_roots = power_analytic_roots(p, roots);
   for(int i = 0; i < num_roots; ++i)
     (*roots)[i] = interval_linear_scale(zero_one, b->dom, (*roots)[i]);
 
@@ -91,22 +87,41 @@ int bezier_quad_roots(Bezier* b, float** roots)
   
   return interval_filter(b->dom, roots, num_roots);
 }
-int bezier_cubic_roots(Bezier* b, float** roots)
+
+Power* bezier_to_power(Bezier* b)
 {
-  assert(b->n == 3);
+  assert(b);
 
-  float A = -b->c[0] + 3*b->c[1] - 3*b->c[2] + b->c[3];
-  float B = 3*b->c[0] - 6*b->c[1] + 3*b->c[2];
-  float C = -3*b->c[0] + 3*b->c[1];
-  float D = b->c[0];
+  if(b->n == 2)
+  {
+    float A = b->c[0] - 2*b->c[1] + b->c[2];
+    float B = -2*b->c[0] + 2*b->c[1];
+    float C = b->c[0];
 
-  Interval* zero_one = interval_create(0.0f, 1.0f);
-
-  int num_roots = power_cubic_roots(A, B, C, D, roots);
-  for(int i = 0; i < num_roots; ++i)
-    (*roots)[i] = interval_linear_scale(zero_one, b->dom, (*roots)[i]);
-
-  interval_destroy(zero_one);
-  
-  return interval_filter(b->dom, roots, num_roots);
+    Power* p = power_create(3);
+    p->c[0] = A;
+    p->c[1] = B;
+    p->c[2] = C;
+    p->n = b->n;
+    return p;
+  }
+  else if(b->n == 3)
+  {
+    float A = -b->c[0] + 3*b->c[1] - 3*b->c[2] + b->c[3];
+    float B = 3*b->c[0] - 6*b->c[1] + 3*b->c[2];
+    float C = -3*b->c[0] + 3*b->c[1];
+    float D = b->c[0];
+    
+    Power* p = power_create(4);
+    p->c[0] = A;
+    p->c[1] = B;
+    p->c[2] = C;
+    p->c[3] = D;
+    p->n = b->n;
+    return p;
+  }
+  else
+  {
+    assert(0); // unimplemented, out of scope of this program
+  }
 }
