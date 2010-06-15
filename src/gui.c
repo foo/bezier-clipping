@@ -408,6 +408,63 @@ void demo_quadclip2()
   graphs[0]->num_roots = bezier_quadclip(b, &graphs[0]->roots, 0.001f);
 }
 
+void demo_cubic_roots1()
+{
+  Bezier* b = sample_bezier_cosinus(3, 30);
+  
+  num_graphs = 1;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+
+  graphs[0]->num_roots = bezier_analytic_roots(b, &graphs[0]->roots);
+}
+
+void demo_cubic_roots2()
+{
+  Bezier* b = bezier_create(3);
+  b->c[0] = 0.5;
+  b->c[1] = -1.0f;
+  b->c[2] = 1.0;
+  b->c[3] = -0.5;
+  
+  num_graphs = 1;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+
+  graphs[0]->num_roots = bezier_analytic_roots(b, &graphs[0]->roots);
+}
+
+void demo_cubic_roots3()
+{
+  Bezier* b = bezier_create(3);
+  b->c[0] = 0.5;
+  b->c[1] = 0.4f;
+  b->c[2] = -0.4f;
+  b->c[3] = -0.5;
+  
+  num_graphs = 1;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+
+  graphs[0]->num_roots = bezier_analytic_roots(b, &graphs[0]->roots);
+}
+
+
+void demo_cubic_roots4()
+{
+  Bezier* b = bezier_create(3);
+  b->c[0] = 0.5;
+  b->c[1] = 0.4f;
+  b->c[2] = -0.4f;
+  b->c[3] = 0.5;
+  
+  num_graphs = 1;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+
+  graphs[0]->num_roots = bezier_analytic_roots(b, &graphs[0]->roots);
+}
+
 void init()
 {
   //demo_parabola();
@@ -444,7 +501,12 @@ void init()
   //demo_bounds_with_intervals4();
 
   //demo_quadclip1();
-  demo_quadclip2();
+  //demo_quadclip2();
+
+  demo_cubic_roots1();
+  //demo_cubic_roots2();
+  //demo_cubic_roots3();
+  //demo_cubic_roots4();
 }
 
 void update()

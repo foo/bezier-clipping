@@ -118,8 +118,11 @@ int power_cubic_roots(float A, float B, float C, float D, float** roots)
       for(; inserter < 3; inserter++)
 	(*roots)[inserter] = p * cos((phi + 2 * inserter * PI) / 3.0) - w;
       
-      // todo: sort roots
-      // todo: remove out of range
+      if ((*roots)[1] < (*roots)[0]) swap(&(*roots)[0], &(*roots)[1]);
+      if ((*roots)[2] < (*roots)[1]) swap(&(*roots)[1], &(*roots)[2]);
+      if ((*roots)[1] < (*roots)[0]) swap(&(*roots)[0], &(*roots)[1]);
+
+      assert((*roots)[0] < (*roots)[1] && (*roots)[1] < (*roots)[2]);
       
       return 3;
     }
@@ -127,7 +130,7 @@ int power_cubic_roots(float A, float B, float C, float D, float** roots)
     {
       delta = sqrt(delta);
       *roots = malloc(sizeof(float));
-      (*roots)[0] = (q + delta)*(q + delta)*(q + delta)*(q + delta) + (q - delta)*(q - delta)*(q - delta)*(q - delta) - w;
+      (*roots)[0] = CBRT(q + delta) + CBRT(q - delta) - w;
       return 1;
     }
   }

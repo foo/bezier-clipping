@@ -23,7 +23,6 @@ Bezier* bezier_copy(Bezier* b);
 void bezier_destroy(Bezier* b);
 void bezier_degree_raise(Bezier* b, int n);
 float bezier_max_coeff_diff(Bezier* b1, Bezier* b2);
+int bezier_analytic_roots(Bezier* b, float** roots);
 void bezier_inc_coeffs(Bezier* b, float ratio);
-int bezier_quad_roots(Bezier* b, float** roots);
-int bezier_cubic_roots(Bezier* b, float** roots);
 Power* bezier_to_power(Bezier* b);

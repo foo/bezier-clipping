@@ -2,6 +2,10 @@
 
 #include <math.h>
 
+#define CBRT(X)		(((X) < 0.0) ? -pow(-(X), 1.0/3.0) : pow((X), 1.0/3.0))  
+#define SQ(X)		((X) * (X))	/* square */
+#define CB(X)		((X) * (X) * (X)) /* cube */
+
 float min(float a, float b);
 float max(float a, float b);
 void swap(float* a, float* b);
