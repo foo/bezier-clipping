@@ -14,7 +14,7 @@ typedef struct
 {
   int n; // degree
   float* c; // coefficients; size is n + 1
-  float a, b; // interval
+  Interval* dom;
 } Bezier;
 
 Bezier* bezier_create(int N);

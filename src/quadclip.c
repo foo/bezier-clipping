@@ -18,9 +18,9 @@ int bezier_quadclip(Bezier* original, float** roots, float eps)
 
 void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float eps, float** reduction_matrix)
 {
-  if(original->b - original->a <= 2.0f*eps)
+  if(interval_len(original->dom) <= 2.0f*eps)
   {
-    (*roots)[(*num_roots)++] = (original->a + original->b) / 2.0f;
+    (*roots)[(*num_roots)++] = interval_len(original->dom) / 2.0f;
   }
   else
   {
@@ -45,7 +45,7 @@ void bezier_quadclip_aux(Bezier* original, float** roots, int* num_roots, float 
     
     for(int i = 0; i < ox_num_intervals; ++i)
     {
-      if(ox_intervals[i]->b - ox_intervals[i]->a < (original->b - original->a) / 2.0f)
+      if(interval_len(ox_intervals[i]) < interval_len(original->dom) / 2.0f)
       {
 	Bezier* clipped = bezier_subrange(original, ox_intervals[i]->a, ox_intervals[i]->b);
 	bezier_quadclip_aux(clipped, roots, num_roots, eps, reduction_matrix);
@@ -81,13 +81,13 @@ int bezier_above(Bezier* b, Interval*** intervals)
       if(B > 0)
       {
 	*intervals = malloc(sizeof(Interval*));
-	(*intervals)[0] = interval_create(b->a, roots[0]);
+	(*intervals)[0] = interval_create(b->dom->a, roots[0]);
 	return 1;
       }
       else
       {
 	*intervals = malloc(sizeof(Interval*));
-	(*intervals)[0] = interval_create(roots[0], b->b);
+	(*intervals)[0] = interval_create(roots[0], b->dom->b);
 	return 1;
       }
     }
@@ -115,13 +115,13 @@ int bezier_above(Bezier* b, Interval*** intervals)
 	  if(Wx < roots[0])
 	  {
 	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(b->a, roots[0]);
+	    (*intervals)[0] = interval_create(b->dom->a, roots[0]);
 	    return 1;
 	  }
 	  else
 	  {
 	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(roots[0], b->b);
+	    (*intervals)[0] = interval_create(roots[0], b->dom->b);
 	    return 1;
 	  }
 	}
@@ -129,11 +129,11 @@ int bezier_above(Bezier* b, Interval*** intervals)
 	{
 	  assert(num_roots == 0);
 
-	  const float half = (b->a + b->b) / 2;
+	  const float half = interval_middle(b->dom);
 	  if(bezier_de_casteljau(b, half) < 0)
 	  {
 	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(b->a, b->b);
+	    (*intervals)[0] = interval_copy(b->dom);
 	    return 1;
 	  }
 	  else
@@ -145,8 +145,8 @@ int bezier_above(Bezier* b, Interval*** intervals)
 	if(num_roots == 2)
 	{
 	  *intervals = malloc(sizeof(Interval*) * 2);
-	  (*intervals)[0] = interval_create(b->a, roots[0]);
-	  (*intervals)[1] = interval_create(roots[1], b->b);
+	  (*intervals)[0] = interval_create(b->dom->a, roots[0]);
+	  (*intervals)[1] = interval_create(roots[1], b->dom->b);
 	  return 2;
 	}
 	else if(num_roots == 1)
@@ -155,13 +155,13 @@ int bezier_above(Bezier* b, Interval*** intervals)
 	  if(Wx < roots[0])
 	  {
 	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(roots[0], b->b);
+	    (*intervals)[0] = interval_create(roots[0], b->dom->b);
 	    return 1;
 	  }
 	  else
 	  {
 	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(b->a, roots[0]);
+	    (*intervals)[0] = interval_create(b->dom->a, roots[0]);
 	    return 1;
 	  }
 	}
@@ -169,11 +169,11 @@ int bezier_above(Bezier* b, Interval*** intervals)
 	{
 	  assert(num_roots == 0);
 
-	  const float half = (b->a + b->b) / 2;
+	  const float half = interval_middle(b->dom);
 	  if(bezier_de_casteljau(b, half) < 0)
 	  {
 	    *intervals = malloc(sizeof(Interval*));
-	    (*intervals)[0] = interval_create(b->a, b->b);
+	    (*intervals)[0] = interval_copy(b->dom);
 	    return 1;
 	  }
 	  else

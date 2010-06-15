@@ -6,8 +6,7 @@ Bezier* bezier_create(int N)
   b->n = N;
   b->c = (float*)malloc(sizeof(float) * (b->n + 1));
 
-  b->a = 0.0f;
-  b->b = 1.0f;
+  b->dom = interval_create(0.0f, 1.0f);
 
   return b;
 }
@@ -18,8 +17,7 @@ Bezier* bezier_create_with_coeffs(int N, float* coeffs)
   b->n = N;
   b->c = coeffs;
 
-  b->a = 0.0f;
-  b->b = 1.0f;
+  b->dom = interval_create(0.0f, 1.0f);
 
   return b;
 }
@@ -28,14 +26,15 @@ Bezier* bezier_copy(Bezier* b)
 {
   Bezier* b2 = bezier_create(b->n);
   memcpy(b2->c, b->c, sizeof(float) * (b->n + 1));
-  b2->a = b->a;
-  b2->b = b->b;
+  
+  b2->dom = interval_copy(b->dom);
   return b2;
 }
 
 void bezier_destroy(Bezier* b)
 {
   free(b->c);
+  free(b->dom);
   free(b);
 }
 
@@ -59,8 +58,7 @@ float bezier_max_coeff_diff(Bezier* b1, Bezier* b2)
   // equal degrees are required in opposition to automatically raising degree in order to preserve b1 and b2
   assert(b1->n == b2->n);
 
-  assert(b1->a == b2->a);
-  assert(b1->b == b2->b);
+  assert(interval_equal(b1->dom, b2->dom));
 
   float result = fabs(b1->c[0] - b2->c[0]);
   for(int i = 1; i <= b1->n; ++i)
@@ -83,7 +81,7 @@ int bezier_quad_roots(Bezier* b, float** roots)
   float B = -2*b->c[0] + 2*b->c[1];
   float C = b->c[0];
 
-  return power_quad_roots(interval_create(b->a, b->b), A, B, C, roots);
+  return power_quad_roots(b->dom, A, B, C, roots);
 }
 int bezier_cubic_roots(Bezier* b, float** roots)
 {
@@ -94,5 +92,5 @@ int bezier_cubic_roots(Bezier* b, float** roots)
   float C = -3*b->c[0] + 3*b->c[1];
   float D = b->c[0];
 
-  return power_cubic_roots(interval_create(b->a, b->b), A, B, C, D, roots);
+  return power_cubic_roots(b->dom, A, B, C, D, roots);
 }

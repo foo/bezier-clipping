@@ -33,7 +33,7 @@ void draw_control_line(Graph* g)
   for (int i = 0; i <= g->bezier->n; i++)
   {
     const float x_01 = (float)i / (float)g->bezier->n;
-    const float x_ab = x_01 * (g->bezier->b - g->bezier->a) + g->bezier->a;
+    const float x_ab = x_01 * (g->bezier->dom->b - g->bezier->dom->a) + g->bezier->dom->a;
       
     glVertex2f(
       g->offset_x + g->width * x_ab,
@@ -53,7 +53,7 @@ void graph_draw(Graph* g)
     for (int i = 0; i <= g->bezier->n; i++)
     {
       const float x_01 = (float)i / (float)g->bezier->n;
-      const float x_ab = x_01 * (g->bezier->b - g->bezier->a) + g->bezier->a;
+      const float x_ab = x_01 * (g->bezier->dom->b - g->bezier->dom->a) + g->bezier->dom->a;
       
       glVertex2f(
 	g->offset_x + g->width * x_ab,
@@ -71,7 +71,7 @@ void graph_draw(Graph* g)
     for (int i = 0; i <= g->bezier->n; i++)
     {
       const float x_01 = (float)i / (float)g->bezier->n;
-      const float x_ab = x_01 * (g->bezier->b - g->bezier->a) + g->bezier->a;
+      const float x_ab = x_01 * (g->bezier->dom->b - g->bezier->dom->a) + g->bezier->dom->a;
       
       glVertex2f(
 	g->offset_x + g->width * x_ab,
@@ -96,7 +96,7 @@ void graph_draw(Graph* g)
 
   glLineWidth(1.0f);
   glBegin(GL_LINE_STRIP);
-  for(float t = g->bezier->a; t <= g->bezier->b; t += g->precision)
+  for(float t = g->bezier->dom->a; t <= g->bezier->dom->b; t += g->precision)
   {
     const float ft = bezier_de_casteljau(g->bezier, t);
 

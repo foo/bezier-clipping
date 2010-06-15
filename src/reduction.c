@@ -82,8 +82,7 @@ Bezier* bezier_degree_reduction(Bezier* c, int m, float **reduction_matrix)
   }
 
   Bezier* low = bezier_create_with_coeffs(m, e);
-  low->a = c->a;
-  low->b = c->b;
+  low->dom = interval_copy(c->dom);
   
   return low;
 }

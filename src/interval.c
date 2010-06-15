@@ -78,3 +78,45 @@ void interval_destroy(Interval* i)
 {
   free(i);
 }
+
+int interval_filter(Interval* i, float** pts, int num_pts)
+{
+  int inserter = 0;
+  for(int k = 0; k < num_pts; ++k)
+    if(interval_inside(i, (*pts)[k]))
+    {
+      if(inserter == k)
+      {
+	inserter++;
+      }
+      else
+      {
+	(*pts)[inserter++] = (*pts)[k];
+      }
+    }
+
+  *pts = realloc(*pts, sizeof(float) * inserter);
+  return inserter;
+}
+
+int interval_equal(Interval* i, Interval* j)
+{
+  assert(i);
+  assert(j);
+
+  return (interval_empty(i) && interval_empty(j)) || (i->a == j->a && i->b == j->b);
+}
+
+float interval_len(Interval* i)
+{
+  assert(i);
+  return (interval_empty(i)) ? 0.0f : i->b - i->a;
+}
+
+float interval_middle(Interval* i)
+{
+  assert(i);
+  assert(!interval_empty(i));
+  
+  return (i->a + i->b) / 2.0f;
+}

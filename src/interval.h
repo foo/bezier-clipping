@@ -1,6 +1,7 @@
 #pragma once
 
 #include <malloc.h>
+#include <assert.h>
 #include "utils.h"
 #include "interval.h"
 
@@ -18,3 +19,8 @@ int interval_subinterval(Interval* i, Interval* j);
 int interval_overlapps(Interval* i, Interval* j);
 int interval_inside(Interval* i, float t);
 void interval_destroy(Interval* i);
+
+int interval_equal(Interval* i, Interval* j);
+int interval_filter(Interval* i, float** pts, int num_pts);
+float interval_len(Interval* i);
+float interval_middle(Interval* i);
