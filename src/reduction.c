@@ -86,3 +86,4 @@ Bezier* bezier_degree_reduction(Bezier* c, int m, float **reduction_matrix)
   
   return low;
 }
+

@@ -45,6 +45,13 @@ void bezier_roots_aux(Bezier* original, float** roots, int* num_roots, float eps
     
     for(int i = 0; i < ox_num_intervals; ++i)
     {
+      if(!interval_subinterval(original->dom, ox_intervals[i]))
+      {
+	printf("o: %f %f\n", original->dom->a, original->dom->b);
+	printf("i: %f %f\n", ox_intervals[i]->a, ox_intervals[i]->b);
+      }
+      assert(interval_subinterval(original->dom, ox_intervals[i]));
+
       if(interval_len(ox_intervals[i]) < interval_len(original->dom) / 2.0f)
       {
 	Bezier* clipped = bezier_subrange(original, ox_intervals[i]->a, ox_intervals[i]->b);

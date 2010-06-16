@@ -153,33 +153,48 @@ Power* power_derivative(Power* p)
   return d;
 }
 
+// in [0,1]
 int power_above(Power* p, Interval*** intervals)
 {
   float* roots = 0;
   int num_roots = power_analytic_roots(p, &roots);
-
-  *intervals = malloc(sizeof(float) * (num_roots - 1));
+  num_roots = interval_filter(interval_create(0,1), &roots, num_roots);
 
   int inserter = 0;
 
-  float last_dec_deriv = 0.0f;
-  Power* deriv = power_derivative(p);
-
-  for(int i = 0; i < num_roots; ++i)
+  if(num_roots == 0)
   {
-    if(power_eval(deriv, roots[i]) < 0.0f)
+    if(power_eval(p, 0.5f) < 0.0)
     {
-      if(i == num_roots - 1)
-	(*intervals)[inserter++] = interval_create(roots[i], 1.0f);
-      else
-	last_dec_deriv = roots[i];
+      *intervals = malloc(sizeof(float));
+      (*intervals)[0] = interval_create(0, 1);
+      return 1;
     }
     else
-    {
-      (*intervals)[inserter++] = interval_create(last_dec_deriv, roots[i]);
-    }
+      return 0;
   }
-
-  power_destroy(deriv);
+  else
+  {
+    *intervals = malloc(sizeof(float) * (num_roots - 1));
+    float last_dec_deriv = 0.0f;
+    Power* deriv = power_derivative(p);
+    
+    for(int i = 0; i < num_roots; ++i)
+    {
+      if(power_eval(deriv, roots[i]) < 0.0f)
+      {
+	if(i == num_roots - 1)
+	  (*intervals)[inserter++] = interval_create(roots[i], 1.0f);
+	else
+	  last_dec_deriv = roots[i];
+      }
+      else
+      {
+	(*intervals)[inserter++] = interval_create(last_dec_deriv, roots[i]);
+      }
+    }
+    power_destroy(deriv);
+  }
+  
   return inserter;
 }

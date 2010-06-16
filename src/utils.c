@@ -57,12 +57,45 @@ float factln(const int n)
   return gammln(n+1.);
 }
 
+#define NBCMAX		40		/* largest n value allowed */
+
+int f_ibinom_c(int n, int i) {
+  int j, *p1, *p2;
+  static int nfill = -1, bc[(NBCMAX + 1) * (NBCMAX + 2) / 2];
+
+  if (nfill < 0) {			/* initialize */
+    bc[0] = 1;
+    nfill = 0;
+  }
+
+  if (n < 0 || i < 0 || i > n || n > NBCMAX) return (-1);
+
+  if (n > nfill) {			/* add rows to table */
+    p1 = bc + nfill * (nfill + 1) / 2;	/* begin of last filled row */
+    p2 = p1 + nfill + 1;		/* begin of 1st empty row */
+    while (nfill < n) {
+      nfill++;
+      *p2++ = 1;
+      for (j = 1; j < nfill; j++, p1++, p2++) *p2 = *p1 + *(p1 + 1);
+      *p2++ = 1;
+      p1++;
+    }
+  }
+
+  return (bc[n * (n + 1) / 2 + i]);
+}
+
+int bico(const int n, const int k)
+{
+  return f_ibinom_c(n, k);
+}
+/*
 float bico(const int n, const int k)
 {
   if (n<0 || k<0 || k>n) return -1;
   if (n<171) return floor(0.5+factrl(n)/(factrl(k)*factrl(n-k)));
   return floor(0.5+exp(factln(n)-factln(k)-factln(n-k)));
-}
+  }*/
 
 int up_power(const int x, const int up)
 {
