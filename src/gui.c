@@ -212,27 +212,61 @@ void demo_bounds1(int reduce)
   graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
 }
 
+void demo_bounds2(int reduce)
+{
+  int deg = 5;
+  Bezier* b = bezier_create(deg);
+  b->c[0] = 0.5;
+  b->c[1] = -0.5;
+  b->c[2] = 0.3;
+  b->c[3] = 0.5;
+  b->c[4] = -0.1;
+  b->c[5] = -0.5;
+  
+  num_graphs = 3;
+  graphs = malloc(sizeof(Graph*) * num_graphs);
+  graphs[0] = graph_create(b);
+
+  float** reduction_matrix = bezier_reduction_matrix(deg, reduce);
+  Bezier* reduced = bezier_degree_reduction(b, reduce, reduction_matrix);
+  Bezier* reduced_and_raised = bezier_copy(reduced);
+
+  bezier_degree_raise(reduced_and_raised, deg);
+
+  float difference = bezier_max_coeff_diff(b, reduced_and_raised);
+    
+  Bezier* reduced_up = bezier_copy(reduced);
+  bezier_inc_coeffs(reduced_up, difference);
+  Bezier* reduced_down = bezier_copy(reduced);
+  bezier_inc_coeffs(reduced_down, -difference);
+    
+  graphs[1] = graph_create(reduced_up);
+  graphs[2] = graph_create(reduced_down);
+
+  graphs[0]->num_intervals = bezier_intervals_between(reduced_up, reduced_down, &graphs[0]->intervals);
+}
+
 void demo_cubic_clip1()
 {
-  Bezier* b = sample_bezier_sinus(3, 10);
+  Bezier* b = sample_bezier_sinus(7, 10);
   b->c[0] = 0.1;
   
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_roots = bezier_roots(b, &graphs[0]->roots, 0.001f, 2);
+  graphs[0]->num_roots = bezier_roots(b, &graphs[0]->roots, 0.001f, 3);
 }
 
 void demo_cubic_clip2()
 {
-  Bezier* b = sample_bezier_cosinus(3, 10);
+  Bezier* b = sample_bezier_cosinus(7, 10);
   
   num_graphs = 1;
   graphs = malloc(sizeof(Graph*) * num_graphs);
   graphs[0] = graph_create(b);
 
-  graphs[0]->num_roots = bezier_roots(b, &graphs[0]->roots, 0.001f, 2);
+  graphs[0]->num_roots = bezier_roots(b, &graphs[0]->roots, 0.001f, 3);
 }
 
 
@@ -252,7 +286,11 @@ void init()
   //demo_between2();
   //demo_between3();
 
-  demo_bounds1(2);
+  //demo_bounds1(3);
+  //demo_bounds1(2);
+
+  //demo_bounds2(3);
+  //demo_bounds2(2);
   
   //demo_cubic_clip1();
   //demo_cubic_clip2();
