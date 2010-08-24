@@ -37,7 +37,13 @@ void bezier_to_file(Bezier* b, FILE* f)
 
 void bezier_control_to_file(Bezier* b, FILE* f)
 {
-  fprintf(f, "ctrl\n");
+  for(int i = 0; i <= b->n; i++)
+  {
+    const float x_01 = (float)i / (float)b->n;
+    const float x_ab = x_01 * (b->dom->b - b->dom->a) + b->dom->a;
+
+    fprintf(f, "%f %f\n", x_ab, b->c[i]);
+  }
 }
 
 /*
@@ -58,23 +64,30 @@ void graph_draw(Graph* g)
 {
   assert(g->num_bezier != 0);
 
-  FILE* gnuplot = fopen("../tests/default/gnuplot.pg", "w");
+  char gnuplot_path[256];
+  sprintf(gnuplot_path, "../tests/%s/gnuplot.pg", g->dirname);
+
+  FILE* gnuplot = fopen(gnuplot_path, "w");
   fprintf(gnuplot, "set term postscript eps enhanced\nset output \"graph.eps\"\n");
 
   for(int i = 0; i < g->num_bezier; ++i)
   {
     char control_path[256];
-    sprintf(control_path, "../tests/default/control%d.xy", i);
-    FILE* control = fopen(control_path, "w");
+    char control_full_path[256];
+    sprintf(control_path, "control%d.xy", i);
+    sprintf(control_full_path, "../tests/%s/%s", g->dirname, control_path);
+    FILE* control = fopen(control_full_path, "w");
     bezier_control_to_file(g->bezier[i], control);
     
     char bezier_path[256];
-    sprintf(bezier_path, "../tests/default/bezier%d.xy", i);
-    FILE* bezier = fopen(bezier_path, "w");
+    char bezier_full_path[256];
+    sprintf(bezier_path, "bezier%d.xy", i);
+    sprintf(bezier_full_path, "../tests/%s/%s", g->dirname, bezier_path);
+    FILE* bezier = fopen(bezier_full_path, "w");
     bezier_to_file(g->bezier[i], bezier);
     
-    fprintf(gnuplot, "plot %s with ????\n", control_path);
-    fprintf(gnuplot, "plot %s with ????\n", bezier_path);
+    fprintf(gnuplot, "plot \"%s\" using 1:2 title \"lamana kontrolna\" with lines\n", control_path);
+    // fprintf(gnuplot, "plot \"%s\" using 1:2 title \"wielomian Beziera\" with lines\n", bezier_path);
   }
 
   // for num_intervals
