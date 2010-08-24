@@ -35,3 +35,6 @@ main: graph reduction quadclip samples interval
 all: main
 clear:
 	rm ../bin/*
+
+graphs:
+	gnuplot ../tests/*/gnuplot.pg && epstopdf ../tests/*/graph.eps

@@ -6,7 +6,7 @@ Graph* graph_create(char* dir)
 
   g->dirname = dir;
   
-  g->draw_control_line = 0;
+  g->draw_control_line = 1;
   g->draw_control_points = 1;
   g->draw_axis = 1;
   g->color_r = 0.0f;
@@ -70,14 +70,25 @@ void graph_draw(Graph* g)
   FILE* gnuplot = fopen(gnuplot_path, "w");
   fprintf(gnuplot, "set term postscript eps enhanced\nset output \"graph.eps\"\n");
 
+  fprintf(gnuplot, "plot ");
+  
   for(int i = 0; i < g->num_bezier; ++i)
   {
-    char control_path[256];
-    char control_full_path[256];
-    sprintf(control_path, "control%d.xy", i);
-    sprintf(control_full_path, "../tests/%s/%s", g->dirname, control_path);
-    FILE* control = fopen(control_full_path, "w");
-    bezier_control_to_file(g->bezier[i], control);
+    if(g->draw_control_line || g->draw_control_points)
+    {
+      char control_path[256];
+      char control_full_path[256];
+      sprintf(control_path, "control%d.xy", i);
+      sprintf(control_full_path, "../tests/%s/%s", g->dirname, control_path);
+      FILE* control = fopen(control_full_path, "w");
+      bezier_control_to_file(g->bezier[i], control);
+
+      if(g->draw_control_line)
+	fprintf(gnuplot, "\"%s\" using 1:2 title \"lamana kontrolna\" with lines,", control_path);
+
+      if(g->draw_control_points)
+	fprintf(gnuplot, "\"%s\" using 1:2:(0.01) title \"lamana kontrolna\" with circles", control_path);
+    }
     
     char bezier_path[256];
     char bezier_full_path[256];
@@ -86,8 +97,7 @@ void graph_draw(Graph* g)
     FILE* bezier = fopen(bezier_full_path, "w");
     bezier_to_file(g->bezier[i], bezier);
     
-    fprintf(gnuplot, "plot \"%s\" using 1:2 title \"lamana kontrolna\" with lines\n", control_path);
-    // fprintf(gnuplot, "plot \"%s\" using 1:2 title \"wielomian Beziera\" with lines\n", bezier_path);
+    //fprintf(gnuplot, "plot \"%s\" using 1:2 title \"wielomian Beziera\" with lines\n", bezier_path);
   }
 
   // for num_intervals
@@ -99,24 +109,6 @@ void graph_draw(Graph* g)
   // utworz num_roots plikow z parami root->0 (circles)
   
   /*
-  glColor3f(g->color_r, g->color_g, g->color_b);
-  
-  if(g->draw_control_line)
-  {
-    glBegin(GL_LINE_STRIP);
-    for (int i = 0; i <= g->bezier->n; i++)
-    {
-      const float x_01 = (float)i / (float)g->bezier->n;
-      const float x_ab = x_01 * (g->bezier->dom->b - g->bezier->dom->a) + g->bezier->dom->a;
-      
-      glVertex2f(
-	g->offset_x + g->width * x_ab,
-	g->offset_y + g->height * g->bezier->c[i]
-		 );
-    }
-    glEnd();
-  }
-
   glLineWidth(1.0f);
   if(g->draw_control_points)
   {
