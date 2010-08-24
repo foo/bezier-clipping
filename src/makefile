@@ -33,7 +33,7 @@ gui: graph reduction quadclip samples interval
 	gcc $(FLAGS) -c gui.c -o ../bin/gui.o
 
 init: gui
-	gcc $(FLAGS) init.c $(OBJ) -lglut -lpng -o ../bin/lpp.e
+	gcc $(FLAGS) init.c $(OBJ) -lm -o ../bin/lpp.e
 
 all: init
 clear:

@@ -1,10 +1,11 @@
 #include "graph.h"
 
-Graph* graph_create(Bezier* b)
+Graph* graph_create(char* dir)
 {
   Graph* g = malloc(sizeof(Graph));
 
-  g->bezier = b;
+  g->dirname = dir;
+  
   g->draw_control_line = 0;
   g->draw_control_points = 1;
   g->draw_axis = 1;
@@ -17,6 +18,9 @@ Graph* graph_create(Bezier* b)
   g->offset_y = 200.0f;
   g->precision = 0.001f;
 
+  g->bezier = 0;
+  g->num_bezier = 0;
+  
   g->roots = 0;
   g->num_roots = 0;
 
@@ -26,25 +30,27 @@ Graph* graph_create(Bezier* b)
   return g;
 }
 
-void draw_control_line(Graph* g)
-{
-  glLineWidth(1.0f);
-  glBegin(GL_LINE_STRIP);
-  for (int i = 0; i <= g->bezier->n; i++)
-  {
-    const float x_01 = (float)i / (float)g->bezier->n;
-    const float x_ab = x_01 * (g->bezier->dom->b - g->bezier->dom->a) + g->bezier->dom->a;
-      
-    glVertex2f(
-      g->offset_x + g->width * x_ab,
-      g->offset_y + g->height * g->bezier->c[i]
-	       );
-  }
-  glEnd();
-}
+/*
+ * kazdy graph musi wyprodukowac:
+ ** katalog danego wykresu, nalezy go nazwac w konstruktorze graph
+ ** plik gnuplota
+
+ * nalezy umozliwic wrzucanie wielu wielomianow do jednego wykresu, dlatego graph powinien miec kolekcje wielomianow a nie jeden wielomian (lub nalezy to podzielic na zbiory graph)
+
+ * mozna pominac rysowanie osi
+ * punkty kontrolne powinny byc osobnym wykresem (with circles)
+ * lamana kontrolna powinna byc osobnym wykresem (with lines)
+
+ * nalezy jakos zaznaczac intervals i roots
+ */
 
 void graph_draw(Graph* g)
 {
+  assert(g->num_bezier != 0);
+
+  printf("%s\n", g->dirname);
+  
+  /*
   glColor3f(g->color_r, g->color_g, g->color_b);
   
   if(g->draw_control_line)
@@ -143,4 +149,5 @@ void graph_draw(Graph* g)
   glEnd();
   
   glLineWidth(1.0f);
+  */
 }

@@ -7,7 +7,11 @@
 
 typedef struct
 {
-  Bezier* bezier;
+  char* dirname;
+  
+  Bezier** bezier;
+  int num_bezier;
+  
   int draw_control_line;
   int draw_control_points;
   int draw_axis;
@@ -27,5 +31,5 @@ typedef struct
   int num_roots;
 } Graph;
 
-Graph* graph_create(Bezier* b);
+Graph* graph_create(char* dir);
 void graph_draw(Graph* g);

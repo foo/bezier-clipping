@@ -10,15 +10,19 @@ int num_graphs = 0;
 
 void demo_cubic_roots1()
 {
+  Graph* g = graph_create("cubic_roots1");
+
   Bezier* b = sample_bezier_cosinus(3, 30);
-  
-  num_graphs = 1;
-  graphs = malloc(sizeof(Graph*) * num_graphs);
-  graphs[0] = graph_create(b);
 
-  graphs[0]->num_roots = bezier_analytic_roots(b, &graphs[0]->roots);
+  g->num_bezier = 1;
+  g->bezier = malloc(sizeof(Bezier*));
+  g->bezier[0] = b;
+
+  g->num_roots = bezier_analytic_roots(b, &g->roots);
+
+  graph_draw(g);
 }
-
+/*
 void demo_cubic_roots2()
 {
   Bezier* b = bezier_create(3);
@@ -268,11 +272,11 @@ void demo_cubic_clip2()
 
   graphs[0]->num_roots = bezier_roots(b, &graphs[0]->roots, 0.001f, 3);
 }
+*/
 
-
-void init()
+void demo()
 {
-  //demo_cubic_roots1();
+  demo_cubic_roots1();
   //demo_cubic_roots2();
   //demo_cubic_roots3();
   //demo_cubic_roots4();
@@ -295,29 +299,3 @@ void init()
   //demo_cubic_clip1();
   //demo_cubic_clip2();
 }
-
-void update()
-{
-}
-
-void draw()
-{
-  for(int g = 0; g < num_graphs; ++g)
-    graph_draw(graphs[g]);
-
-  glColor3f(1.0f, 0.0f, 0.0f);
-  glLineWidth(3.0f);
-  glBegin(GL_LINES);
-  
-  // mouse
-  glColor3f(0.0f, 0.0f, 0.0f);
-  glBegin(GL_LINE_STRIP);
-  for(float i = 0; i < 2 * 3.1415; i += 0.1)
-    glVertex2f(mouse_size * cosf(i) + getMouseX(), mouse_size * sinf(i) + getMouseY());
-  glEnd();
-}
-
-void key_press(unsigned char key) {}
-void mouse_move() {}
-void mouse_left_click() {}
-void mouse_right_click() {}
