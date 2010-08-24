@@ -8,15 +8,6 @@ Graph* graph_create(char* dir)
   
   g->draw_control_line = 1;
   g->draw_control_points = 1;
-  g->draw_axis = 1;
-  g->color_r = 0.0f;
-  g->color_g = 0.0f;
-  g->color_b = 0.0f;
-  g->width = 400.0f;
-  g->height = 400.0f;
-  g->offset_x = 100.0f;
-  g->offset_y = 200.0f;
-  g->precision = 0.001f;
 
   g->bezier = 0;
   g->num_bezier = 0;
@@ -33,6 +24,12 @@ Graph* graph_create(char* dir)
 void bezier_to_file(Bezier* b, FILE* f)
 {
   fprintf(f, "bezier\n");
+  for(float t = b->dom->a; t <= b->dom->b; t += 0.001f)
+  {
+    const float ft = bezier_de_casteljau(b, t);
+
+    fprintf(f, "%f %f\n", t, ft);
+  }
 }
 
 void bezier_control_to_file(Bezier* b, FILE* f)
@@ -46,20 +43,6 @@ void bezier_control_to_file(Bezier* b, FILE* f)
   }
 }
 
-/*
- * kazdy graph musi wyprodukowac:
- ** katalog danego wykresu, nalezy go nazwac w konstruktorze graph
- ** plik gnuplota
-
- * nalezy umozliwic wrzucanie wielu wielomianow do jednego wykresu, dlatego graph powinien miec kolekcje wielomianow a nie jeden wielomian (lub nalezy to podzielic na zbiory graph)
-
- * mozna pominac rysowanie osi
- * punkty kontrolne powinny byc osobnym wykresem (with circles)
- * lamana kontrolna powinna byc osobnym wykresem (with lines)
-
- * nalezy jakos zaznaczac intervals i roots
- */
-
 void graph_draw(Graph* g)
 {
   assert(g->num_bezier != 0);
@@ -68,9 +51,14 @@ void graph_draw(Graph* g)
   sprintf(gnuplot_path, "../tests/%s/gnuplot.pg", g->dirname);
 
   FILE* gnuplot = fopen(gnuplot_path, "w");
-  fprintf(gnuplot, "set term postscript eps enhanced\nset output \"graph.eps\"\n");
+  fprintf(gnuplot, "set term postscript eps enhanced\n");
+  fprintf(gnuplot, "set output \"graph.eps\"\n");
+  fprintf(gnuplot, "set xzeroaxis lt -1\n");
+  fprintf(gnuplot, "set yzeroaxis lt -1\n");
 
   fprintf(gnuplot, "plot ");
+
+  int first_plot = 1;
   
   for(int i = 0; i < g->num_bezier; ++i)
   {
@@ -84,10 +72,23 @@ void graph_draw(Graph* g)
       bezier_control_to_file(g->bezier[i], control);
 
       if(g->draw_control_line)
-	fprintf(gnuplot, "\"%s\" using 1:2 title \"lamana kontrolna\" with lines,", control_path);
-
+      {
+	if(!first_plot)
+	  fprintf(gnuplot, ",");
+	else
+	  first_plot = 0;
+	fprintf(gnuplot, "\"%s\" using 1:2 title \"lamana kontrolna\" with lines", control_path);
+      }
+      
       if(g->draw_control_points)
-	fprintf(gnuplot, "\"%s\" using 1:2:(0.01) title \"lamana kontrolna\" with circles", control_path);
+      {
+	if(!first_plot)
+	  fprintf(gnuplot, ",");
+	else
+	  first_plot = 0;
+
+	fprintf(gnuplot, "\"%s\" using 1:2 title \"lamana kontrolna\" with points", control_path);
+      }
     }
     
     char bezier_path[256];
@@ -96,79 +97,41 @@ void graph_draw(Graph* g)
     sprintf(bezier_full_path, "../tests/%s/%s", g->dirname, bezier_path);
     FILE* bezier = fopen(bezier_full_path, "w");
     bezier_to_file(g->bezier[i], bezier);
-    
-    //fprintf(gnuplot, "plot \"%s\" using 1:2 title \"wielomian Beziera\" with lines\n", bezier_path);
+
+    if(!first_plot)
+      fprintf(gnuplot, ",");
+    else
+      first_plot = 0;
+
+    fprintf(gnuplot, "\"%s\" using 1:2 title \"wielomian Beziera\" with lines", bezier_path);
   }
 
-  // for num_intervals
-  // for num_roots
-  
-  // utworz num_bezier plikow z parami dziedzina->wartosc
-  // utworz num_bezier plikow z parami i/n->punkt kontrolny
+  if(g->num_roots != 0)
+  {
+    char roots_path[256];
+    char roots_full_path[256];
+    sprintf(roots_path, "roots.xy");
+    sprintf(roots_full_path, "../tests/%s/%s", g->dirname, roots_path);
+    
+    FILE* roots = fopen(roots_full_path, "w");
+    
+    for(int i = 0; i < g->num_roots; ++i)
+    {
+      fprintf(roots, "%f 0.0\n", g->roots[i]);
+    }
+    
+    if(!first_plot)
+      fprintf(gnuplot, ",");
+    else
+      first_plot = 0;
+    
+    fprintf(gnuplot, "\"%s\" using 1:2:(0.005) title \"miejsca zerowe\" with circles", roots_path);
+  }
+
   // utworz num_interval plikow z bound rect
   // utworz num_roots plikow z parami root->0 (circles)
   
   /*
-  glLineWidth(1.0f);
-  if(g->draw_control_points)
-  {
-    glPointSize(5.0);
-    glBegin(GL_POINTS);
-    for (int i = 0; i <= g->bezier->n; i++)
-    {
-      const float x_01 = (float)i / (float)g->bezier->n;
-      const float x_ab = x_01 * (g->bezier->dom->b - g->bezier->dom->a) + g->bezier->dom->a;
-      
-      glVertex2f(
-	g->offset_x + g->width * x_ab,
-	g->offset_y + g->height * g->bezier->c[i]
-		 );
-
-    }
-    glEnd();
-  }
-
-  glLineWidth(1.0f);
-  if(g->draw_axis)
-  {
-    glBegin(GL_LINES);
-    glVertex2f(g->offset_x, g->offset_y);
-    glVertex2f(g->offset_x, g->offset_y + g->height);
-
-    glVertex2f(g->offset_x, g->offset_y);
-    glVertex2f(g->offset_x + g->width, g->offset_y);
-    glEnd();
-  }
-
-  glLineWidth(1.0f);
-  glBegin(GL_LINE_STRIP);
-  for(float t = g->bezier->dom->a; t <= g->bezier->dom->b; t += g->precision)
-  {
-    const float ft = bezier_de_casteljau(g->bezier, t);
-
-    glVertex2f(
-      g->offset_x + g->width * t,
-      g->offset_y + g->height * ft
-	       );
-  }
-  glEnd();
-
-  glColor3f(1.0f, 0.0f, 0.0f);
-  glLineWidth(3.0f);
-  glBegin(GL_LINES);
-  
-  for(int i = 0; i < g->num_intervals; ++i)
-  {
-    assert(g->intervals);
-    assert(g->intervals[i]);
-    assert(!interval_empty(g->intervals[i]));
-    glVertex2f(g->offset_x + g->width * g->intervals[i]->a, g->offset_y);
-    glVertex2f(g->offset_x + g->width * g->intervals[i]->b, g->offset_y);
-  }
-  glEnd();
-
-  glBegin(GL_POINTS);
-  
   for(int i = 0; i < g->num_intervals; ++i)
   {
     assert(g->intervals);
