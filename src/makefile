@@ -1,6 +1,6 @@
 
 FLAGS=-Wall -std=c99 -pedantic
-OBJ=../bin/bezier.o ../bin/graph.o ../bin/quadclip.o ../bin/casteljau.o ../bin/reduction.o ../bin/samples.o ../bin/utils.o ../bin/power.o ../bin/gui.o ../bin/interval.o
+OBJ=../bin/bezier.o ../bin/graph.o ../bin/quadclip.o ../bin/casteljau.o ../bin/reduction.o ../bin/samples.o ../bin/utils.o ../bin/power.o ../bin/interval.o
 
 power:
 	gcc $(FLAGS) -c power.c -o ../bin/power.o
@@ -29,12 +29,9 @@ utils:
 interval:
 	gcc $(FLAGS) -c interval.c -o ../bin/interval.o
 
-gui: graph reduction quadclip samples interval
-	gcc $(FLAGS) -c gui.c -o ../bin/gui.o
+main: graph reduction quadclip samples interval
+	gcc $(FLAGS) main.c $(OBJ) -lm -o ../bin/lpp.e
 
-init: gui
-	gcc $(FLAGS) init.c $(OBJ) -lm -o ../bin/lpp.e
-
-all: init
+all: main
 clear:
 	rm ../bin/*

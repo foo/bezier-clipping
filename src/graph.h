@@ -1,6 +1,7 @@
 #pragma once
 
 #include <malloc.h>
+#include <stdio.h>
 #include "bezier.h"
 #include "casteljau.h"
 #include "interval.h"

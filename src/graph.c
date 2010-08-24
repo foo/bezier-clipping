@@ -30,6 +30,16 @@ Graph* graph_create(char* dir)
   return g;
 }
 
+void bezier_to_file(Bezier* b, FILE* f)
+{
+  fprintf(f, "bezier\n");
+}
+
+void bezier_control_to_file(Bezier* b, FILE* f)
+{
+  fprintf(f, "ctrl\n");
+}
+
 /*
  * kazdy graph musi wyprodukowac:
  ** katalog danego wykresu, nalezy go nazwac w konstruktorze graph
@@ -48,7 +58,32 @@ void graph_draw(Graph* g)
 {
   assert(g->num_bezier != 0);
 
-  printf("%s\n", g->dirname);
+  FILE* gnuplot = fopen("../tests/default/gnuplot.pg", "w");
+  fprintf(gnuplot, "set term postscript eps enhanced\nset output \"graph.eps\"\n");
+
+  for(int i = 0; i < g->num_bezier; ++i)
+  {
+    char control_path[256];
+    sprintf(control_path, "../tests/default/control%d.xy", i);
+    FILE* control = fopen(control_path, "w");
+    bezier_control_to_file(g->bezier[i], control);
+    
+    char bezier_path[256];
+    sprintf(bezier_path, "../tests/default/bezier%d.xy", i);
+    FILE* bezier = fopen(bezier_path, "w");
+    bezier_to_file(g->bezier[i], bezier);
+    
+    fprintf(gnuplot, "plot %s with ????\n", control_path);
+    fprintf(gnuplot, "plot %s with ????\n", bezier_path);
+  }
+
+  // for num_intervals
+  // for num_roots
+  
+  // utworz num_bezier plikow z parami dziedzina->wartosc
+  // utworz num_bezier plikow z parami i/n->punkt kontrolny
+  // utworz num_interval plikow z bound rect
+  // utworz num_roots plikow z parami root->0 (circles)
   
   /*
   glColor3f(g->color_r, g->color_g, g->color_b);
