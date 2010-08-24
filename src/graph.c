@@ -21,6 +21,14 @@ Graph* graph_create(char* dir)
   return g;
 }
 
+void graph_add_bezier(Graph* g, Bezier* b)
+{
+  g->num_bezier++;
+  g->bezier = realloc(g->bezier, sizeof(Bezier*) * g->num_bezier);
+  g->bezier[g->num_bezier-1] = b;
+}
+
+
 void bezier_to_file(Bezier* b, FILE* f)
 {
   fprintf(f, "bezier\n");
@@ -127,30 +135,26 @@ void graph_draw(Graph* g)
     
     fprintf(gnuplot, "\"%s\" using 1:2:(0.005) title \"miejsca zerowe\" with circles", roots_path);
   }
-
-  // utworz num_interval plikow z bound rect
-  // utworz num_roots plikow z parami root->0 (circles)
   
-  /*
-  for(int i = 0; i < g->num_intervals; ++i)
+  if(g->num_intervals != 0)
   {
-    assert(g->intervals);
-    assert(g->intervals[i]);
-    assert(!interval_empty(g->intervals[i]));
-    glVertex2f(g->offset_x + g->width * g->intervals[i]->a, g->offset_y);
-    glVertex2f(g->offset_x + g->width * g->intervals[i]->b, g->offset_y);
+    char intervals_path[256];
+    char intervals_full_path[256];
+    sprintf(intervals_path, "intervals.xy");
+    sprintf(intervals_full_path, "../tests/%s/%s", g->dirname, intervals_path);
+    
+    FILE* roots = fopen(intervals_full_path, "w");
+    
+    for(int i = 0; i < g->num_intervals; ++i)
+    {
+      fprintf(roots, "%f %f\n", g->intervals[i]->a, g->intervals[i]->b - g->intervals[i]->a);
+    }
+    
+    if(!first_plot)
+      fprintf(gnuplot, ",");
+    else
+      first_plot = 0;
+    
+    fprintf(gnuplot, "\"%s\" using 1:(-0.01):2 title \"przedzialy\" with xerrorbars", intervals_path);
   }
-  glEnd();
-
-  glBegin(GL_POINTS);
-  
-  for(int i = 0; i < g->num_roots; ++i)
-  {
-    assert(g->roots);
-    glVertex2f(g->offset_x + g->width * g->roots[i], g->offset_y);
-  }
-  glEnd();
-  
-  glLineWidth(1.0f);
-  */
 }

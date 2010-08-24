@@ -25,3 +25,4 @@ typedef struct
 
 Graph* graph_create(char* dir);
 void graph_draw(Graph* g);
+void graph_add_bezier(Graph* g, Bezier* b);
