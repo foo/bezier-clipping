@@ -59,8 +59,8 @@ void graph_draw(Graph* g)
   sprintf(gnuplot_path, "../tests/%s/gnuplot.pg", g->dirname);
 
   FILE* gnuplot = fopen(gnuplot_path, "w");
-  fprintf(gnuplot, "set term postscript eps enhanced\n");
-  fprintf(gnuplot, "set output \"graph.eps\"\n");
+  fprintf(gnuplot, "set terminal pdf\n");
+  fprintf(gnuplot, "set output \"graph.pdf\"\n");
   fprintf(gnuplot, "set xzeroaxis lt -1\n");
   fprintf(gnuplot, "set yzeroaxis lt -1\n");
 
@@ -85,7 +85,7 @@ void graph_draw(Graph* g)
 	  fprintf(gnuplot, ",");
 	else
 	  first_plot = 0;
-	fprintf(gnuplot, "\"%s\" using 1:2 title \"lamana kontrolna\" with lines", control_path);
+	fprintf(gnuplot, "\"%s\" using 1:2 title \"lamana kontrolna\" with lines lt -1", control_path);
       }
       
       if(g->draw_control_points)
@@ -95,7 +95,7 @@ void graph_draw(Graph* g)
 	else
 	  first_plot = 0;
 
-	fprintf(gnuplot, "\"%s\" using 1:2 title \"lamana kontrolna\" with points", control_path);
+	fprintf(gnuplot, "\"%s\" using 1:2 title \"lamana kontrolna\" with points lt -1", control_path);
       }
     }
     
@@ -111,7 +111,7 @@ void graph_draw(Graph* g)
     else
       first_plot = 0;
 
-    fprintf(gnuplot, "\"%s\" using 1:2 title \"wielomian Beziera\" with lines", bezier_path);
+    fprintf(gnuplot, "\"%s\" using 1:2 title \"wielomian Beziera\" with lines lt -1", bezier_path);
   }
 
   if(g->num_roots != 0)
@@ -133,7 +133,7 @@ void graph_draw(Graph* g)
     else
       first_plot = 0;
     
-    fprintf(gnuplot, "\"%s\" using 1:2:(0.005) title \"miejsca zerowe\" with circles", roots_path);
+    fprintf(gnuplot, "\"%s\" using 1:2:(0.005) title \"miejsca zerowe\" with circles lt -1", roots_path);
   }
   
   if(g->num_intervals != 0)
@@ -155,6 +155,6 @@ void graph_draw(Graph* g)
     else
       first_plot = 0;
     
-    fprintf(gnuplot, "\"%s\" using 1:(-0.01):2 title \"przedzialy\" with xerrorbars", intervals_path);
+    fprintf(gnuplot, "\"%s\" using 1:(-0.01):2 title \"przedzialy\" with xerrorbars lt -1", intervals_path);
   }
 }
