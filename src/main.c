@@ -66,6 +66,7 @@ void demo_bounds2()
   bezier_inc_coeffs(reduced_down, -difference);
 
   graph_add_bezier(g, b);
+  graph_add_bezier(g, reduced);
   graph_add_bezier(g, reduced_up);
   graph_add_bezier(g, reduced_down);
 
