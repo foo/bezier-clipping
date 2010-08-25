@@ -147,7 +147,7 @@ void graph_draw(Graph* g)
     
     for(int i = 0; i < g->num_intervals; ++i)
     {
-      fprintf(roots, "%f %f\n", g->intervals[i]->a, g->intervals[i]->b - g->intervals[i]->a);
+      fprintf(roots, "%f %f\n", g->intervals[i]->a, g->intervals[i]->b);
     }
     
     if(!first_plot)
@@ -155,6 +155,6 @@ void graph_draw(Graph* g)
     else
       first_plot = 0;
     
-    fprintf(gnuplot, "\"%s\" using 1:(-0.01):2 title \"przedzialy\" with xerrorbars lt -1", intervals_path);
+    fprintf(gnuplot, "\"%s\" using (0):(-0.01):1:2 title \"przedzialy\" with xerrorbars lt -1", intervals_path);
   }
 }
