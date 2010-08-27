@@ -37,27 +37,44 @@ Inne metody. Szybkosc zbieznosci jest jakoscia metody.
 
 \section{Szukanie zer wielomianów}
 
-Szukanie zer wielomianu. Wzory Cardano. Wyższego stopnia nalezy suzkac numerycznie. REgula descartes. Twierdzenie Sturma.
+Wzory analityczne na zera wielomianów niskiego stopnia (2 i 3 napisac, 4 wspomniec ze są)
+* Wyższego stopnia nalezy szukac numerycznie
+** regula descartes
+** twierdzenie Sturma.
+** http://mathworld.wolfram.com/AbelsImpossibilityTheorem.html
 
-http://mathworld.wolfram.com/AbelsImpossibilityTheorem.html
 
- Mamy informacje - ile jest zer zespolonych, co ogranicza liczbe zer rzeczywistych, mamy ciągłość
+Gdy mamy informację, że funkcja, której zer szukamy jest wielomianem, możemy skorzystać z własności wielomianów do:
+* przyspieszenia metody
+* upewnienia się, że znajdujemy wszystkie zera
+** ograniczenie na liczbę zer rzeczywistych - stopień
+** ustalenie pewnego przyblizenia poczatkowego
+
+
 
 \section{Wielomiany w formie Beziera}
 
-Definicja. Zastosowanie: krzywe i powierzchnie w programach CAD (takze miejsce wymyslenia). Rysunek krzywej, rysunek powierzchni. W formie potegowej nie ma wyraznego powiazania geometrii wielomianu z jego wspolczynnikami. 
+Baza Bernsteina. Również jest bazą wielomianów, co oznacza, że każdy wielomian w bazie potęgowej ma odpowiadające przedstawienie w bazei Bernsteina.
 
-Otoczka wypukła. Dzielenie przedziału. Algorytm de Casteljau. Poddziedzina. Rozszerzona definicja wielomianu Beziera ze względu na dziedzinę.
+Zastosowanie: krzywe i powierzchnie w programach CAD (takze miejsce wymyslenia). Rysunek krzywej, rysunek powierzchni. W formie potegowej nie ma wyraznego powiazania geometrii wielomianu z jego wspolczynnikami. 
+
+Postac Beziera ma wiele ciekawych wlasnosci:
+* Otoczka wypukła. Krótki dowód jako kombinacja wypukla
+* Dzielenie przedziału. Algorytm de Casteljau. Poddziedzina. Rozszerzona definicja wielomianu Beziera ze względu na dziedzinę.
 
 Metoda bezclip. Szybkosc metody bezclip.
+Wykorzystujemy właściwości wielomianu: podziedziena (do nowej otoczki wypuklej)
+Metoda pasuje do schematu w/w.
 
 \section{Aproksymacja wielomianu wielomianem}
 
-``Redukcja stopnia''
+Bez wglebiania sie w samą aproksymacje? Mozna przedstawic aproksymacje jako zagadnienie geometryczne.
 
-\section{wykorzystanie aproksymacji}
+Przyblizenie wielomianu wysokiego stopnia wielomianem niskiego stopnia. ``Redukcja stopnia''. 
 
-Aproksymujac wielomian upraszczamy go, tracac informacje ale jednoczesnie zyskujac mozliwosc latwiejszego przetwarzania go.
+Aproksymujac wielomian upraszczamy go, tracac informacje (punkty poczatkowe, ) ale jednoczesnie zyskujac mozliwosc latwiejszego przetwarzania go.
+
+\section{n-clip}
 
 Maksymalna różnica między wielomianami.
 
@@ -65,16 +82,18 @@ Podnoszenie stopnia.
 
 Dwa wielomiany ograniczające.
 
-\section{Operacje na przedziałach}
-
-- odejmowanie przedziałów od siebie
-
-\section{n-clip}
-\subsection{quadclip}
-
 Modyfikacja n-clip jest modyfikacja bisekcji. Wykorzystuje fakt, ze funkcja, ktorej zer szukamy jest wielomianem. Wykorzystujemy takze pewne wlasnosci wielomianow Beziera tj. podzial wielomianu w punkcje czy poddziedzina. (Potrzebne jest to przy wielokrotnym wykorzystaniu tej samej macierzy redukcji)
 
 \subsection{cubiccliping}
+
+\subsection{podsumowanie}
+
+!! na koncu
+
+\section{Dodatek 1: Operacje na przedziałach}
+
+- odejmowanie przedziałów od siebie
+
 
 
 \begin{center}
