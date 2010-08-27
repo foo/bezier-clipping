@@ -17,16 +17,21 @@
 
 \section{Wstęp}
 
-Jakie zastosowania ma znajdowanie zer? Szukanie przeciec krzywej z prosta. Szukanie najblizszych punktow na prostej.
+!!!!!!!!! Wstęp napisz na końcu, powinien on opisywac , co zostanie zawarte w pracy.
 
+Jakie zastosowania ma znajdowanie zer? Szukanie przeciec krzywej z prosta. Szukanie najblizszych punktow na prostej.
 Niniejsza praca daje pogląd na to, czym jest szukanie zer wielomianu i jak napisać metodę szukania zer.
 
 \section{Szukanie zer}
 
+Zajmijmy się metodą szukania zer, która przebiega wg następującego schematu:
+* Znalezienie zera numerycznie to znalezienie przedzialu o dlugosci <= \eps, ktory zawiera zero (zastanow sie, czy na pewno - w cubicclip zero moze nie wystapic, jesli pierwiastek jest parzystokrotny).
+* Metoda szukania zer generuje ciąg przedziałów, z których kazdy nastepny jest podprzedizalem poprzedniego.
+* koniec - gdy przedział jest wystarczająco mały
 
-Szukanie numeryczne - co to znaczy? Zawężanie przedziałów na przykładzie bisekcji. Koniec - gdy przedział jest wystarczająco mały. Rysunek kolejnych przedzialow jeden-pod-drugim. Przykladem na rysunku moze byc obliczanie pierwiastka kwadratowego.
+Dobrym przykładem metody tego typu jest bisekcja. Przykladem na rysunku moze byc obliczanie pierwiastka kwadratowego.
 
-Szukanie wszystkich zer - bisekcja z dzieleniem przedziału na 2, gdy jest zbyt długi.
+Szukanie wszystkich zer rzeczywistych - bisekcja z dzieleniem przedziału na 2 gdy moze wystapic wiecej niz 1 zero w przedziale (np. gdy jest zbyt długi). Modyfikacja schematu.
 
 Inne metody. Szybkosc zbieznosci jest jakoscia metody. 
 
@@ -36,7 +41,7 @@ Szukanie zer wielomianu. Wzory Cardano. Wyższego stopnia nalezy suzkac numerycz
 
 http://mathworld.wolfram.com/AbelsImpossibilityTheorem.html
 
- Mamy informacje - ile jest zer conajwyzej, mamy ciągłość
+ Mamy informacje - ile jest zer zespolonych, co ogranicza liczbe zer rzeczywistych, mamy ciągłość
 
 \section{Wielomiany w formie Beziera}
 
@@ -63,6 +68,14 @@ Dwa wielomiany ograniczające.
 \section{Operacje na przedziałach}
 
 - odejmowanie przedziałów od siebie
+
+\section{n-clip}
+\subsection{quadclip}
+
+Modyfikacja n-clip jest modyfikacja bisekcji. Wykorzystuje fakt, ze funkcja, ktorej zer szukamy jest wielomianem. Wykorzystujemy takze pewne wlasnosci wielomianow Beziera tj. podzial wielomianu w punkcje czy poddziedzina. (Potrzebne jest to przy wielokrotnym wykorzystaniu tej samej macierzy redukcji)
+
+\subsection{cubiccliping}
+
 
 \begin{center}
 \begin{figure}
