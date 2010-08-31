@@ -65,40 +65,60 @@ Zmodyfikujmy powyższy schemat znajdowania jednego zera. Zamiast generowania ci�
 \item każdy liść $L$ jest pierwszym przedziałem na ścieżce od korzenia do $L$, który ma długość mniejszą niż $2 \varepsilon$
 \end{enumerate}
 
+Wynikiem jest zbiór środków niepustych przedziałów znajdujących się w liściach drzewa przedziałów.
 
 !! Rysunek drzewa przedziałów w bisekcji przy dwóch podprzedziałach, rysunek drzewa przedziałów zdegenerowanego do listy
 !! Podpis do rysunku: W wypadku 1 zera drzewo moze sie degenerowac do listy, ktora mozna traktowac jako ciąg z poprzedniego schematu.
 
 Przedstawiony został w powyższym schemacie pewien zbiór metod znajdowania jednego zera funkcji f. Metody w tym zbiorze różnią się realizacją funkcji generującej drzewo przedziałów. Generowanie drzewa można opisać w postaci operacji znajdowania zbioru podprzedziałów (potomków) dla danego przedziału (rodzica).
 
-Przykładem metody szukania wielu zer funkcji jest modyfikacja opisanej w poprzednim podrozdziale metody bisekcji. W przypadku metody szukania wielu zer mamy większą elastyczność, gdyż w przypadku gdy w obu połowach dzielonego przedziału jest możliwość wystąpienia zera, zamiast odrzucać jedną z połów obie połowy są określane jako potomkowie przedziału.
+Przykładem metody szukania wielu zer funkcji jest modyfikacja opisanej w poprzednim podrozdziale metody bisekcji. W przypadku gdy w obu połowach dzielonego przedziału jest możliwość wystąpienia zera, obie połowy są określane jako potomkowie przedziału.
 
 !! Zdanie wielokrotnie zlozone
 
 Inną realizacją może być np. w przypadku wielomianów: izolacja zer. Zwykla metoda znajdowania zera ignoruje dodatkowe zera.
 
-\subsection{Jakość metody znajdowania zer}
+\subsection{Szybkość metody znajdowania zer}
 
-Szybkosc zbieznosci jest jakoscia metody. Jak z kazdym krokiem kurczą się przedzialy. Krok jest liczony w zaleznosci od liczby operacji znaczacych tj. obliczenie wartosci funkcji.
+!! big mess:
+
+Nalezy odroznic dwia sposoby porownywania szybkosci metody. Pierwsza to zaimplementowanie metody w konkretnym jezyku programowania, za pomoca konkretnego kompilatora i uruchomienie jej na konkretnym procesorze z konkretna iloscia cache'u, na konkretnym systemie operacyjnym, na ktorym pracuja rownolegle konkretne programy i zmierzenie czasu dzialania. Podobna metoda jest zliczenie operacji zmiennoprzecinkowych. Druga to matematyczne okreslenie szybkosci metody. 
+
+W niniejszym rozdziale zajmiemy sie drugim sposobem. Uzycie notacji duze O jest bez sensu, gdyz stosunek liczby operacji do wielkosci danyhc wejsciowych moze byc bardzo rozny. PRzede wszystkim zalezy od funkcji. Przykladowo, funkcje sklejane sa opisywane b. duza liczba danych, jednak szukanie zer moze pominac wiele przedzialow. Dlatego dla pomiaru szybkosci metod znajdowania zer uzywamy rzedu zbieznosci, czyli jak z kazdym krokiem kurczą się przedzialy. Bierzemy pod uwage tylko niektore operacje, tj. obliczenie wartosci funkcji w punkcie czy obliczenie pochodnej, reszte operacji traktujac jako tanie. Krok jest liczony w zaleznosci od liczby operacji znaczacych.
 
 \section{Znajdowanie zer wielomianów}
 
-Wzory analityczne na zera wielomianów niskiego stopnia (2 i 3 napisac, 4 wspomniec ze są)
+\subsection{Zera wielomianów stopnia niższego niż 5}
+
+Istnieją wzory analityczne na zera wielomianów niskiego stopnia
+
+Wzory na zera 2 i 3 napisac, 4 wspomniec ze są.
+
+Poprawianie wzorow. Wzory Viete'a. Dodatkowy krok metody newtona.
+
+\subsection{Zera wielomianów dowolnego stopnia}
+
 * Wyższego stopnia nalezy szukac numerycznie
 ** http://mathworld.wolfram.com/AbelsImpossibilityTheorem.html
 
+Znajdowanie zer wielomianów nie jest jednak tak ogólnym zadaniem jak znajdowanie zer funkcji ciągłych. Możemy skorzystać z weilu własności wielomianów.
 
 Gdy mamy informację, że funkcja, której zer szukamy jest wielomianem, możemy skorzystać z własności wielomianów do:
 * przyspieszenia metody
 * upewnienia się, że znajdujemy wszystkie zera
 ** ograniczenie na liczbę zer rzeczywistych - stopień
 ** ustalenie pewnego przyblizenia poczatkowego
+** ciągłość 0..stopien-1 pochodnych
 
 
 
 \section{Wielomiany w formie Beziera}
 
-Baza Bernsteina. Również jest bazą wielomianów, co oznacza, że każdy wielomian w bazie potęgowej ma odpowiadające przedstawienie w bazei Bernsteina.
+!! wiadomosci z ponizszego paragrafu powiniennes potwierdzic źródłami albo chociaz sprawdzic ich poprawnosc w jakims podreczniku.
+
+Zbiór wielomianów stopnia nie większego niż $n$ jest przestrzenią wektorową o wymiarze $n$. Każda przestrzeń liniowa ma nieskończoną liczbę baz. Jedną z baz wielomianów jest baza potęgowa ${1,x,x^2,x^3,...,x^n}$. Inną bazą jest baza Bernsteina ${B^n_0(x),...,B^n_n(x)}$, gdzie $B^n_i(x) = (n po k)x^i(1-x)^i$. Wielomian wyrażony w bazie Bernsteina nazywany jest wielomianem w formie Beziera. Każdy wielomian w bazie potęgowej $P(x) = \sum^n_{i=0}p_i x^i$ można przedstawić w bazie Bernsteina $P(x) = \sum^n_{i=0}b_i B^n_i(x)$. Zależność między wektorem $p = <p_0,...,p_n>$ a wektorem $b = <b_0, ..., b_n$ w formie $p [ m_{ij} ] = b$ nazywana jest macierzą konwersji albo macierzą przejścia.
+
+Different tasks, different tools.
 
 Zastosowanie: krzywe i powierzchnie w programach CAD (takze miejsce wymyslenia). Rysunek krzywej, rysunek powierzchni. W formie potegowej nie ma wyraznego powiazania geometrii wielomianu z jego wspolczynnikami. 
 
