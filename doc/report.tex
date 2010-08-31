@@ -25,10 +25,12 @@ Niniejsza praca daje pogląd na to, czym jest szukanie zer wielomianu i jak napi
 
 \section{Numeryczne znajdowanie zer}
 
+\subsection{Znajdowanie jednego zera}
+
 Metoda znajdowania jednego zera funkcji dostaje argumenty:
 \begin{enumerate}
 \item pewien opis funkcji f, który umożliwia obliczenie wartości tej funkcji dla dowolnego argumentu
-\item przybliżenie początkowe $P_0$, czyli przedział w którym szukamy zera funkcji f
+\item przedział początkowy $P_0$, czyli przedział w którym szukamy zera funkcji f; metoda nie znajdzie żadnego zera spoza tego przedziału
 \item żądana dokładność $\varepsilon$ znalezienia zera funkcji f
 \end{enumerate}
 
@@ -42,29 +44,43 @@ $$P_k \subset P_{k-1}\hspace{1cm}(1 \leq k \leq n)$$
 
 Wynikiem jest środek przedziału $P_n$, który jest odległy od zera funkcji f o conajwyżej $\varepsilon$. W przypadku istnienia zera w przedziale $P_0$, udało się znaleźć zero funkcji f z dokładnością $\varepsilon$.
 
-Przedstawiona została w powyższym schemacie pewna rodzina metod znajdowania jednego zera funkcji f. Metody w tej rodzinie różnią się realizacją funkcji generującej ciąg $\langle P_0, P_1, ..., P_n\rangle$. Kolejny przedział jest pewną funkcją poprzedniego przedziału. Przykładem metody znajdowania jednego zera funkcji jest bisekcja.
-
-W bisekcji przedział $P_{k+1}$ otrzymuje się z przedziału $P_k$ z początkiem w $a_k$ oraz końcem w $b_k$ przez podzielenie $P_k$ na dwie połowy: $A$ i $B$ oraz odrzucenie przedzialu w ktorym nie ma zera. Gdy w obu nie ma zera to stop, nie ma zera w P0.
+Przedstawiona została w powyższym schemacie pewien zbiór metod znajdowania jednego zera funkcji f. Metody w tym zbiorze różnią się realizacją funkcji generującej ciąg $\langle P_0, P_1, ..., P_n\rangle$.
+Przykładem metody znajdowania jednego zera funkcji jest bisekcja. W bisekcji przedział $P_{k+1}$ otrzymuje się dzieląc $P_k$ na pół i jako $P_{k+1}$ wybierając tę połowę, w której jest możliwość wystąpienia zera. W bisekcji należy określić realizację operacji określającej możliwość wystąpienia zera w danym przedziale (w danej połowie przedziału $P_k$). Przykładową taką operacją jest sprawdzenie, czy funkcja f ma w końcach sprawdzanego przedziału różne znaki.
 
 ! rysunek bisekcji
 
-Istnieja innne rodziny metod szukania zer, np newton i pochodne
+W niniejszej pracy zajmiemy się inną metodą z wyżej przedstawionego zbioru metod szukania zer funkcji. Przykładem metody nie należącej do wyżej opisanego zbioru metod jest metoda Newtona. Znaczącą różnicą między metodą Newtona a metodami opisanymi wyżej jest generowanie ciągu przybliżeń zera funkcji zamiast generowania ciągu przedziałów zawierających zero.
 
-Dobrym przykładem metody tego typu jest bisekcja. Bisekcja to przyklad metody numerycnzego znajdowania jednego zera. Jej realizacja to nastepujaca funkcja przejscia z Pi do Pi+1: Dzielenie przedzialu na pol i rozwiazanie problemu decyzyjnego: czy w danym przedziale istnieje zero. W bisekcji do rozw. problemu decyzyjnego potrzebne jest zalozenie o ciaglosci funkcji f.
+\subsection{Znajdowanie wielu zer}
 
+Zmodyfikujmy powyższy schemat znajdowania jednego zera. Zamiast generowania ciągu przedziałów, metoda szukania wielu zer generuje drzewo przedziałów. Drzewo przybliżeń ma własności:
+\begin{enumerate}
+\item w korzeniu znajduje się przedział początkowy $P_0$
+\item każdy potomek jest podprzedziałem swojego rodzica
+\item zawieranie zer na kazdej sciezce
+\item liście drzewa są pierwszymi przedziałami na sciezce do korzenia, które mają długosc mniejsza niz 2 eps
+\end{enumerate}
 
-Przykladem na rysunku moze byc obliczanie pierwiastka kwadratowego.
+Niektore sciezki moga sie konczyc przedzialami dluzszymi niz 2 eps, wtedy sa to porazki.
 
-Szukanie wszystkich zer rzeczywistych - bisekcja z dzieleniem przedziału na 2 gdy moze wystapic wiecej niz 1 zero w przedziale (np. gdy jest zbyt długi). Modyfikacja schematu.
+!! zmodyfikuj schemat 1 zera tak, aby mial mozliwosc porazki (ost przedzial dluzszy niz 2 eps).
 
-Inne metody. Szybkosc zbieznosci jest jakoscia metody. 
+W wypadku 1 zera drzewo moze sie degenerowac do listy, ktora mozna traktowac jako ciąg z poprzedniego schematu.
+
+Przykład: niescislosc w definicji bisekcji.
+
+Dzielenie przedziału na wiecej czesci, gdy moze wystapic wiecej niz 1 zero w przedziale (np. gdy jest zbyt długi, czyli przedzial nie kurczy się tak szybko jak by to wynikało z szybkości zbieżności metody).
+
+Inną realizacją może być np. w przypadku wielomianów: izolacja zer. Zwykla metoda znajdowania zera ignoruje dodatkowe zera.
+
+\subsection{Jakość metody znajdowania zer}
+
+Szybkosc zbieznosci jest jakoscia metody. Jak z kazdym krokiem kurczą się przedzialy. Krok jest liczony w zaleznosci od liczby operacji znaczacych tj. obliczenie wartosci funkcji.
 
 \section{Znajdowanie zer wielomianów}
 
 Wzory analityczne na zera wielomianów niskiego stopnia (2 i 3 napisac, 4 wspomniec ze są)
 * Wyższego stopnia nalezy szukac numerycznie
-** regula descartes
-** twierdzenie Sturma.
 ** http://mathworld.wolfram.com/AbelsImpossibilityTheorem.html
 
 
