@@ -34,18 +34,22 @@ Metoda znajdowania jednego zera funkcji dostaje argumenty:
 \item żądana dokładność $\varepsilon$ znalezienia zera funkcji f
 \end{enumerate}
 
-Zakładając, że w przedziale $P_0$ znajduje się zero funkcji f, metoda numerycznego znajdowania jednego zera funkcji f generuje ciąg przedziałów $\langle P_0, P_1, ..., P_n\rangle$ o własnościach:
+Metoda numerycznego znajdowania jednego zera funkcji f generuje ciąg przedziałów $\langle P_0, P_1, ..., P_n\rangle$ o własnościach:
 \begin{enumerate}
 \item każdy przedział jest podprzedziałem poprzedniego przedziału:
 $$P_k \subset P_{k-1}\hspace{1cm}(1 \leq k \leq n)$$
-\item każdy przedział zawiera zero funkcji f
+\item każdy przedział zawiera zero funkcji f z przedziału $P_0$
+
+Adnotacja na dole strony: odnosnie zbioru pustego. Jesli w przedziale P0 nie ma zera funkcji f to stwierdzenie, ze przedzial pusty (porazka) zawiera zero funkcji f z przedzialu P0 jest prawdziwe.
+
 \item ostatni przedział $P_n$ jest pierwszym przedziałem krótszym niż $2 \varepsilon$
 \end{enumerate}
 
-Wynikiem jest środek przedziału $P_n$, który jest odległy od zera funkcji f o conajwyżej $\varepsilon$. W przypadku istnienia zera w przedziale $P_0$, udało się znaleźć zero funkcji f z dokładnością $\varepsilon$.
+Jeśli w przedziale $P_0$ metoda nie znalazła zera, to ostatnim przedziałem w ciągu jest przedział pusty; wtedy wynikiem jest brak zer. W przeciwnym przypadku wynikiem jest środek przedziału $P_n$, który jest odległy od zera funkcji f o conajwyżej $\varepsilon$. W przypadku istnienia zera w przedziale $P_0$, udało się znaleźć zero funkcji f z dokładnością $\varepsilon$.
 
-Przedstawiona została w powyższym schemacie pewien zbiór metod znajdowania jednego zera funkcji f. Metody w tym zbiorze różnią się realizacją funkcji generującej ciąg $\langle P_0, P_1, ..., P_n\rangle$.
-Przykładem metody znajdowania jednego zera funkcji jest bisekcja. W bisekcji przedział $P_{k+1}$ otrzymuje się dzieląc $P_k$ na pół i jako $P_{k+1}$ wybierając tę połowę, w której jest możliwość wystąpienia zera. W bisekcji należy określić realizację operacji określającej możliwość wystąpienia zera w danym przedziale (w danej połowie przedziału $P_k$). Przykładową taką operacją jest sprawdzenie, czy funkcja f ma w końcach sprawdzanego przedziału różne znaki.
+Przedstawiony został w powyższym schemacie pewien zbiór metod znajdowania jednego zera funkcji f. Metody w tym zbiorze różnią się realizacją funkcji generującej ciąg $\langle P_0, P_1, ..., P_n\rangle$. Generowanie ciągu można opisać w postaci szukania podprzedziału $P_{k+1}$ dla danego przedziału $P_k$.
+
+Przykładem metody znajdowania jednego zera funkcji jest bisekcja. W bisekcji przedział $P_{k+1}$ otrzymuje się dzieląc $P_k$ na pół i jako $P_{k+1}$ wybierając tę połowę, w której jest możliwość wystąpienia zera. W przypadku, gdy w żadnej połowie nie ma możliwości wystąpienia zera, $P_{k+1}$ jest przedziałem pustym i metoda kończy działanie. W przypadku, gdy w obu połowach jest możliwość wystąpienia zera, jako $P_{k+1}$ wybierana jest dowolna z połów. W bisekcji należy określić realizację operacji określającej możliwość wystąpienia zera w danym przedziale (w danej połowie przedziału $P_k$). Przykładową taką operacją jest sprawdzenie, czy funkcja f ma w końcach sprawdzanego przedziału różne znaki.
 
 ! rysunek bisekcji
 
@@ -53,23 +57,23 @@ W niniejszej pracy zajmiemy się inną metodą z wyżej przedstawionego zbioru m
 
 \subsection{Znajdowanie wielu zer}
 
-Zmodyfikujmy powyższy schemat znajdowania jednego zera. Zamiast generowania ciągu przedziałów, metoda szukania wielu zer generuje drzewo przedziałów. Drzewo przybliżeń ma własności:
+Zmodyfikujmy powyższy schemat znajdowania jednego zera. Zamiast generowania ciągu przedziałów, metoda szukania wielu zer generuje drzewo przedziałów. Drzewo przedziałów ma własności:
 \begin{enumerate}
 \item w korzeniu znajduje się przedział początkowy $P_0$
 \item każdy potomek jest podprzedziałem swojego rodzica
-\item zawieranie zer na kazdej sciezce
-\item liście drzewa są pierwszymi przedziałami na sciezce do korzenia, które mają długosc mniejsza niz 2 eps
+\item przedział z każdego węzła zawiera zero funkcji f !! to niekoniecznie jest prawda
+\item każdy liść $L$ jest pierwszym przedziałem na ścieżce od korzenia do $L$, który ma długość mniejszą niż $2 \varepsilon$
 \end{enumerate}
 
-Niektore sciezki moga sie konczyc przedzialami dluzszymi niz 2 eps, wtedy sa to porazki.
 
-!! zmodyfikuj schemat 1 zera tak, aby mial mozliwosc porazki (ost przedzial dluzszy niz 2 eps).
+!! Rysunek drzewa przedziałów w bisekcji przy dwóch podprzedziałach, rysunek drzewa przedziałów zdegenerowanego do listy
+!! Podpis do rysunku: W wypadku 1 zera drzewo moze sie degenerowac do listy, ktora mozna traktowac jako ciąg z poprzedniego schematu.
 
-W wypadku 1 zera drzewo moze sie degenerowac do listy, ktora mozna traktowac jako ciąg z poprzedniego schematu.
+Przedstawiony został w powyższym schemacie pewien zbiór metod znajdowania jednego zera funkcji f. Metody w tym zbiorze różnią się realizacją funkcji generującej drzewo przedziałów. Generowanie drzewa można opisać w postaci operacji znajdowania zbioru podprzedziałów (potomków) dla danego przedziału (rodzica).
 
-Przykład: niescislosc w definicji bisekcji.
+Przykładem metody szukania wielu zer funkcji jest modyfikacja opisanej w poprzednim podrozdziale metody bisekcji. W przypadku metody szukania wielu zer mamy większą elastyczność, gdyż w przypadku gdy w obu połowach dzielonego przedziału jest możliwość wystąpienia zera, zamiast odrzucać jedną z połów obie połowy są określane jako potomkowie przedziału.
 
-Dzielenie przedziału na wiecej czesci, gdy moze wystapic wiecej niz 1 zero w przedziale (np. gdy jest zbyt długi, czyli przedzial nie kurczy się tak szybko jak by to wynikało z szybkości zbieżności metody).
+!! Zdanie wielokrotnie zlozone
 
 Inną realizacją może być np. w przypadku wielomianów: izolacja zer. Zwykla metoda znajdowania zera ignoruje dodatkowe zera.
 
@@ -101,6 +105,8 @@ Zastosowanie: krzywe i powierzchnie w programach CAD (takze miejsce wymyslenia).
 Postac Beziera ma wiele ciekawych wlasnosci:
 * Otoczka wypukła. Krótki dowód jako kombinacja wypukla
 * Dzielenie przedziału. Algorytm de Casteljau. Poddziedzina. Rozszerzona definicja wielomianu Beziera ze względu na dziedzinę.
+
+Znjdowanie wielu zer. Dzielenie przedziału na wiecej czesci, gdy moze wystapic wiecej niz 1 zero w przedziale (np. gdy jest zbyt długi, czyli przedzial nie kurczy się tak szybko jak by to wynikało z szybkości zbieżności metody). Tutaj, rząd zbieżności metody to 2, więc dzieliomy na dwie częsi w przypadku, gdy przedzial sie nie skurczyl o polowe.
 
 Metoda bezclip. Szybkosc metody bezclip.
 Wykorzystujemy właściwości wielomianu: podziedziena (do nowej otoczki wypuklej)
