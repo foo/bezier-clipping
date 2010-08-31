@@ -112,18 +112,28 @@ Gdy mamy informację, że funkcja, której zer szukamy jest wielomianem, możemy
 
 
 
-\section{Wielomiany w formie Beziera}
+\section{Wielomiany w postaci Beziera}
 
 !! wiadomosci z ponizszego paragrafu powiniennes potwierdzic źródłami albo chociaz sprawdzic ich poprawnosc w jakims podreczniku.
 
-Zbiór wielomianów stopnia nie większego niż $n$ jest przestrzenią wektorową o wymiarze $n$. Każda przestrzeń liniowa ma nieskończoną liczbę baz. Jedną z baz wielomianów jest baza potęgowa ${1,x,x^2,x^3,...,x^n}$. Inną bazą jest baza Bernsteina ${B^n_0(x),...,B^n_n(x)}$, gdzie $B^n_i(x) = (n po k)x^i(1-x)^i$. Wielomian wyrażony w bazie Bernsteina nazywany jest wielomianem w formie Beziera. Każdy wielomian w bazie potęgowej $P(x) = \sum^n_{i=0}p_i x^i$ można przedstawić w bazie Bernsteina $P(x) = \sum^n_{i=0}b_i B^n_i(x)$. Zależność między wektorem $p = <p_0,...,p_n>$ a wektorem $b = <b_0, ..., b_n$ w formie $p [ m_{ij} ] = b$ nazywana jest macierzą konwersji albo macierzą przejścia.
+Zbiór wielomianów stopnia nie większego niż $n$ jest przestrzenią wektorową o wymiarze $n$. Każda przestrzeń liniowa ma nieskończoną liczbę baz. Jedną z baz wielomianów jest baza potęgowa ${1,x,x^2,x^3,...,x^n}$. Inną bazą jest baza Bernsteina ${B^n_0(x),...,B^n_n(x)}$, gdzie $B^n_i(x) = (n po k)x^i(1-x)^i$. Wielomian wyrażony w bazie Bernsteina nazywany jest wielomianem w postaci Beziera. Każdy wielomian w bazie potęgowej $P(x) = \sum^n_{i=0}p_i x^i$ można przedstawić w bazie Bernsteina $P(x) = \sum^n_{i=0}b_i B^n_i(x)$. Zależność między wektorem $p = <p_0,...,p_n>$ a wektorem $b = <b_0, ..., b_n$ w formie $p [ m_{ij} ] = b$ nazywana jest macierzą konwersji albo macierzą przejścia.
 
-Different tasks, different tools.
+Postać Beziera ma inne własności niż postać potęgowa. W jednych zastosowaniach sprawdza się postać potęgowa, w innych postać Beziera, w innych sprawdzają się jeszcze inne bazy. Przykładowym zastosowaniem postaci Beziera jest grafika komputerowa. Zgodnie z tw. Weierstrassa (udowodnionym zresztą przy pomocy wielomianów w bazie Bernsteina) krzywa parametryczna opisana parą wielomianów może odwzorowywać dowolny kształt ciągły z dowolną dokładnością. Specjalne krzywe wielomianowe, krzywe, których wielomiany są opisane w postaci Beziera dają łatwość kształtowania krzywej. Związek współczynników Beziera wielomianów opisujących krzywą jest wizualnie powiązany z kształtem krzywej. Pozwala to ludziom nie znającym matematyki !! (bardzo niefajne okreslenie) używać potężnego narzędzia jakim są krzywe parametryczne do konstrukcji kształtów. Krzywe i powierzchnie parametryczne są potężnym narzędziem, gdyż są opisane wektorowo a nie rastrowo, dzięki czemu pozwalają na łatwą (effortless, bezwysiłkową?), bez modyfikacji kazdego piksela modyfikację istniejących kształtów oraz pozwalają na przekształcenia tj. przesunięcie, obrót i skalowanie.
 
-Zastosowanie: krzywe i powierzchnie w programach CAD (takze miejsce wymyslenia). Rysunek krzywej, rysunek powierzchni. W formie potegowej nie ma wyraznego powiazania geometrii wielomianu z jego wspolczynnikami. 
+!! rysunek wielomianu w postaci Beziera wraz z punktami kontrolnymi
+!! rysunek krzywej
+!! rysunek powierzchni
 
-Postac Beziera ma wiele ciekawych wlasnosci:
-* Otoczka wypukła. Krótki dowód jako kombinacja wypukla
+Powodem powiązania geometrycznego postaci Bezier z jej wykresem jest jej własność otoczki wypukłej. Krótki dowód przez kombinację wypukłą.
+
+!! rysunek otoczki wypuklej
+
+\section{Znajdowanie zer wielomianu w postaci Beziera}
+
+Przecięcie {krzywa,powierzchnia}-prosta jest problemem, który sprowadza się do znajdowania zera wielomianu w formie Beziera. Problem ten występuje np. w ray-tracingu, czyli wyświetlaniu sceny oświetlonej techniką śledzenia promieni w scenie, której obiekty są powierzchniami w postaci Beziera. Krótkie przedstawienie tej redukcji.
+
+Pomysly na szukanie zer. Pierwszy pomysl to obliczenie macierzy przejscia (wspomnienie, ze efektywne algorytmy wymagaja czasu proporcjonalnego liniowo do stopnia, gdyz macierz przejscia jest wstęgowa). Jednakze, lepsze metody istnieją. Wykorzystują one pewne własności postaci Beziera.
+
 * Dzielenie przedziału. Algorytm de Casteljau. Poddziedzina. Rozszerzona definicja wielomianu Beziera ze względu na dziedzinę.
 
 Znjdowanie wielu zer. Dzielenie przedziału na wiecej czesci, gdy moze wystapic wiecej niz 1 zero w przedziale (np. gdy jest zbyt długi, czyli przedzial nie kurczy się tak szybko jak by to wynikało z szybkości zbieżności metody). Tutaj, rząd zbieżności metody to 2, więc dzieliomy na dwie częsi w przypadku, gdy przedzial sie nie skurczyl o polowe.
@@ -144,13 +154,13 @@ Macierz redukcji. Obliczanie macierzy redukcji metodą Lewanowicza-Woźnego.
 
 \section{n-clip}
 
-Maksymalna różnica między wielomianami.
-
-Podnoszenie stopnia.
+Dzięki skorzystaniu z dalszych własności wlasnosci postaci Beziera: 
+* Maksymalna różnica między wielomianami dzięki łatwemu obliczaniu normy maksymalnej wielomianu różnicy.
+* Podnoszenie stopnia.
 
 Dwa wielomiany ograniczające.
 
-Modyfikacja n-clip jest modyfikacja bisekcji. Wykorzystuje fakt, ze funkcja, ktorej zer szukamy jest wielomianem. Wykorzystujemy takze pewne wlasnosci wielomianow Beziera tj. podzial wielomianu w punkcje czy poddziedzina. (Potrzebne jest to przy wielokrotnym wykorzystaniu tej samej macierzy redukcji, zauwazmy rozwniez, ze po znalezieniu pierwszego zera nie warto szukac zer wielomianu P(x)/(x-r0), gdyz nie mozna wykorzystac tej samej macierzy redukcji)
+Wykorzystuje fakt, ze funkcja, ktorej zer szukamy jest wielomianem. Wykorzystujemy takze pewne wlasnosci wielomianow Beziera tj. podzial wielomianu w punkcje czy poddziedzina. (Potrzebne jest to przy wielokrotnym wykorzystaniu tej samej macierzy redukcji, zauwazmy rozwniez, ze po znalezieniu pierwszego zera nie warto szukac zer wielomianu P(x)/(x-r0), gdyz nie mozna wykorzystac tej samej macierzy redukcji)
 
 \subsection{cubiccliping}
 
