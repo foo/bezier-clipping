@@ -1,3 +1,4 @@
+
 \documentclass[11pt,a4paper,oneside]{report}
 
 \usepackage[utf8]{inputenc}
@@ -22,20 +23,43 @@
 Jakie zastosowania ma znajdowanie zer? Szukanie przeciec krzywej z prosta. Szukanie najblizszych punktow na prostej.
 Niniejsza praca daje pogląd na to, czym jest szukanie zer wielomianu i jak napisać metodę szukania zer.
 
-\section{Szukanie zer}
+\section{Numeryczne znajdowanie zer}
 
-Zajmijmy się metodą szukania zer, która przebiega wg następującego schematu:
-* Znalezienie zera numerycznie to znalezienie przedzialu o dlugosci <= \eps, ktory zawiera zero (zastanow sie, czy na pewno - w cubicclip zero moze nie wystapic, jesli pierwiastek jest parzystokrotny).
-* Metoda szukania zer generuje ciąg przedziałów, z których kazdy nastepny jest podprzedizalem poprzedniego.
-* koniec - gdy przedział jest wystarczająco mały
+Metoda znajdowania jednego zera funkcji dostaje argumenty:
+\begin{enumerate}
+\item pewien opis funkcji f, który umożliwia obliczenie wartości tej funkcji dla dowolnego argumentu
+\item przybliżenie początkowe $P_0$, czyli przedział w którym szukamy zera funkcji f
+\item żądana dokładność $\varepsilon$ znalezienia zera funkcji f
+\end{enumerate}
 
-Dobrym przykładem metody tego typu jest bisekcja. Przykladem na rysunku moze byc obliczanie pierwiastka kwadratowego.
+Zakładając, że w przedziale $P_0$ znajduje się zero funkcji f, metoda numerycznego znajdowania jednego zera funkcji f generuje ciąg przedziałów $\langle P_0, P_1, ..., P_n\rangle$ o własnościach:
+\begin{enumerate}
+\item każdy przedział jest podprzedziałem poprzedniego przedziału:
+$$P_k \subset P_{k-1}\hspace{1cm}(1 \leq k \leq n)$$
+\item każdy przedział zawiera zero funkcji f
+\item ostatni przedział $P_n$ jest pierwszym przedziałem krótszym niż $2 \varepsilon$
+\end{enumerate}
+
+Wynikiem jest środek przedziału $P_n$, który jest odległy od zera funkcji f o conajwyżej $\varepsilon$. W przypadku istnienia zera w przedziale $P_0$, udało się znaleźć zero funkcji f z dokładnością $\varepsilon$.
+
+Przedstawiona została w powyższym schemacie pewna rodzina metod znajdowania jednego zera funkcji f. Metody w tej rodzinie różnią się realizacją funkcji generującej ciąg $\langle P_0, P_1, ..., P_n\rangle$. Kolejny przedział jest pewną funkcją poprzedniego przedziału. Przykładem metody znajdowania jednego zera funkcji jest bisekcja.
+
+W bisekcji przedział $P_{k+1}$ otrzymuje się z przedziału $P_k$ z początkiem w $a_k$ oraz końcem w $b_k$ przez podzielenie $P_k$ na dwie połowy: $A$ i $B$ oraz odrzucenie przedzialu w ktorym nie ma zera. Gdy w obu nie ma zera to stop, nie ma zera w P0.
+
+! rysunek bisekcji
+
+Istnieja innne rodziny metod szukania zer, np newton i pochodne
+
+Dobrym przykładem metody tego typu jest bisekcja. Bisekcja to przyklad metody numerycnzego znajdowania jednego zera. Jej realizacja to nastepujaca funkcja przejscia z Pi do Pi+1: Dzielenie przedzialu na pol i rozwiazanie problemu decyzyjnego: czy w danym przedziale istnieje zero. W bisekcji do rozw. problemu decyzyjnego potrzebne jest zalozenie o ciaglosci funkcji f.
+
+
+Przykladem na rysunku moze byc obliczanie pierwiastka kwadratowego.
 
 Szukanie wszystkich zer rzeczywistych - bisekcja z dzieleniem przedziału na 2 gdy moze wystapic wiecej niz 1 zero w przedziale (np. gdy jest zbyt długi). Modyfikacja schematu.
 
 Inne metody. Szybkosc zbieznosci jest jakoscia metody. 
 
-\section{Szukanie zer wielomianów}
+\section{Znajdowanie zer wielomianów}
 
 Wzory analityczne na zera wielomianów niskiego stopnia (2 i 3 napisac, 4 wspomniec ze są)
 * Wyższego stopnia nalezy szukac numerycznie
@@ -72,7 +96,9 @@ Bez wglebiania sie w samą aproksymacje? Mozna przedstawic aproksymacje jako zag
 
 Przyblizenie wielomianu wysokiego stopnia wielomianem niskiego stopnia. ``Redukcja stopnia''. 
 
-Aproksymujac wielomian upraszczamy go, tracac informacje (punkty poczatkowe, ) ale jednoczesnie zyskujac mozliwosc latwiejszego przetwarzania go.
+Aproksymujac wielomian upraszczamy go, tracac informacje (punkty krańcowe, ) ale jednoczesnie zyskujac mozliwosc latwiejszego przetwarzania go.
+
+Macierz redukcji. Obliczanie macierzy redukcji metodą Lewanowicza-Woźnego.
 
 \section{n-clip}
 
@@ -82,7 +108,7 @@ Podnoszenie stopnia.
 
 Dwa wielomiany ograniczające.
 
-Modyfikacja n-clip jest modyfikacja bisekcji. Wykorzystuje fakt, ze funkcja, ktorej zer szukamy jest wielomianem. Wykorzystujemy takze pewne wlasnosci wielomianow Beziera tj. podzial wielomianu w punkcje czy poddziedzina. (Potrzebne jest to przy wielokrotnym wykorzystaniu tej samej macierzy redukcji)
+Modyfikacja n-clip jest modyfikacja bisekcji. Wykorzystuje fakt, ze funkcja, ktorej zer szukamy jest wielomianem. Wykorzystujemy takze pewne wlasnosci wielomianow Beziera tj. podzial wielomianu w punkcje czy poddziedzina. (Potrzebne jest to przy wielokrotnym wykorzystaniu tej samej macierzy redukcji, zauwazmy rozwniez, ze po znalezieniu pierwszego zera nie warto szukac zer wielomianu P(x)/(x-r0), gdyz nie mozna wykorzystac tej samej macierzy redukcji)
 
 \subsection{cubiccliping}
 
