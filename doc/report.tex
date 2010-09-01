@@ -18,7 +18,8 @@
 
 \section{Wstęp}
 
-!!!!!!!!! Wstęp napisz na końcu, powinien on opisywac , co zostanie zawarte w pracy.
+asdf
+!!!!!!!!! Wstęp napisz na końcu, powinien on opisywac , co zostanie zawarte w pracy
 
 Jakie zastosowania ma znajdowanie zer? Szukanie przeciec krzywej z prosta. Szukanie najblizszych punktow na prostej.
 Niniejsza praca daje pogląd na to, czym jest szukanie zer wielomianu i jak napisać metodę szukania zer.
@@ -74,17 +75,15 @@ Przedstawiony został w powyższym schemacie pewien zbiór metod znajdowania jed
 
 Przykładem metody szukania wielu zer funkcji jest modyfikacja opisanej w poprzednim podrozdziale metody bisekcji. W przypadku gdy w obu połowach dzielonego przedziału jest możliwość wystąpienia zera, obie połowy są określane jako potomkowie przedziału.
 
-!! Zdanie wielokrotnie zlozone
-
-Inną realizacją może być np. w przypadku wielomianów: izolacja zer. Zwykla metoda znajdowania zera ignoruje dodatkowe zera.
-
 \subsection{Szybkość metody znajdowania zer}
 
-!! big mess:
+Szybkość znajdowania zer jest jedną z miar jakości metody. Możemy do pomiaru szybkości użyć komputera. Można zaprogramować metodę szukania zer w pewnym ustalonym języku programowania, za pomocą ustalonego kompilatora i uruchomić ją na komputerze z ustalonym procesorem, ustaloną hierarchią pamięci, na ustalonym systemie operacyjnym, na którym pracują równolegle ustalone programy i podać na wejście programowi ustaloną funkcję, której zer szukamy i ustaloną dokładność. Czas, który upłynął od podania danych do otrzymania wyniku można traktować jako szybkość działania metody. To podejście ma pewne wady, takie jak testowanie metody na skończonej liczbie funkcji oraz brak możliwości powtórzenia eksperymentu w dokładnie tych samych warunkach. Jednak jest to pomiar łatwy do wykonania i dający pewne wskazówki co do szybkości działania metody.
 
-Nalezy odroznic dwia sposoby porownywania szybkosci metody. Pierwsza to zaimplementowanie metody w konkretnym jezyku programowania, za pomoca konkretnego kompilatora i uruchomienie jej na konkretnym procesorze z konkretna iloscia cache'u, na konkretnym systemie operacyjnym, na ktorym pracuja rownolegle konkretne programy i zmierzenie czasu dzialania. Podobna metoda jest zliczenie operacji zmiennoprzecinkowych. Druga to matematyczne okreslenie szybkosci metody. 
+Zamiast mierzenia czasu możemy zmierzyć liczbę operacji zmiennoprzecinkowych, które wykonano znajdując zera konkretnej funkcji. To podejście wyklucza wiele czynników, biorących udział w poprzednim pomiarze. Przykładowo, pomijane są realizacje operacji przydziału i zwalniania pamięci, wczytywania danych i wypisywania wyników. Zyskujemy możliwość porównywania metod znajdowania zer przez uruchamianie ich na tych samych danych, lecz na innych komputerach. Jednakże, wciąż jesteśmy ograniczeni do testowania na skończonej liczbie funkcji. 
 
-W niniejszym rozdziale zajmiemy sie drugim sposobem. Uzycie notacji duze O jest bez sensu, gdyz stosunek liczby operacji do wielkosci danyhc wejsciowych moze byc bardzo rozny. PRzede wszystkim zalezy od funkcji. Przykladowo, funkcje sklejane sa opisywane b. duza liczba danych, jednak szukanie zer moze pominac wiele przedzialow. Dlatego dla pomiaru szybkosci metod znajdowania zer uzywamy rzedu zbieznosci, czyli jak z kazdym krokiem kurczą się przedzialy. Bierzemy pod uwage tylko niektore operacje, tj. obliczenie wartosci funkcji w punkcie czy obliczenie pochodnej, reszte operacji traktujac jako tanie. Krok jest liczony w zaleznosci od liczby operacji znaczacych.
+Lepsze metody zostały wymyślone. Mozemy uniezależnic pomiar szybkosci metody od konkretnej testowanej funkcji.
+
+Uzycie notacji duze O jest bez sensu, gdyz stosunek liczby operacji do wielkosci danyhc wejsciowych moze byc bardzo rozny. PRzede wszystkim zalezy od funkcji. Przykladowo, funkcje sklejane sa opisywane b. duza liczba danych, jednak szukanie zer moze pominac wiele przedzialow. Dlatego dla pomiaru szybkosci metod znajdowania zer uzywamy rzedu zbieznosci, czyli jak z kazdym krokiem kurczą się przedzialy. Bierzemy pod uwage tylko niektore operacje, tj. obliczenie wartosci funkcji w punkcie czy obliczenie pochodnej, reszte operacji traktujac jako tanie. Krok jest liczony w zaleznosci od liczby operacji znaczacych.
 
 \section{Znajdowanie zer wielomianów}
 
