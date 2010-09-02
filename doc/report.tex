@@ -102,23 +102,17 @@ e_{k+1}=\frac{1}{2}e_k \\
 \end{cases}
 \end{equation}
 
-Musimy takze uwzględnić, ile operacji zostało wykonanych, aby wygenerowac nastepny przedzial. Bierzemy pod uwage tylko niektore operacje, tj. obliczenie wartosci funkcji w punkcie czy obliczenie pochodnej, reszte operacji traktujac jako tanie.
-
-PRzykladowo, jesli porownujemy dwie metody, z ktorej jedna wymaga obliczenia funkcji w krancach poprzedniego przedzialu i pochodnej wewnatrz i nastepny przedzial jest krotszy 3-krotnie oraz mamy metode, ktora wymaga jedynie obliczenia pochodnej i przedzial jest 2-krotnie mniejszy to 3/3 = 1 a 2/1 = 2 i druga metoda jest lepsza.
-
-W przypadku wielu zer drzewo rozwijane jest tak, ze w jednym kroku (dla jednej ewaluacji) rozwijana jest tylko jedna gałąź, dlatego ignorujemy kroki pracujace nad innymi zerami.
-
-
-
-Przykładowo, bisekcja ma zbieżność liniową. O zbieznosci liniowej i dodatkowemu wymaganiu na zbieznosc linowa - stala musi byc mniejsza od jednosci, gdyz inaczej metoda bylaby rozbiezna - kolejny przedzial bylby wiekszy od poprzedniego!
-
 \section{Znajdowanie zer wielomianów}
 
 \subsection{Zera wielomianów stopnia niższego niż 5}
 
-Istnieją wzory analityczne na zera wielomianów niskiego stopnia
+Do szukania zer wielomianów niskich stopni można użyć wzorów analitycznych. 
 
 Wzory na zera 2 i 3 napisac, 4 wspomniec ze są.
+
+Interesuje nas liczba zapisana w komputerze, gdyz nie chcemy przetrzymywac ulamkow i pierwiastkow. Dlatego musimy obliczyc wzor. Wzor zawiera pierwiastki.
+
+Aby operować na zerach wielomianów, nalezy obliczyc pierwiastki. Pierwiastki kwadratowe to zera wielomianu 2 stopnia. Natomiast pierwiastek kwadratowy potrzebny jest do obliczenia zer wielomianu 2 stopnia. PIerwiastka kwadratowego nie mozna uzyc do obliczenia siebie samego, dlatego nalezy pierwiastek obliczyc numerycznie. MOzna obliczyc np. bisekcja, jednakze popularna metoda obliczania pierwiastkow kwadratowych jest metoda Newtona.
 
 Poprawianie wzorow. Wzory Viete'a. Dodatkowy krok metody newtona.
 
