@@ -1,10 +1,11 @@
-
 \documentclass[11pt,a4paper,oneside]{report}
 
 \usepackage[utf8]{inputenc}
 \usepackage[polish]{babel}
 \usepackage{polski}
 \usepackage{graphics}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
 
 \makeatother
 \title{Znajdowanie zer wielomianu w postaci Beziera za pomocą przycinania sześciennego}
@@ -18,7 +19,6 @@
 
 \section{Wstęp}
 
-asdf
 !!!!!!!!! Wstęp napisz na końcu, powinien on opisywac , co zostanie zawarte w pracy
 
 Jakie zastosowania ma znajdowanie zer? Szukanie przeciec krzywej z prosta. Szukanie najblizszych punktow na prostej.
@@ -81,9 +81,36 @@ Szybkość znajdowania zer jest jedną z miar jakości metody. Możemy do pomiar
 
 Zamiast mierzenia czasu możemy zmierzyć liczbę operacji zmiennoprzecinkowych, które wykonano znajdując zera konkretnej funkcji. To podejście wyklucza wiele czynników, biorących udział w poprzednim pomiarze. Przykładowo, pomijane są realizacje operacji przydziału i zwalniania pamięci, wczytywania danych i wypisywania wyników. Zyskujemy możliwość porównywania metod znajdowania zer przez uruchamianie ich na tych samych danych, lecz na innych komputerach. Jednakże, wciąż jesteśmy ograniczeni do testowania na skończonej liczbie funkcji. 
 
-Lepsze metody zostały wymyślone. Mozemy uniezależnic pomiar szybkosci metody od konkretnej testowanej funkcji.
+Lepsze metody zostały wymyślone. Możemy rozpatrzyć zależności między kolejnymi przedziałami dla dowolnej funkcji analizując operację znajdowania następnika przedziału w ciągu lub potomków przedziału w drzewie przedziałów. Posługujemy się pojęciem rzędu zbieżności, czyli miarą tego, ile krótszy jest następny wygenerowany przedział od poprzedniego. Oznaczając długość $k$-tego przedziału w ciągu jako $e_k$ metoda ma rząd zbieżności p, gdy:
 
-Uzycie notacji duze O jest bez sensu, gdyz stosunek liczby operacji do wielkosci danyhc wejsciowych moze byc bardzo rozny. PRzede wszystkim zalezy od funkcji. Przykladowo, funkcje sklejane sa opisywane b. duza liczba danych, jednak szukanie zer moze pominac wiele przedzialow. Dlatego dla pomiaru szybkosci metod znajdowania zer uzywamy rzedu zbieznosci, czyli jak z kazdym krokiem kurczą się przedzialy. Bierzemy pod uwage tylko niektore operacje, tj. obliczenie wartosci funkcji w punkcie czy obliczenie pochodnej, reszte operacji traktujac jako tanie. Krok jest liczony w zaleznosci od liczby operacji znaczacych.
+$$e_k^p \sim e_{k+1}$$
+
+Biorąc pod uwagę, że przedziały nie mogą mieć ujemnej długości, że zależność może się stabilizować dopiero od pewnego kroku, oraz że analizowana metoda powinna być zbieżna, mamy rząd zbieżności 1 gdy:
+
+$$\lim_{k \rightarrow \inf}\frac{e_{k+1}}{e_k} = u\hspace{1cm}0<u<1$$
+
+oraz rząd zbieżności $p$, $p>1$, gdy:
+
+$$\lim_{k\rightarrow\inf}\frac{e_{k+1}}{e_k^p} = u\hspace{1cm}u>0$$
+
+Przykładowo. bisekcja ma rząd zbieżności 1, gdyż następny przedział jest połową poprzedniego:
+
+\begin{equation}
+\begin{cases}
+e_{k+1}=\frac{1}{2}e_k \\
+\lim_{k \rightarrow \inf}\frac{e_{k+1}}{e_k}=\frac{1}{2}
+\end{cases}
+\end{equation}
+
+Musimy takze uwzględnić, ile operacji zostało wykonanych, aby wygenerowac nastepny przedzial. Bierzemy pod uwage tylko niektore operacje, tj. obliczenie wartosci funkcji w punkcie czy obliczenie pochodnej, reszte operacji traktujac jako tanie.
+
+PRzykladowo, jesli porownujemy dwie metody, z ktorej jedna wymaga obliczenia funkcji w krancach poprzedniego przedzialu i pochodnej wewnatrz i nastepny przedzial jest krotszy 3-krotnie oraz mamy metode, ktora wymaga jedynie obliczenia pochodnej i przedzial jest 2-krotnie mniejszy to 3/3 = 1 a 2/1 = 2 i druga metoda jest lepsza.
+
+W przypadku wielu zer drzewo rozwijane jest tak, ze w jednym kroku (dla jednej ewaluacji) rozwijana jest tylko jedna gałąź, dlatego ignorujemy kroki pracujace nad innymi zerami.
+
+
+
+Przykładowo, bisekcja ma zbieżność liniową. O zbieznosci liniowej i dodatkowemu wymaganiu na zbieznosc linowa - stala musi byc mniejsza od jednosci, gdyz inaczej metoda bylaby rozbiezna - kolejny przedzial bylby wiekszy od poprzedniego!
 
 \section{Znajdowanie zer wielomianów}
 
@@ -135,15 +162,19 @@ Pomysly na szukanie zer. Pierwszy pomysl to obliczenie macierzy przejscia (wspom
 
 * Dzielenie przedziału. Algorytm de Casteljau. Poddziedzina. Rozszerzona definicja wielomianu Beziera ze względu na dziedzinę.
 
-Znjdowanie wielu zer. Dzielenie przedziału na wiecej czesci, gdy moze wystapic wiecej niz 1 zero w przedziale (np. gdy jest zbyt długi, czyli przedzial nie kurczy się tak szybko jak by to wynikało z szybkości zbieżności metody). Tutaj, rząd zbieżności metody to 2, więc dzieliomy na dwie częsi w przypadku, gdy przedzial sie nie skurczyl o polowe.
+Metoda bezclip. Aby zdefiniowac bezclip wystarczy zdefiniowac znajdowanie potomkow przedzialu w drzewie przedzialu. PRZecięcie otoczki wypuklej punktow kontrolnych wielomianu z osią OX oraz ew. dzielenie na 2 czesci.
 
-Metoda bezclip. Szybkosc metody bezclip.
+!! Dlaczego na 2 czesci? Bo rzad zbieznosci jest 2. Czy to stwierdzenie jest prawdziwe i czy metode, ktora ma rzad zbieznosci 3 najlepiej podzielic na wiecej czesci?
+
+!! rysunek kolejnych otoczek wypuklych
+
+Szybkosc metody bezclip.
+
 Wykorzystujemy właściwości wielomianu: podziedziena (do nowej otoczki wypuklej)
-Metoda pasuje do schematu w/w.
 
 \section{Aproksymacja wielomianu wielomianem}
 
-Bez wglebiania sie w samą aproksymacje? Mozna przedstawic aproksymacje jako zagadnienie geometryczne.
+Aproksymacja to utworzenie uproszczonego modelu, ktory daje pewne informacje o oryginale i jest latwiejszy do przetworzenia. Tutaj bedziemy aproksymowac wielomian wysokiego stopnia, ktorego zer nie mozna okreslic analitycznie wielomianem stopnia nieskiego, ktorego zera mozemy okreslic analitycznie. Musimy takze okreslic, jak zera wielomianu niskiego stopnia roznia sie od zer oryginalnego wielomianu.
 
 Przyblizenie wielomianu wysokiego stopnia wielomianem niskiego stopnia. ``Redukcja stopnia''. 
 
