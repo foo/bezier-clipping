@@ -104,24 +104,17 @@ e_{k+1}=\frac{1}{2}e_k \\
 
 \section{Znajdowanie zer wielomianów}
 
-\subsection{Zera wielomianów stopnia niższego niż 5}
+\subsection{Zera wielomianów niskiego stopnia}
 
 Do szukania zer wielomianów niskich stopni można użyć wzorów analitycznych. 
 
-Wzory na zera 2 i 3 napisac, 4 wspomniec ze są.
+Wielomian stopnia zerowego posiada zero lub nieskończoną liczbę pierwiastków. Wielomian stopnia pierwszego ma jeden pierwiastek, który można otrzymać za pomocą jednego dzielenia i zmiany znaku. Wielomian stopnia drugiego ma zero, jeden lub dwa pierwiastki, które można otrzymać wykonując proste operacje arytmetyczne i obliczając pierwiastek kwadratowy. Wielomian stopnia trzeciego ma jeden, dwa lub trzy pierwiastki, które można otrzymać za pomocą prostych działań arytmetycznych i obliczania pierwiastków drugiego i trzeciego stopnia.
 
-Interesuje nas liczba zapisana w komputerze, gdyz nie chcemy przetrzymywac ulamkow i pierwiastkow. Dlatego musimy obliczyc wzor. Wzor zawiera pierwiastki.
-
-Aby operować na zerach wielomianów, nalezy obliczyc pierwiastki. Pierwiastki kwadratowe to zera wielomianu 2 stopnia. Natomiast pierwiastek kwadratowy potrzebny jest do obliczenia zer wielomianu 2 stopnia. PIerwiastka kwadratowego nie mozna uzyc do obliczenia siebie samego, dlatego nalezy pierwiastek obliczyc numerycznie. MOzna obliczyc np. bisekcja, jednakze popularna metoda obliczania pierwiastkow kwadratowych jest metoda Newtona.
-
-Poprawianie wzorow. Wzory Viete'a. Dodatkowy krok metody newtona.
+Obliczenie pierwiastka $n$-tego stopnia z liczby $a$ wymaga rozwiązania równania $x^n = a$. Dlatego mimo istnienia analitycznych wzorów na zera wielomianów stopnia 2 i 3, obliczenie ich wymaga zastosowania metod numerycznych. Do obliczenia pierwiastka można użyć bisekcji, jednak lepsze rezultaty daje skorzystanie z metody Newtona.
 
 \subsection{Zera wielomianów dowolnego stopnia}
 
-* Wyższego stopnia nalezy szukac numerycznie
-** http://mathworld.wolfram.com/AbelsImpossibilityTheorem.html
-
-Znajdowanie zer wielomianów nie jest jednak tak ogólnym zadaniem jak znajdowanie zer funkcji ciągłych. Możemy skorzystać z weilu własności wielomianów.
+Do znalezienia zer wielomianu stopnia wyższego niż 5 należy użyć metod numerycznych. Tych zer nie da się zapisać za pomocą skończonej liczby prostych operacji arytmetycznych i pierwiastkowania. Znajdowanie zer wielomianów nie jest jednak tak ogólnym zadaniem jak znajdowanie zer funkcji ciągłych. Możemy skorzystać z wielu własności charakterystycznych dla wielomianów. Własności te, takie jak ciągłość, ograniczenie liczby zer rzeczywistych przez stopień wielomianu, łatwa obliczalność pochodnej
 
 Gdy mamy informację, że funkcja, której zer szukamy jest wielomianem, możemy skorzystać z własności wielomianów do:
 * przyspieszenia metody
