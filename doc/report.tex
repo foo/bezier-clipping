@@ -118,7 +118,7 @@ Zbiór wielomianów stopnia nie większego niż $n$ jest przestrzenią wektorow�
 
 Postać Beziera ma szereg innych własności niż postać potęgowa. W jednych zastosowaniach sprawdza się postać potęgowa, w innych postać Beziera, w innych sprawdzają się jeszcze inne bazy. Przykładowym zastosowaniem postaci Beziera wielomianu jest grafika komputerowa. Zgodnie z twierdzeniem Weierstrassa (udowodnionym zresztą przy pomocy wielomianów w bazie Bernsteina) krzywa parametryczna opisana parą wielomianów może odwzorowywać dowolny kształt ciągły z dowolną dokładnością. Specjalne krzywe wielomianowe, krzywe, których wielomiany są opisane w postaci Beziera umożliwiają łatwe kształtowanie krzywej.
 
-Niech para wielomianów $X(t) = \sum^n_{i=0}x_i B^n_i(t)$ oraz $Y(t) = \sum^n_{i=0}y_i B^n_i(t)$ opisuje krzywą wielomianową. Punkty $\langle (x_0,y_0), ..., (x_n, y_n) \rangle$ nazywane są punktami kontrolnymi krzywej. Można zaobserwować wizualny związek między kształtem krzywej a położeniem punktów kontrolnych.
+Niech para wielomianów $X(t) = \sum^n_{i=0}x_i B^n_i(t)$ oraz $Y(t) = \sum^n_{i=0}y_i B^n_i(t)$ dla $0\leq t \leq 1$ opisuje krzywą wielomianową. Punkty $\langle (x_0,y_0), ..., (x_n, y_n) \rangle$ nazywane są punktami kontrolnymi krzywej. Można zaobserwować wizualny związek między kształtem krzywej a położeniem punktów kontrolnych.
 
 !! rysunek wielomianu w postaci Beziera wraz z punktami kontrolnymi
 !! rysunek krzywej
@@ -128,19 +128,15 @@ Niech para wielomianów $X(t) = \sum^n_{i=0}x_i B^n_i(t)$ oraz $Y(t) = \sum^n_{i
 
 Szukanie przecięć krzywej opisanej parą wielomianów z prostą jest zadaniem, który sprowadza się do znajdowania zer wielomianu. W przypadku, gdy krzywa jest opisana wielomianami w formie Beziera to zadanie sprowadza się do szukania zer wielomianu w formie Beziera.
 
-Jedną z możliwości jest konwersja postaci wielomianu z postaci Beziera do potęgowej. Istnieją stabilne numerycznie i efektywne (liniowe w stosunku do stopnia wielomianu) algorytmy konwersji. Istnieją sprawdzone algorytmy algorytmy szukania zer wielomianów w formie potęgowej. Jednakże, specyficzne własności postaci Beziera wielomianu pozwalają na konstrukcję efektywnych i stabilnych numerycznie algorytmów operujących na wielomianach w postaci Beziera bez dodatkowego kroku, jakim jest konwersja baz.
+Jedną z możliwości jest konwersja postaci wielomianu z postaci Beziera do potęgowej. Istnieją stabilne numerycznie i efektywne (liniowe w stosunku do stopnia wielomianu) algorytmy konwersji. Istnieją efektywne i stabilne numerycznie algorytmy szukania zer wielomianów w formie potęgowej. Jednakże, specyficzne własności postaci Beziera wielomianu pozwalają na konstrukcję efektywnych i stabilnych numerycznie algorytmów operujących na wielomianach w postaci Beziera bez dodatkowego kroku, jakim jest konwersja baz.
 
-* Dzielenie przedziału. Algorytm de Casteljau. Poddziedzina. Rozszerzona definicja wielomianu Beziera ze względu na dziedzinę.
+Własności:
 
-Metoda bezclip. Aby zdefiniowac bezclip wystarczy zdefiniowac znajdowanie potomkow przedzialu w drzewie przedzialu. PRZecięcie otoczki wypuklej punktow kontrolnych wielomianu z osią OX oraz ew. dzielenie na 2 czesci.
+Podział wielomianu za pomocą algorytmu de Casteljau.
 
-!! Dlaczego na 2 czesci? Bo rzad zbieznosci jest 2. Czy to stwierdzenie jest prawdziwe i czy metode, ktora ma rzad zbieznosci 3 najlepiej podzielic na wiecej czesci?
+Ograniczenia wartości maksymalnej w przedziale $\langle 0, 1 \rangle$.
 
-!! rysunek kolejnych otoczek wypuklych
-
-Szybkosc metody bezclip.
-
-Wykorzystujemy właściwości wielomianu: podziedziena (do nowej otoczki wypuklej)
+Podnoszenie stopnia.
 
 \section{Aproksymacja wielomianu wielomianem}
 
@@ -152,33 +148,35 @@ Aproksymujac wielomian upraszczamy go, tracac informacje (punkty krańcowe, ) al
 
 Macierz redukcji. Obliczanie macierzy redukcji metodą Lewanowicza-Woźnego.
 
-\section{n-clip}
+\section{cubic clipping}
 
-Dzięki skorzystaniu z dalszych własności wlasnosci postaci Beziera: 
-* Maksymalna różnica między wielomianami dzięki łatwemu obliczaniu normy maksymalnej wielomianu różnicy.
-* Podnoszenie stopnia.
+Wykorzystanie w praktyce własności opisanych w rozdziale powyżej.
+
+Poddziedzina za pomocą dwóch dzielen algorytmem de Casteljau.
+
+Ograniczenie odleglosci miedzy dwoma wielomianami w postaci Beziera za pomoca ograniczenia wartosci maksymalnej.
+
+Podnoszenie stopnia do ograniczenia maksymalnej roznicy miedzy wielomianami roznych stopni.
 
 Dwa wielomiany ograniczające.
 
-Wykorzystuje fakt, ze funkcja, ktorej zer szukamy jest wielomianem. Wykorzystujemy takze pewne wlasnosci wielomianow Beziera tj. podzial wielomianu w punkcje czy poddziedzina. (Potrzebne jest to przy wielokrotnym wykorzystaniu tej samej macierzy redukcji, zauwazmy rozwniez, ze po znalezieniu pierwszego zera nie warto szukac zer wielomianu P(x)/(x-r0), gdyz nie mozna wykorzystac tej samej macierzy redukcji)
+\begin{center}
+  \begin{figure}
+    \includegraphics{../tests/between2/graph.pdf}
+  \end{figure}
+\end{center}
 
-\subsection{cubiccliping}
+
+
+OPis algorytmu. Wspomnienie o operacjach na przedzialach.
+
+Wykorzystujemy tylko jedna macierz redukcji.
+
+Rząd zbieżności.
 
 \subsection{podsumowanie}
 
 !! na koncu
-
-\section{Dodatek 1: Operacje na przedziałach}
-
-- odejmowanie przedziałów od siebie
-
-
-
-\begin{center}
-\begin{figure}
-\includegraphics{../tests/between2/graph.pdf}
-\end{figure}
-\end{center}
 
 
 \end{document}
