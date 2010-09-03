@@ -19,11 +19,6 @@
 
 \section{Wstęp}
 
-!!!!!!!!! Wstęp napisz na końcu, powinien on opisywac , co zostanie zawarte w pracy
-
-Jakie zastosowania ma znajdowanie zer? Szukanie przeciec krzywej z prosta. Szukanie najblizszych punktow na prostej.
-Niniejsza praca daje pogląd na to, czym jest szukanie zer wielomianu i jak napisać metodę szukania zer.
-
 \section{Numeryczne znajdowanie zer}
 
 \subsection{Znajdowanie jednego zera}
@@ -41,41 +36,38 @@ Metoda numerycznego znajdowania jednego zera funkcji f generuje ciąg przedział
 \begin{enumerate}
 \item Każdy przedział tego ciągu jest podprzedziałem swojego poprzednika:
 $$P_k \subset P_{k-1}\hspace{1cm}(1 \leq k \leq n)$$
-\item Jeśli poprzednik pewnego ciągu zawiera zero to ten przedział także zawiera to zero.
+\item Jeśli poprzednik pewnego ciągu zawiera zero to ten przedział także zawiera to zero:
+$$ x_0 \in P_{k-1}\Rightarrow x_0 \in P_k\hspace{1cm}(1 \leq k \leq n)$$
 \item $P_n$ jest jedynym przedziałem krótszym niż $2 \varepsilon$.
 \end{enumerate}
 
-Jeśli w przedziale $P_0$ znaleziono zero, to wynikiem działania metody jest środek przedziału $P_n$. Skoro zero znajduje się w $P_n$ i jego długość jest mniejsza niż $2 \varepsilon$ to udało się zlokalizować zero funkcji f z błędem mniejszym niż $\varepsilon$. Jeśli nie znaleziono zera, 
+Jeśli w przedziale $P_0$ znaleziono zero, to wynikiem działania metody jest środek przedziału $P_n$. Skoro zero znajduje się w $P_n$ i jego długość jest mniejsza niż $2 \varepsilon$ to udało się zlokalizować zero funkcji f z błędem mniejszym niż $\varepsilon$. Jeśli nie znaleziono zera, $P_n$ jest przedziałem pustym.
 
-
-
-
-Jeśli w przedziale $P_0$ metoda nie znalazła zera, to ostatnim przedziałem w ciągu jest przedział pusty; wtedy wynikiem jest brak zer. W przeciwnym przypadku wynikiem jest środek przedziału $P_n$, który jest odległy od zera funkcji f o conajwyżej $\varepsilon$. W przypadku istnienia zera w przedziale $P_0$, udało się znaleźć zero funkcji f z dokładnością $\varepsilon$.
-
-Przedstawiony został w powyższym schemacie pewien zbiór metod znajdowania jednego zera funkcji f. Metody w tym zbiorze różnią się realizacją funkcji generującej ciąg $\langle P_0, P_1, ..., P_n\rangle$. Generowanie ciągu można opisać w postaci szukania podprzedziału $P_{k+1}$ dla danego przedziału $P_k$.
-
-Przykładem metody znajdowania jednego zera funkcji jest bisekcja. W bisekcji przedział $P_{k+1}$ otrzymuje się dzieląc $P_k$ na pół i jako $P_{k+1}$ wybierając tę połowę, w której jest możliwość wystąpienia zera. W przypadku, gdy w żadnej połowie nie ma możliwości wystąpienia zera, $P_{k+1}$ jest przedziałem pustym i metoda kończy działanie. W przypadku, gdy w obu połowach jest możliwość wystąpienia zera, jako $P_{k+1}$ wybierana jest dowolna z połów. W bisekcji należy określić realizację operacji określającej możliwość wystąpienia zera w danym przedziale (w danej połowie przedziału $P_k$). Przykładową taką operacją jest sprawdzenie, czy funkcja f ma w końcach sprawdzanego przedziału różne znaki.
+Metody znajdowania zer zdefiniowane powyższym schematem różnią się sposobem konstrukcji ciągu $\langle P_0, P_1, ..., P_n\rangle$. Do kompletnego opisu dowolnej metody z tego zbioru wystarczy zdefiniować, w jaki sposób mając przedział $P_k$ konstruujemy przedział $P_{k+1}$.
+z
+Przykładem metody znajdowania jednego zera funkcji jest bisekcja. W bisekcji przedział $P_{k+1}$ otrzymuje się dzieląc $P_k$ na pół i jako $P_{k+1}$ wybierając tę połowę, w której jest możliwość wystąpienia zera. W przypadku, gdy w żadnej połowie nie ma możliwości wystąpienia zera, $P_{k+1}$ jest przedziałem pustym i metoda kończy działanie. W bisekcji należy określić realizację operacji określającej możliwość wystąpienia zera w danym przedziale (w danej połowie przedziału $P_k$). Przykładową taką operacją jest sprawdzenie, czy funkcja f ma w końcach sprawdzanego przedziału różne znaki.
 
 ! rysunek bisekcji
 
-W niniejszej pracy zajmiemy się inną metodą z wyżej przedstawionego zbioru metod szukania zer funkcji. Przykładem metody nie należącej do wyżej opisanego zbioru metod jest metoda Newtona. Znaczącą różnicą między metodą Newtona a metodami opisanymi wyżej jest generowanie ciągu przybliżeń zera funkcji zamiast generowania ciągu przedziałów zawierających zero.
-
 \subsection{Znajdowanie wielu zer}
+
+Metod znajdowania jednego zera nie stosuje się do funkcji mających więcej niż jedno zero w przedziale $P_0$. Przykładowo, metoda bisekcji ma działanie niezdefiniowane w przypadku, gdy w obu połowach przedziału jest możliwość wystąpienia zera.
 
 Zmodyfikujmy powyższy schemat znajdowania jednego zera. Zamiast generowania ciągu przedziałów, metoda szukania wielu zer generuje drzewo przedziałów. Drzewo przedziałów ma własności:
 \begin{enumerate}
-\item w korzeniu znajduje się przedział początkowy $P_0$
-\item każdy potomek jest podprzedziałem swojego rodzica
-\item przedział z każdego węzła zawiera zero funkcji f !! to niekoniecznie jest prawda
-\item każdy liść $L$ jest pierwszym przedziałem na ścieżce od korzenia do $L$, który ma długość mniejszą niż $2 \varepsilon$
+\item Korzeniem jest przedział początkowy $P_0$.
+\item Każdy potomek jest podprzedziałem swojego rodzica.
+\item Przedziały mające wspólnego rodzica nie mają części wspólnych.
+\item Każde zero znajdujące się w przedziale znajduje się w także w pewnym przedziale potomnym.
+\item Każdy liść $L$ jest jedynym przedziałem na ścieżce od korzenia do $L$, który ma długość mniejszą niż $2 \varepsilon$
 \end{enumerate}
 
-Wynikiem jest zbiór środków niepustych przedziałów znajdujących się w liściach drzewa przedziałów.
+Wynikiem działania metody jest zbiór środków niepustych przedziałów znajdujących się w liściach drzewa przedziałów.
 
 !! Rysunek drzewa przedziałów w bisekcji przy dwóch podprzedziałach, rysunek drzewa przedziałów zdegenerowanego do listy
 !! Podpis do rysunku: W wypadku 1 zera drzewo moze sie degenerowac do listy, ktora mozna traktowac jako ciąg z poprzedniego schematu.
 
-Przedstawiony został w powyższym schemacie pewien zbiór metod znajdowania jednego zera funkcji f. Metody w tym zbiorze różnią się realizacją funkcji generującej drzewo przedziałów. Generowanie drzewa można opisać w postaci operacji znajdowania zbioru podprzedziałów (potomków) dla danego przedziału (rodzica).
+Przedstawiony został w powyższym schemacie pewien zbiór metod znajdowania jednego zera funkcji f. Metody w tym zbiorze różnią się realizacją funkcji generującej drzewo przedziałów.
 
 Przykładem metody szukania wielu zer funkcji jest modyfikacja opisanej w poprzednim podrozdziale metody bisekcji. W przypadku gdy w obu połowach dzielonego przedziału jest możliwość wystąpienia zera, obie połowy są określane jako potomkowie przedziału.
 
@@ -112,9 +104,9 @@ e_{k+1}=\frac{1}{2}e_k \\
 
 Do szukania zer wielomianów niskich stopni można użyć wzorów analitycznych. 
 
-Wielomian stopnia zerowego posiada zero lub nieskończoną liczbę pierwiastków. Wielomian stopnia pierwszego ma jeden pierwiastek, który można otrzymać za pomocą jednego dzielenia i zmiany znaku. Wielomian stopnia drugiego ma zero, jeden lub dwa pierwiastki, które można otrzymać wykonując proste operacje arytmetyczne i obliczając pierwiastek kwadratowy. Wielomian stopnia trzeciego ma jeden, dwa lub trzy pierwiastki, które można otrzymać za pomocą prostych działań arytmetycznych i obliczania pierwiastków drugiego i trzeciego stopnia.
+Wielomian stopnia pierwszego ma jeden pierwiastek, który można otrzymać za pomocą jednego dzielenia i zmiany znaku. Wielomian stopnia drugiego ma zero, jeden lub dwa pierwiastki, które można otrzymać wykonując proste operacje arytmetyczne i obliczając pierwiastek kwadratowy. Wielomian stopnia trzeciego ma jeden, dwa lub trzy pierwiastki, które można otrzymać za pomocą prostych działań arytmetycznych i obliczania pierwiastków drugiego i trzeciego stopnia.
 
-Obliczenie pierwiastka $n$-tego stopnia z liczby $a$ wymaga rozwiązania równania $x^n = a$. Dlatego mimo istnienia analitycznych wzorów na zera wielomianów stopnia 2 i 3, obliczenie ich wymaga zastosowania metod numerycznych. Do obliczenia pierwiastka można użyć bisekcji, jednak lepsze rezultaty daje skorzystanie z metody Newtona.
+Obliczenie pierwiastka $n$-tego stopnia z liczby $a$ wymaga rozwiązania równania $x^n = a$. Dlatego mimo istnienia analitycznych wzorów na zera wielomianów stopnia 2 i 3, obliczenie ich wymaga zastosowania metod numerycznych. Do obliczenia pierwiastka można użyć wyżej opisanej bisekcji, jednak lepsze rezultaty daje skorzystanie z metody Newtona.
 
 \subsection{Zera wielomianów dowolnego stopnia}
 
@@ -124,21 +116,19 @@ Do znalezienia zer wielomianu stopnia wyższego niż 5 należy użyć metod nume
 
 Zbiór wielomianów stopnia nie większego niż $n$ jest przestrzenią wektorową o wymiarze $n$. Każda przestrzeń liniowa ma nieskończoną liczbę baz. Jedną z baz wielomianów jest baza potęgowa ${1,x,x^2,x^3,...,x^n}$. Inną bazą jest baza Bernsteina ${B^n_0(x),...,B^n_n(x)}$, gdzie $B^n_i(x) = (n po k)x^i(1-x)^i$. Wielomian wyrażony w bazie Bernsteina nazywany jest wielomianem w postaci Beziera. Każdy wielomian w bazie potęgowej $P(x) = \sum^n_{i=0}p_i x^i$ można przedstawić w bazie Bernsteina $P(x) = \sum^n_{i=0}b_i B^n_i(x)$. Zależność między wektorem $p = <p_0,...,p_n>$ a wektorem $b = <b_0, ..., b_n$ w formie $p [ m_{ij} ] = b$ nazywana jest macierzą konwersji albo macierzą przejścia.
 
-Postać Beziera ma inne własności niż postać potęgowa. W jednych zastosowaniach sprawdza się postać potęgowa, w innych postać Beziera, w innych sprawdzają się jeszcze inne bazy. Przykładowym zastosowaniem postaci Beziera jest grafika komputerowa. Zgodnie z twierdzeniem Weierstrassa (udowodnionym zresztą przy pomocy wielomianów w bazie Bernsteina) krzywa parametryczna opisana parą wielomianów może odwzorowywać dowolny kształt ciągły z dowolną dokładnością. Specjalne krzywe wielomianowe, krzywe, których wielomiany są opisane w postaci Beziera umożliwiają łatwe kształtowanie krzywej. Związek współczynników Beziera wielomianów opisujących krzywą jest wizualnie powiązany z kształtem krzywej.
+Postać Beziera ma szereg innych własności niż postać potęgowa. W jednych zastosowaniach sprawdza się postać potęgowa, w innych postać Beziera, w innych sprawdzają się jeszcze inne bazy. Przykładowym zastosowaniem postaci Beziera wielomianu jest grafika komputerowa. Zgodnie z twierdzeniem Weierstrassa (udowodnionym zresztą przy pomocy wielomianów w bazie Bernsteina) krzywa parametryczna opisana parą wielomianów może odwzorowywać dowolny kształt ciągły z dowolną dokładnością. Specjalne krzywe wielomianowe, krzywe, których wielomiany są opisane w postaci Beziera umożliwiają łatwe kształtowanie krzywej.
+
+Niech para wielomianów $X(t) = \sum^n_{i=0}x_i B^n_i(t)$ oraz $Y(t) = \sum^n_{i=0}y_i B^n_i(t)$ opisuje krzywą wielomianową. Punkty $\langle (x_0,y_0), ..., (x_n, y_n) \rangle$ nazywane są punktami kontrolnymi krzywej. Można zaobserwować wizualny związek między kształtem krzywej a położeniem punktów kontrolnych.
 
 !! rysunek wielomianu w postaci Beziera wraz z punktami kontrolnymi
 !! rysunek krzywej
 !! rysunek powierzchni
 
-Powodem powiązania geometrycznego postaci Beziera z jej wykresem jest jej własność otoczki wypukłej. Krótki dowód przez kombinację wypukłą.
-
-!! rysunek otoczki wypuklej
-
 \section{Znajdowanie zer wielomianu w postaci Beziera}
 
-Przecięcie {krzywa,powierzchnia}-prosta jest problemem, który sprowadza się do znajdowania zera wielomianu w formie Beziera. Problem ten występuje np. w ray-tracingu, czyli wyświetlaniu sceny oświetlonej techniką śledzenia promieni w scenie, której obiekty są powierzchniami w postaci Beziera. Krótkie przedstawienie tej redukcji.
+Szukanie przecięć krzywej opisanej parą wielomianów z prostą jest zadaniem, który sprowadza się do znajdowania zer wielomianu. W przypadku, gdy krzywa jest opisana wielomianami w formie Beziera to zadanie sprowadza się do szukania zer wielomianu w formie Beziera.
 
-Pomysly na szukanie zer. Pierwszy pomysl to obliczenie macierzy przejscia (wspomnienie, ze efektywne algorytmy wymagaja czasu proporcjonalnego liniowo do stopnia, gdyz macierz przejscia jest wstęgowa). Jednakze, lepsze metody istnieją. Wykorzystują one pewne własności postaci Beziera.
+Jedną z możliwości jest konwersja postaci wielomianu z postaci Beziera do potęgowej. Istnieją stabilne numerycznie i efektywne (liniowe w stosunku do stopnia wielomianu) algorytmy konwersji. Istnieją sprawdzone algorytmy algorytmy szukania zer wielomianów w formie potęgowej. Jednakże, specyficzne własności postaci Beziera wielomianu pozwalają na konstrukcję efektywnych i stabilnych numerycznie algorytmów operujących na wielomianach w postaci Beziera bez dodatkowego kroku, jakim jest konwersja baz.
 
 * Dzielenie przedziału. Algorytm de Casteljau. Poddziedzina. Rozszerzona definicja wielomianu Beziera ze względu na dziedzinę.
 
