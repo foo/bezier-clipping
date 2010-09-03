@@ -28,23 +28,27 @@ Niniejsza praca daje pogląd na to, czym jest szukanie zer wielomianu i jak napi
 
 \subsection{Znajdowanie jednego zera}
 
+W niniejszej pracy będziemy rozpatrywać zbiór metod znajdowania zer o pewnych cechach wspólnych. Działanie tych metod polega na zawężaniu danego przedziału do momentu osiągnięcia zadanej dokładności lub wykluczenia istnienia zera w danym przedziale.
+
 Metoda znajdowania jednego zera funkcji dostaje argumenty:
 \begin{enumerate}
-\item pewien opis funkcji f, który umożliwia obliczenie wartości tej funkcji dla dowolnego argumentu
-\item przedział początkowy $P_0$, czyli przedział w którym szukamy zera funkcji f; metoda nie znajdzie żadnego zera spoza tego przedziału
-\item żądana dokładność $\varepsilon$ znalezienia zera funkcji f
+\item Pewien opis funkcji f, który umożliwia obliczenie wartości tej funkcji dla dowolnego argumentu.
+\item Przedział początkowy $P_0$, czyli przedział w którym szukamy zera funkcji f; metoda nie znajdzie żadnego zera spoza tego przedziału.
+\item Żądaną dokładność $\varepsilon$ znalezienia zera funkcji f.
 \end{enumerate}
 
 Metoda numerycznego znajdowania jednego zera funkcji f generuje ciąg przedziałów $\langle P_0, P_1, ..., P_n\rangle$ o własnościach:
 \begin{enumerate}
-\item każdy przedział jest podprzedziałem poprzedniego przedziału:
+\item Każdy przedział tego ciągu jest podprzedziałem swojego poprzednika:
 $$P_k \subset P_{k-1}\hspace{1cm}(1 \leq k \leq n)$$
-\item każdy przedział zawiera zero funkcji f z przedziału $P_0$
-
-Adnotacja na dole strony: odnosnie zbioru pustego. Jesli w przedziale P0 nie ma zera funkcji f to stwierdzenie, ze przedzial pusty (porazka) zawiera zero funkcji f z przedzialu P0 jest prawdziwe.
-
-\item ostatni przedział $P_n$ jest pierwszym przedziałem krótszym niż $2 \varepsilon$
+\item Jeśli poprzednik pewnego ciągu zawiera zero to ten przedział także zawiera to zero.
+\item $P_n$ jest jedynym przedziałem krótszym niż $2 \varepsilon$.
 \end{enumerate}
+
+Jeśli w przedziale $P_0$ znaleziono zero, to wynikiem działania metody jest środek przedziału $P_n$. Skoro zero znajduje się w $P_n$ i jego długość jest mniejsza niż $2 \varepsilon$ to udało się zlokalizować zero funkcji f z błędem mniejszym niż $\varepsilon$. Jeśli nie znaleziono zera, 
+
+
+
 
 Jeśli w przedziale $P_0$ metoda nie znalazła zera, to ostatnim przedziałem w ciągu jest przedział pusty; wtedy wynikiem jest brak zer. W przeciwnym przypadku wynikiem jest środek przedziału $P_n$, który jest odległy od zera funkcji f o conajwyżej $\varepsilon$. W przypadku istnienia zera w przedziale $P_0$, udało się znaleźć zero funkcji f z dokładnością $\varepsilon$.
 
@@ -114,30 +118,19 @@ Obliczenie pierwiastka $n$-tego stopnia z liczby $a$ wymaga rozwiązania równan
 
 \subsection{Zera wielomianów dowolnego stopnia}
 
-Do znalezienia zer wielomianu stopnia wyższego niż 5 należy użyć metod numerycznych. Tych zer nie da się zapisać za pomocą skończonej liczby prostych operacji arytmetycznych i pierwiastkowania. Znajdowanie zer wielomianów nie jest jednak tak ogólnym zadaniem jak znajdowanie zer funkcji ciągłych. Możemy skorzystać z wielu własności charakterystycznych dla wielomianów. Własności te, takie jak ciągłość, ograniczenie liczby zer rzeczywistych przez stopień wielomianu, łatwa obliczalność pochodnej
-
-Gdy mamy informację, że funkcja, której zer szukamy jest wielomianem, możemy skorzystać z własności wielomianów do:
-* przyspieszenia metody
-* upewnienia się, że znajdujemy wszystkie zera
-** ograniczenie na liczbę zer rzeczywistych - stopień
-** ustalenie pewnego przyblizenia poczatkowego
-** ciągłość 0..stopien-1 pochodnych
-
-
+Do znalezienia zer wielomianu stopnia wyższego niż 5 należy użyć metod numerycznych. Tych zer nie da się zapisać za pomocą skończonej liczby prostych operacji arytmetycznych i pierwiastkowania. Znajdowanie zer wielomianów nie jest jednak tak ogólnym zadaniem jak znajdowanie zer funkcji ciągłych. Możemy skorzystać z wielu własności charakterystycznych dla wielomianów. Własności te, takie jak ciągłość, ograniczenie liczby zer rzeczywistych przez stopień wielomianu, łatwość obliczania pochodnej dają narzędzia do konstrukcji specyficznych dla wielomianów metod szukania zer.
 
 \section{Wielomiany w postaci Beziera}
 
-!! wiadomosci z ponizszego paragrafu powiniennes potwierdzic źródłami albo chociaz sprawdzic ich poprawnosc w jakims podreczniku.
-
 Zbiór wielomianów stopnia nie większego niż $n$ jest przestrzenią wektorową o wymiarze $n$. Każda przestrzeń liniowa ma nieskończoną liczbę baz. Jedną z baz wielomianów jest baza potęgowa ${1,x,x^2,x^3,...,x^n}$. Inną bazą jest baza Bernsteina ${B^n_0(x),...,B^n_n(x)}$, gdzie $B^n_i(x) = (n po k)x^i(1-x)^i$. Wielomian wyrażony w bazie Bernsteina nazywany jest wielomianem w postaci Beziera. Każdy wielomian w bazie potęgowej $P(x) = \sum^n_{i=0}p_i x^i$ można przedstawić w bazie Bernsteina $P(x) = \sum^n_{i=0}b_i B^n_i(x)$. Zależność między wektorem $p = <p_0,...,p_n>$ a wektorem $b = <b_0, ..., b_n$ w formie $p [ m_{ij} ] = b$ nazywana jest macierzą konwersji albo macierzą przejścia.
 
-Postać Beziera ma inne własności niż postać potęgowa. W jednych zastosowaniach sprawdza się postać potęgowa, w innych postać Beziera, w innych sprawdzają się jeszcze inne bazy. Przykładowym zastosowaniem postaci Beziera jest grafika komputerowa. Zgodnie z tw. Weierstrassa (udowodnionym zresztą przy pomocy wielomianów w bazie Bernsteina) krzywa parametryczna opisana parą wielomianów może odwzorowywać dowolny kształt ciągły z dowolną dokładnością. Specjalne krzywe wielomianowe, krzywe, których wielomiany są opisane w postaci Beziera dają łatwość kształtowania krzywej. Związek współczynników Beziera wielomianów opisujących krzywą jest wizualnie powiązany z kształtem krzywej. Pozwala to ludziom nie znającym matematyki !! (bardzo niefajne okreslenie) używać potężnego narzędzia jakim są krzywe parametryczne do konstrukcji kształtów. Krzywe i powierzchnie parametryczne są potężnym narzędziem, gdyż są opisane wektorowo a nie rastrowo, dzięki czemu pozwalają na łatwą (effortless, bezwysiłkową?), bez modyfikacji kazdego piksela modyfikację istniejących kształtów oraz pozwalają na przekształcenia tj. przesunięcie, obrót i skalowanie.
+Postać Beziera ma inne własności niż postać potęgowa. W jednych zastosowaniach sprawdza się postać potęgowa, w innych postać Beziera, w innych sprawdzają się jeszcze inne bazy. Przykładowym zastosowaniem postaci Beziera jest grafika komputerowa. Zgodnie z twierdzeniem Weierstrassa (udowodnionym zresztą przy pomocy wielomianów w bazie Bernsteina) krzywa parametryczna opisana parą wielomianów może odwzorowywać dowolny kształt ciągły z dowolną dokładnością. Specjalne krzywe wielomianowe, krzywe, których wielomiany są opisane w postaci Beziera umożliwiają łatwe kształtowanie krzywej. Związek współczynników Beziera wielomianów opisujących krzywą jest wizualnie powiązany z kształtem krzywej.
 
 !! rysunek wielomianu w postaci Beziera wraz z punktami kontrolnymi
 !! rysunek krzywej
 !! rysunek powierzchni
 
-Powodem powiązania geometrycznego postaci Bezier z jej wykresem jest jej własność otoczki wypukłej. Krótki dowód przez kombinację wypukłą.
+Powodem powiązania geometrycznego postaci Beziera z jej wykresem jest jej własność otoczki wypukłej. Krótki dowód przez kombinację wypukłą.
 
 !! rysunek otoczki wypuklej
 
