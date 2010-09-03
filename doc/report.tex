@@ -134,11 +134,15 @@ Własności:
 
 Podział wielomianu za pomocą algorytmu de Casteljau.
 
-Ograniczenia wartości maksymalnej w przedziale $\langle 0, 1 \rangle$.
+Ograniczenia wartości maksymalnej w przedziale $\langle 0, 1 \rangle$. Maksymalna wartość wielomianu w formie Beziera nie przekracza wartości największego współczynnika.
+$$ P(x) = \sum^n_{i=0} b_i B^n_i(x) \leq \sum^n_{i=0} \max_{1\leq i \leq n}{b_i} B^n_i(x) = \max_{1\leq i \leq n}{b_i} \sum^n_{i=0}B^n_i(x) = \max_{1\leq i \leq n}{b_i}$$
 
 Podnoszenie stopnia.
+Tj. dopisywanie zer przy najwyzszych potegach w postaci potegowej. Kazdy element przestrzeni liniowej n-wymiarowej jest tez elementem przestrzeni n+1-wymiarowej.
 
 \section{Aproksymacja wielomianu wielomianem}
+
+Operacja odwrotna do tej w poprzednim rozdziale, jednak wiaze sie ona z utrata informacji.
 
 Aproksymacja to utworzenie uproszczonego modelu, ktory daje pewne informacje o oryginale i jest latwiejszy do przetworzenia. Tutaj bedziemy aproksymowac wielomian wysokiego stopnia, ktorego zer nie mozna okreslic analitycznie wielomianem stopnia nieskiego, ktorego zera mozemy okreslic analitycznie. Musimy takze okreslic, jak zera wielomianu niskiego stopnia roznia sie od zer oryginalnego wielomianu.
 
