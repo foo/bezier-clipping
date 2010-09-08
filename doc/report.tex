@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,oneside]{report}
+\documentclass{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage[polish]{babel}
@@ -7,8 +7,39 @@
 \usepackage{amsmath}
 \usepackage{mathrsfs}
 
+\makeatletter
+\renewcommand\@seccntformat[1]{\csname the#1\endcsname.\quad}
+\renewcommand\numberline[1]{#1.\hskip0.7em}
+
+\newcommand{\linia}{\rule{\linewidth}{0.4mm}}
+
+\renewcommand{\maketitle}{\begin{titlepage}
+    \vspace*{1cm}
+    \begin{center}
+      Instutut Informatyki Uniwersytetu Wrocławskiego\\
+      Licencjacki Projekt Programistyczny \\
+      Prowadzący: Stanisław Lewanowicz \\
+      \vspace{3cm}
+      \normalsize \@author \par
+      \vspace{0.8cm}
+      \noindent
+      \LARGE \textsc{\@title}\\
+      \vspace{1cm}
+      \normalsize
+    \end{center}
+    \vspace{0.5cm}
+    \begin{flushright}
+      \vspace{5cm}
+    \end{flushright}
+    \vspace*{\stretch{6}}
+    \begin{center}
+      \@date
+    \end{center}
+  \end{titlepage}%
+}
+
 \makeatother
-\title{Znajdowanie zer wielomianu w postaci Beziera za pomocą przycinania sześciennego}
+\title{Znajdowanie zer wielomianu w postaci Beziera metodą przycinania sześciennego}
 \author{Maciej Pacut}
 \date{Wrocław 2010}
 
@@ -19,6 +50,8 @@
 
 \section{Wstęp}
 
+Niniejsza praca prezentuje efektywną metodę znajdowania zer wielomianu w postaci Beziera. Przed zaprezentowaniem metody przycinania sześciennego zbudujemy narzędzia i terminologię potrzebną do łatwego i jednoznacznego przedstawienia metody. Opisane będą podejścia do numerycznego znajdowania zer funkcji. Zaprezentowane będą metody znajdowania zer specyficznej rodziny funkcji jakimi są wielomiany wraz z własnościami, które umożliwiają projektowanie specyficznych dla wielomianów metod znajdowania zer. Przedstawione zostaną wielomiany w postaci Beziera wraz z ich zastosowaniami. Zaprezentujemy specyficzne własności wielomianów w tej postaci. Dokładniej opisane będzie zadanie aproksymacji wielomianowej.
+
 \section{Numeryczne znajdowanie zer}
 
 \subsection{Znajdowanie jednego zera}
@@ -27,38 +60,38 @@ W niniejszej pracy będziemy rozpatrywać zbiór metod znajdowania zer o pewnych
 
 Metoda znajdowania jednego zera funkcji dostaje argumenty:
 \begin{enumerate}
-\item Pewien opis funkcji f, który umożliwia obliczenie wartości tej funkcji dla dowolnego argumentu.
-\item Przedział początkowy $P_0$, czyli przedział w którym szukamy zera funkcji f; metoda nie znajdzie żadnego zera spoza tego przedziału.
-\item Żądaną dokładność $\varepsilon$ znalezienia zera funkcji f.
+\item Pewien opis funkcji $f$, który umożliwia obliczenie wartości tej funkcji dla dowolnego argumentu.
+\item Przedział początkowy $P_0$, czyli przedział w którym szukamy zera funkcji $f$; metoda nie znajdzie żadnego zera spoza tego przedziału.
+\item Żądaną dokładność $\varepsilon$ znalezienia zera funkcji $f$.
 \end{enumerate}
 
-Metoda numerycznego znajdowania jednego zera funkcji f generuje ciąg przedziałów $\langle P_0, P_1, ..., P_n\rangle$ o własnościach:
+Metoda numerycznego znajdowania jednego zera funkcji $f$ generuje ciąg przedziałów $\langle P_0, P_1, ..., P_n\rangle$ o własnościach:
 \begin{enumerate}
 \item Każdy przedział tego ciągu jest podprzedziałem swojego poprzednika:
 $$P_k \subset P_{k-1}\hspace{1cm}(1 \leq k \leq n)$$
-\item Jeśli poprzednik pewnego ciągu zawiera zero to ten przedział także zawiera to zero:
-$$ x_0 \in P_{k-1}\Rightarrow x_0 \in P_k\hspace{1cm}(1 \leq k \leq n)$$
+\item Jeśli pewien przedział zawiera zero funkcji $f$ to następnik tego przedziału także zawiera to zero:
+$$ x_0 \in P_{k-1}\Rightarrow x_0 \in P_k\hspace{1cm}(1 \leq k \leq n;f(x_0)=0)$$
 \item $P_n$ jest jedynym przedziałem krótszym niż $2 \varepsilon$.
 \end{enumerate}
 
-Jeśli w przedziale $P_0$ znaleziono zero, to wynikiem działania metody jest środek przedziału $P_n$. Skoro zero znajduje się w $P_n$ i jego długość jest mniejsza niż $2 \varepsilon$ to udało się zlokalizować zero funkcji f z błędem mniejszym niż $\varepsilon$. Jeśli nie znaleziono zera, $P_n$ jest przedziałem pustym.
+Jeśli w przedziale $P_0$ znaleziono zero, to wynikiem działania metody jest środek przedziału $P_n$. Skoro zero znajduje się w $P_n$ i jego długość jest mniejsza niż $2 \varepsilon$ to udało się zlokalizować zero funkcji $f$ z błędem mniejszym niż $\varepsilon$. Jeśli nie znaleziono zera, $P_n$ jest przedziałem pustym.
 
-Metody znajdowania zer zdefiniowane powyższym schematem różnią się sposobem konstrukcji ciągu $\langle P_0, P_1, ..., P_n\rangle$. Do kompletnego opisu dowolnej metody z tego zbioru wystarczy zdefiniować, w jaki sposób mając przedział $P_k$ konstruujemy przedział $P_{k+1}$.
-z
-Przykładem metody znajdowania jednego zera funkcji jest bisekcja. W bisekcji przedział $P_{k+1}$ otrzymuje się dzieląc $P_k$ na pół i jako $P_{k+1}$ wybierając tę połowę, w której jest możliwość wystąpienia zera. W przypadku, gdy w żadnej połowie nie ma możliwości wystąpienia zera, $P_{k+1}$ jest przedziałem pustym i metoda kończy działanie. W bisekcji należy określić realizację operacji określającej możliwość wystąpienia zera w danym przedziale (w danej połowie przedziału $P_k$). Przykładową taką operacją jest sprawdzenie, czy funkcja f ma w końcach sprawdzanego przedziału różne znaki.
+Metody znajdowania zer zdefiniowane powyższym schematem różnią się sposobem konstrukcji ciągu $\langle P_0, P_1, ..., P_n\rangle$. Do kompletnego opisu metody wystarczy zdefiniować, w jaki sposób mając przedział $P_k$ konstruujemy przedział $P_{k+1}$.
+
+Przykładem metody znajdowania jednego zera funkcji jest bisekcja. W bisekcji przedział $P_{k+1}$ otrzymuje się dzieląc $P_k$ na pół i jako $P_{k+1}$ wybierając tę połowę, w której jest możliwość wystąpienia zera. W przypadku, gdy w żadnej połowie nie ma możliwości wystąpienia zera, $P_{k+1} = P_n$ i $P_{k+1}$ jest przedziałem pustym i metoda kończy działanie. W bisekcji należy określić realizację operacji określającej możliwość wystąpienia zera w danym przedziale (w danej połowie przedziału $P_k$). Przykładową taką operacją jest sprawdzenie, czy funkcja $f$ ma w końcach sprawdzanego przedziału różne znaki.
 
 ! rysunek bisekcji
 
 \subsection{Znajdowanie wielu zer}
 
-Metod znajdowania jednego zera nie stosuje się do funkcji mających więcej niż jedno zero w przedziale $P_0$. Przykładowo, metoda bisekcji ma działanie niezdefiniowane w przypadku, gdy w obu połowach przedziału jest możliwość wystąpienia zera.
+Metod znajdowania jednego zera nie stosuje się do funkcji mających więcej niż jedno zero w przedziale $P_0$. Przykładowo, metoda bisekcji ma działanie niezdefiniowane w przypadku, gdy w obu połowach przedziału $P_k$ jest możliwość wystąpienia zera.
 
 Zmodyfikujmy powyższy schemat znajdowania jednego zera. Zamiast generowania ciągu przedziałów, metoda szukania wielu zer generuje drzewo przedziałów. Drzewo przedziałów ma własności:
 \begin{enumerate}
 \item Korzeniem jest przedział początkowy $P_0$.
 \item Każdy potomek jest podprzedziałem swojego rodzica.
 \item Przedziały mające wspólnego rodzica nie mają części wspólnych.
-\item Każde zero znajdujące się w przedziale znajduje się w także w pewnym przedziale potomnym.
+\item Każde zero funkcji $f$ znajdujące się w pewnym przedziale znajduje się w także w pewnym jego przedziale potomnym.
 \item Każdy liść $L$ jest jedynym przedziałem na ścieżce od korzenia do $L$, który ma długość mniejszą niż $2 \varepsilon$
 \end{enumerate}
 
@@ -67,7 +100,7 @@ Wynikiem działania metody jest zbiór środków niepustych przedziałów znajdu
 !! Rysunek drzewa przedziałów w bisekcji przy dwóch podprzedziałach, rysunek drzewa przedziałów zdegenerowanego do listy
 !! Podpis do rysunku: W wypadku 1 zera drzewo moze sie degenerowac do listy, ktora mozna traktowac jako ciąg z poprzedniego schematu.
 
-Przedstawiony został w powyższym schemacie pewien zbiór metod znajdowania jednego zera funkcji f. Metody w tym zbiorze różnią się realizacją funkcji generującej drzewo przedziałów.
+Przedstawiony został w powyższym schemacie pewien zbiór metod znajdowania wielu zer funkcji $f$. Metody w tym zbiorze różnią się realizacją funkcji generującej drzewo przedziałów.
 
 Przykładem metody szukania wielu zer funkcji jest modyfikacja opisanej w poprzednim podrozdziale metody bisekcji. W przypadku gdy w obu połowach dzielonego przedziału jest możliwość wystąpienia zera, obie połowy są określane jako potomkowie przedziału.
 
@@ -77,19 +110,26 @@ Szybkość znajdowania zer jest jedną z miar jakości metody. Możemy do pomiar
 
 Zamiast mierzenia czasu możemy zmierzyć liczbę operacji zmiennoprzecinkowych, które wykonano znajdując zera konkretnej funkcji. To podejście wyklucza wiele czynników, biorących udział w poprzednim pomiarze. Przykładowo, pomijane są realizacje operacji przydziału i zwalniania pamięci, wczytywania danych i wypisywania wyników. Zyskujemy możliwość porównywania metod znajdowania zer przez uruchamianie ich na tych samych danych, lecz na innych komputerach. Jednakże, wciąż jesteśmy ograniczeni do testowania na skończonej liczbie funkcji. 
 
-Lepsze metody zostały wymyślone. Możemy rozpatrzyć zależności między kolejnymi przedziałami dla dowolnej funkcji analizując operację znajdowania następnika przedziału w ciągu lub potomków przedziału w drzewie przedziałów. Posługujemy się pojęciem rzędu zbieżności, czyli miarą tego, ile krótszy jest następny wygenerowany przedział od poprzedniego. Oznaczając długość $k$-tego przedziału w ciągu jako $e_k$ metoda ma rząd zbieżności p, gdy:
+Zostały wymyślone lepsze metody pomiaru. Możemy rozpatrzyć zależności między kolejnymi przedziałami dla dowolnej funkcji, analizując operację znajdowania następnika przedziału. Posługujemy się pojęciem rzędu zbieżności, czyli miarą tego, ile krótszy jest następny wygenerowany przedział od poprzedniego. Oznaczając długość $k$-tego przedziału w ciągu jako $e_k$ metoda ma rząd zbieżności $p$, gdy:
 
 $$e_k^p \sim e_{k+1}$$
 
-Biorąc pod uwagę, że przedziały nie mogą mieć ujemnej długości, że zależność może się stabilizować dopiero od pewnego kroku, oraz że analizowana metoda powinna być zbieżna, mamy rząd zbieżności 1 gdy:
+Biorąc pod uwagę, że:
+\begin{itemize}
+\item przedziały nie mogą mieć ujemnej długości
+\item zależność może się stabilizować dopiero od pewnego kroku
+\item analizowana metoda powinna być zbieżna
+\end{itemize}
+
+metoda ma rząd zbieżności $1$, gdy:
 
 $$\lim_{k \rightarrow \inf}\frac{e_{k+1}}{e_k} = u\hspace{1cm}0<u<1$$
 
-oraz rząd zbieżności $p$, $p>1$, gdy:
+oraz rząd zbieżności $p$ dla $p>1$, gdy:
 
 $$\lim_{k\rightarrow\inf}\frac{e_{k+1}}{e_k^p} = u\hspace{1cm}u>0$$
 
-Przykładowo. bisekcja ma rząd zbieżności 1, gdyż następny przedział jest połową poprzedniego:
+Przykładowo bisekcja ma rząd zbieżności 1, gdyż następny przedział jest połową poprzedniego:
 
 \begin{equation}
 \begin{cases}
@@ -101,6 +141,7 @@ e_{k+1}=\frac{1}{2}e_k \\
 \section{Znajdowanie zer wielomianów}
 
 \subsection{Zera wielomianów niskiego stopnia}
+
 
 Do szukania zer wielomianów niskich stopni można użyć wzorów analitycznych. 
 
@@ -114,9 +155,9 @@ Do znalezienia zer wielomianu stopnia wyższego niż 5 należy użyć metod nume
 
 \section{Wielomiany w postaci Beziera}
 
-Zbiór wielomianów stopnia nie większego niż $n$ jest przestrzenią wektorową o wymiarze $n$. Każda przestrzeń liniowa ma nieskończoną liczbę baz. Jedną z baz wielomianów jest baza potęgowa ${1,x,x^2,x^3,...,x^n}$. Inną bazą jest baza Bernsteina ${B^n_0(x),...,B^n_n(x)}$, gdzie $B^n_i(x) = (n po k)x^i(1-x)^i$. Wielomian wyrażony w bazie Bernsteina nazywany jest wielomianem w postaci Beziera. Każdy wielomian w bazie potęgowej $P(x) = \sum^n_{i=0}p_i x^i$ można przedstawić w bazie Bernsteina $P(x) = \sum^n_{i=0}b_i B^n_i(x)$. Zależność między wektorem $p = <p_0,...,p_n>$ a wektorem $b = <b_0, ..., b_n$ w formie $p [ m_{ij} ] = b$ nazywana jest macierzą konwersji albo macierzą przejścia.
+Zbiór wielomianów stopnia nie większego niż $n$ jest przestrzenią liniową o wymiarze $n$. Każda przestrzeń liniowa ma nieskończoną liczbę baz. Jedną z baz wielomianów jest baza potęgowa ${1,x,x^2,x^3,...,x^n}$. Inną bazą jest baza Bernsteina $\{B^n_0(x),...,B^n_n(x)\}$, gdzie $B^n_i(x) = {n \choose k}x^i(1-x)^i$. Wielomian wyrażony w bazie Bernsteina nazywany jest wielomianem w postaci Beziera. Każdy wielomian w bazie potęgowej $P(x) = \sum^n_{i=0}p_i x^i$ można przedstawić w bazie Bernsteina $P(x) = \sum^n_{i=0}b_i B^n_i(x)$. Zależność między wektorem $p = \langle p_0,...,p_n \rangle$ a wektorem $b = \langle b_0, ..., b_n\rangle$ w formie $p [ m_{ij} ] = b$ nazywana jest macierzą konwersji albo macierzą przejścia.
 
-Postać Beziera ma szereg innych własności niż postać potęgowa. W jednych zastosowaniach sprawdza się postać potęgowa, w innych postać Beziera, w innych sprawdzają się jeszcze inne bazy. Przykładowym zastosowaniem postaci Beziera wielomianu jest grafika komputerowa. Zgodnie z twierdzeniem Weierstrassa (udowodnionym zresztą przy pomocy wielomianów w bazie Bernsteina) krzywa parametryczna opisana parą wielomianów może odwzorowywać dowolny kształt ciągły z dowolną dokładnością. Specjalne krzywe wielomianowe, krzywe, których wielomiany są opisane w postaci Beziera umożliwiają łatwe kształtowanie krzywej.
+Postać Beziera ma szereg innych własności niż postać potęgowa. W jednych zastosowaniach sprawdza się postać potęgowa, w innych postać Beziera, w innych sprawdzają się jeszcze inne bazy. Przykładowym zastosowaniem wielomianów w postaci Beziera jest grafika komputerowa. Zgodnie z twierdzeniem Weierstrassa (udowodnionym zresztą przy pomocy wielomianów w bazie Bernsteina) krzywa parametryczna opisana parą wielomianów może odwzorowywać dowolny kształt ciągły z dowolną dokładnością. Specjalne krzywe wielomianowe, których wielomiany są opisane w postaci Beziera umożliwiają łatwe kształtowanie krzywej.
 
 Niech para wielomianów $X(t) = \sum^n_{i=0}x_i B^n_i(t)$ oraz $Y(t) = \sum^n_{i=0}y_i B^n_i(t)$ dla $0\leq t \leq 1$ opisuje krzywą wielomianową. Punkty $\langle (x_0,y_0), ..., (x_n, y_n) \rangle$ nazywane są punktami kontrolnymi krzywej. Można zaobserwować wizualny związek między kształtem krzywej a położeniem punktów kontrolnych.
 
@@ -126,61 +167,138 @@ Niech para wielomianów $X(t) = \sum^n_{i=0}x_i B^n_i(t)$ oraz $Y(t) = \sum^n_{i
 
 \section{Znajdowanie zer wielomianu w postaci Beziera}
 
-Szukanie przecięć krzywej opisanej parą wielomianów z prostą jest zadaniem, który sprowadza się do znajdowania zer wielomianu. W przypadku, gdy krzywa jest opisana wielomianami w formie Beziera to zadanie sprowadza się do szukania zer wielomianu w formie Beziera.
+Szukanie przecięć prostej z krzywą opisaną parą wielomianów jest zadaniem, które sprowadza się do znajdowania zer wielomianu. W przypadku, gdy krzywa jest opisana wielomianami w formie Beziera to zadanie sprowadza się do szukania zer wielomianu w formie Beziera.
 
-Jedną z możliwości jest konwersja postaci wielomianu z postaci Beziera do potęgowej. Istnieją stabilne numerycznie i efektywne (liniowe w stosunku do stopnia wielomianu) algorytmy konwersji. Istnieją efektywne i stabilne numerycznie algorytmy szukania zer wielomianów w formie potęgowej. Jednakże, specyficzne własności postaci Beziera wielomianu pozwalają na konstrukcję efektywnych i stabilnych numerycznie algorytmów operujących na wielomianach w postaci Beziera bez dodatkowego kroku, jakim jest konwersja baz.
+Jednym ze sposobów rozwiązania tego zadania jest konwersja wielomianu z postaci Beziera do postaci potęgowej. Istnieją stabilne numerycznie i efektywne (liniowe w stosunku do stopnia wielomianu) algorytmy konwersji i szukania zer wielomianów w formie potęgowej. Jednakże, specyficzne własności wielomianów w postaci Beziera pozwalają na konstrukcję efektywnych i stabilnych numerycznie algorytmów operujących na wielomianach w postaci Beziera bez dodatkowego kroku, jakim jest konwersja baz.
 
-Własności:
+Ważną własnością wielomianów w postaci Beziera jest własność otoczki wypukłej. W przedziale $\langle 0, 1 \rangle$ wielomiany bazowe $\{ B^n_0, B^n_1, ..., B^n_n \}$ są nieujemne i sumują się do jedynki. Oznacza to, że zbiór wartości wielomianu w przedziale $\langle 0, 1 \rangle$ jest ograniczony od dołu przez najmniejszy współczynnik wielomianu i ograniczony od góry przez największy współczynnik wielomianu.
 
-Podział wielomianu za pomocą algorytmu de Casteljau.
+Aby skorzystać z własności otoczki wypukłej dla pewnego przedziału $P$ będącego podprzedziałem $\langle 0, 1 \rangle$ należy przeskalować dziedzinę wielomianu tak, aby przedział $P$ stał się nowym przedziałem $\langle 0, 1 \rangle$. Aby to zrobić, moglibyśmy obliczyć wartość wielomianu w $n+1$ punktach przedziału $P$, następnie przeskalować te punkty do przedziału $\langle 0, 1 \rangle$ i wykonać interpolację wielomianową na tych punktach.
 
-Ograniczenia wartości maksymalnej w przedziale $\langle 0, 1 \rangle$. Maksymalna wartość wielomianu w formie Beziera nie przekracza wartości największego współczynnika.
-$$ P(x) = \sum^n_{i=0} b_i B^n_i(x) \leq \sum^n_{i=0} \max_{1\leq i \leq n}{b_i} B^n_i(x) = \max_{1\leq i \leq n}{b_i} \sum^n_{i=0}B^n_i(x) = \max_{1\leq i \leq n}{b_i}$$
+Jednakże istnieje prostszy sposób specyficzny dla wielomianów w postaci Beziera. Algorytm de Casteljau, który jest algorytmem obliczania wartości wielomianu $P(x)$ w postaci Beziera dla argumentu $t$, poza wartością wielomianu w tym punkcie wyznacza także współczynniki wielomianów równych wielomianowi $P(x)$ w przedziałach $\langle 0, t \rangle$ i $\langle t, 1 \rangle$. Wykonanie algorytmu de Casteljau w obu krańcach przedziału $P$ daje współczynniki wielomianu z przeskalowanym przedziałem $P$ do przedziału $\langle 0, 1 \rangle$.
 
-Podnoszenie stopnia.
-Tj. dopisywanie zer przy najwyzszych potegach w postaci potegowej. Kazdy element przestrzeni liniowej n-wymiarowej jest tez elementem przestrzeni n+1-wymiarowej.
+Ekstrapolując własność otoczki wypukłej na dwa wymiary możemy zaprojektować metodę znajdowania zer wielomianu w postaci Beziera. W dwóch wymiarach wykres krzywej Beziera znajduje się w otoczce wypukłej punktów kontrolnych. Możemy skorzystać z tej własności dla wielomianów w postaci Beziera, traktując wielomian jako krzywą i wyznaczając otoczkę wypukłą tej krzywej.
 
-\section{Aproksymacja wielomianu wielomianem}
+!! rysunek otoczki wypulkej wielomianu
 
-Operacja odwrotna do tej w poprzednim rozdziale, jednak wiaze sie ona z utrata informacji.
+Zgodnie ze schematem metody znajdowania wielu zer funkcji, musimy jedynie zdefiniować operację znajdowania potomków przedziału w drzewie przedziałów. Niech dany będzie przedział $P$ będący podprzedziałem $\langle 0, 1 \rangle$. Potomkiem przedziału $P$ jest przedział powstały przez znalezienie przecięcia otoczki wypukłej wielomianu w przedziale $P$ z osią $0X$. W przypadku, gdy znalezione przecięcie nie jest przynajmniej dwukrotnie krótsze od przedziału $P$, dzielimy przecięcie na dwie połowy i jako potomków przedziału określamy obie połowy.
 
-Aproksymacja to utworzenie uproszczonego modelu, ktory daje pewne informacje o oryginale i jest latwiejszy do przetworzenia. Tutaj bedziemy aproksymowac wielomian wysokiego stopnia, ktorego zer nie mozna okreslic analitycznie wielomianem stopnia nieskiego, ktorego zera mozemy okreslic analitycznie. Musimy takze okreslic, jak zera wielomianu niskiego stopnia roznia sie od zer oryginalnego wielomianu.
+Rząd zbieżności tej metody wynosi 2.
 
-Przyblizenie wielomianu wysokiego stopnia wielomianem niskiego stopnia. ``Redukcja stopnia''. 
+!! rysunek bezclip
 
-Aproksymujac wielomian upraszczamy go, tracac informacje (punkty krańcowe, ) ale jednoczesnie zyskujac mozliwosc latwiejszego przetwarzania go.
+\section{Aproksymacja wielomianu wielomianem niższego stopnia}
 
-Macierz redukcji. Obliczanie macierzy redukcji metodą Lewanowicza-Woźnego.
+Aproksymacja to utworzenie uproszczonego modelu, który daje pewne informacje o oryginale i jest łatwiejszy do przetworzenia.
 
-\section{cubic clipping}
+Na zadanie aproksymacji wielomianu wielomianem niższego stopnia można spojrzeć jak na zadanie geometryczne. Do ilustracji geometrycznej natury zadania aproksymacji użyjemy przykładu.
 
-Wykorzystanie w praktyce własności opisanych w rozdziale powyżej.
+Chcemy aproksymować pewien element przestrzeni wektorowej $\Re^2$ elementem pewnej prostej $S = \{ (x, ax) \in \Re^2 : x \in \Re \}$.
 
-Poddziedzina za pomocą dwóch dzielen algorytmem de Casteljau.
+!! rysunek takiej prostej
 
-Ograniczenie odleglosci miedzy dwoma wielomianami w postaci Beziera za pomoca ograniczenia wartosci maksymalnej.
+Bazą $\Re^2$ może być zbiór wektorów $\{\langle 0, 1 \rangle, \langle 1, 0 \rangle \}$ a bazą $S$ może być $\psi = \{\langle 1, a + b\rangle \}$. Każdy element przestrzeni wektorowej jest kombinacją liniową elementów bazowych.
 
-Podnoszenie stopnia do ograniczenia maksymalnej roznicy miedzy wielomianami roznych stopni.
+Mając element $f \in \Re^2$ chcemy znaleźć najbliższy do niego element $g \in S$. Wektor różnicy $f - g$ jest najkrótszy spośród wszystkich wektorów $f - s$, $s \in S$. Geometrycznie, wektor $f - g$ jest najkrótszy, gdy $f - g$ jest prostopadły do $S$.
 
-Dwa wielomiany ograniczające.
+!! rysunek wektora błędu
+
+Wektor jest prostopadły do przestrzeni wektorowej, gdy jest prostopadły do każdego wektora bazowego tej przestrzeni. Wektory są prostopadłe do siebie, gdy ich iloczyn skalarny jest równy zero. $S$ ma tylko jeden wektor bazowy, wystarczy więc rozwiązać równanie:
+
+$$(\psi, f - g) = 0$$
+
+Przedstawiając f i g jako kombinacje wektorów bazowych odpowiednich przestrzeni wektorowych
+$$f = \langle 0,1 \rangle f_y + \langle 1,0 \rangle f_x$$
+$$g = g_{len} \psi$$
+
+mamy:
+
+$$(\psi, \langle 1,0 \rangle f_x + \langle 0,1 \rangle f_y - g_{len} \psi) = 0$$
+
+Korzystajac z wlasnosci iloczynu skalarnego:
+
+$$(\psi, \langle 1,0 \rangle f_x + \langle 0,1 \rangle f_y) = (\psi, g_{len} \psi)$$
+$$(\psi, \langle 1,0 \rangle f_x) + (\psi, \langle 0,1 \rangle f_y) = (\psi, g_{len} \psi)$$
+$$(\psi, \langle 1,0 \rangle) f_x + (\psi, \langle 0,1 \rangle) f_y = (\psi, \psi)g_{len}$$
+$$g_{len} = (\psi, \langle 1,0 \rangle) f_x + (\psi, \langle 0,1 \rangle) f_y$$
+
+Ostatecznie:
+
+$$g = \psi ((\psi, \langle 1,0 \rangle) f_x + (\psi, \langle 0,1 \rangle) f_y)$$
+
+Do rozwiązania powyższego zadania wystarczy więc obliczyć iloczyny skalarne wektorów bazowych i wykonać proste operacje arytmetyczne.
+
+Uogólniając powyższe zadanie aproksymujemy element $f$ przestrzeni wektorowej $L_n$ o bazie $\{\psi_0, ..., \psi_n\}$ elementem $g$ przestrzeni wektorowej $L_m$ o bazie $\{\gamma_0, ..., \gamma_m\}$, gdzie $n > m$. Wtedy warunki prostopadłości wektora błędu $f - g$ do $L_m$:
+
+$$(f - g, \gamma_k) = 0\hspace{1cm}(k=0,1,...,m)$$
+
+gdzie:
+
+$$f = \sum^n_{i=0}f_i\psi_i$$
+$$g = \sum^n_{i=0}g_i\gamma_i$$
+
+tworzą układ równań:
+
+$$\sum^n_{i=0}(\psi_i, \gamma_k)f_i = \sum^m_{i=0}(\gamma_i, \gamma_k)g_i\hspace{1cm}(k=0,1,...,m)$$
+
+Gdy baza przestrzeni $L_m$ jest ortonormalna, czyli każdy wektor bazowy jest prostopadły do dowolnego innego wektora bazowego i długość każdego wektora wynosi $1$, to układ redukuje się do:
+
+$$g_i = \sum^n_{i=0}(\psi_i, \gamma_k)f_i\hspace{1cm}(k=0,1,...,m)$$
+
+Wielkości $(\psi_i, \gamma_k)$ dla $(i=0,1,...,n;k=0,1,...,m)$ można zapisać w macierzy. Po obliczeniu macierzy aproksymacji wektor aproksymujący otrzymuje się mnożąc wektor aproksymowany przez macierz aproksymacji.
+
+Do rozwiązania zadania wielomianowej aproksymacji średniokwadratowej jest wykorzystywany podobny mechanizm. Przestrzeń wielomianów $\Pi_n$ w przedziale $\langle a, b \rangle$ jest przestrzenią wektorową o wymiarze $n$. Wystarczy zdefiniować iloczyn skalarny wielomianów:
+
+$$(f, g) = \int_a^bp(x)f(x)g(x)dx$$
+
+gdzie funkcja wagowa $p(x)$ jest determinowana przez przedział $\langle a, b \rangle$. Tak zdefiniowany iloczyn skalarny spełnia własności iloczynu skalarnego takie jak przemienność czy liniowość. Rozumowania przeprowadzone dla aproksymacji wektorów mogą zostać powtórzone dla aproksymacji wielomianowej.
+
+W niniejszej pracy szczególnie interesuje nas aproksymacja wielomianów w postaci Beziera innymi wielomianami w postaci Beziera. Jednakże wielomiany bazowe Bernsteina nie są ortonormalne według tak zdefiniowanego iloczynu skalarnego, przez co układ równań dla warunku prostopadłości nie może zostać zredukowany do mnożenia wektora współczynników wielomianu przez macierz aproksymacji.
+
+Prostym sposobem rozwiązania tego problemu jest rozwiązanie układu równań jedną z metod rozwiązywania układów równań liniowych, np. metodą eliminacji Gaussa. Jest to metoda kosztowna, poza tym rozwiązywanie niektórych układów równań liniowych jest źle uwarunkowane.
+
+Innym sposobem rozwiązania tego problemu jest szukanie wielomianu aproksymującego w bazie ortonormalnej i późniejsza konwersja do postaci Beziera. W przypadku zastosowania tej metody należy także przeprowadzić konwersję wielomianu aproksymowanego do tej samej bazy w celu obliczenia iloczynu skalarnego.
+
+Istnieją lepsze sposoby rozwiązania tego problemu. Bezpośrednia zależność między współczynnikami aproksymowanego wielomianu w postaci Beziera a współczynnikami wielomianu aproksymującego została opracowana przez Juttlera. Ta zależność zapisana w formie macierzy pozwala na otrzymanie wielomianu aproksymującego za pomocą tylko jednego mnożenia wektora współczynników przez macierz. Efektywną metodą obliczania tej macierzy jest metoda Lewanowicza-Woźnego.
+
+\section{Przycinanie sześcienne}
+
+Przycinanie sześcienne to efektywna metoda znajdowania wielu zer wielomianu w postaci Beziera. Wykorzystuje ona wiele własności wielomianu w postaci Beziera opisanych w niniejszej pracy.
+
+Opiszmy operację znajdowania potomków przedziału dla metody przycinania sześciennego.
+
+Wejście:
+
+Wielomian $Q(x)$, którego zer szukamy
+
+Przedział $P$, którego potomków szukamy
+
+Algorytm:
+
+$R^3(x) \leftarrow$ aproksymacja $Q(x)$ wielomianem stopnia trzeciego w przedziale $P$
+
+$R^n(x) \leftarrow$ podniesienie stopnia wielomianu $R^3(x)$ do stopnia $n$
+
+$D(x) \leftarrow Q(x) - R^n(x)$
+
+$d \leftarrow$ górne ograniczenie maksymalnej wartości absolutnej wielomianu $D(x)$ w przedziale $P$
+
+$U(x) \leftarrow R^3(x) + d$
+
+$L(x) \leftarrow R^3(x) - d$
+
+$potomkowie P \leftarrow$ podprzedziały $P$ w których $U(x)$ jest dodatni a $L(x)$ jest ujemny
+
+Zauważmy, że wykres $Q(x)$ w przedziale $P$, a w szczególności zera $Q(x)$ w przedziale $P$ zawierają się pomiędzy wykresami wielomianów $L(x)$ i $U(x)$.
+
+Aby zastosować jedną macierz aproksymacji należy każdy aproksymowany przedział przeskalować do przedziału $\langle 0, 1 \rangle$.
+
+Rząd zbieżności przycinania sześciennego wynosi 4.
 
 \begin{center}
   \begin{figure}
     \includegraphics{../tests/between2/graph.pdf}
   \end{figure}
 \end{center}
-
-
-
-OPis algorytmu. Wspomnienie o operacjach na przedzialach.
-
-Wykorzystujemy tylko jedna macierz redukcji.
-
-Rząd zbieżności.
-
-\subsection{podsumowanie}
-
-!! na koncu
-
 
 \end{document}
